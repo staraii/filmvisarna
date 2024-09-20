@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@100;400;500;600;700&display=swap');
+
+:root {
+  font-family: "Poppins", system-ui;
+  line-height: 1.6;
+  font-weight: 400;
+  font-size: 100%;
+
+  --main-font: "Poppins";
+  --title-font: "Bebas Neue", sans-serif;
+  --background-color: #0b0815;
+  --text-color: #efecf8;
+  --primary-color: #702c53;
+  --secondary-color: #ac9ed9;
+  --accent-color: #c15f6f;
+
+  color-scheme: light dark;
+  color: var(--text-color);
+  background-color: var(--background-color);
+
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body {
+  min-height: 100vh;
+  width: 100%;
+}
+h1, h2, h3, h4, h5 {
+  font-family: var(--title-font);
+  font-weight: 700;
+}
+h1 {
+  font-size: 4.210rem;
+}
+h2 {
+  font-size: 3.158rem;
+}
+h3 {
+  font-size: 2.369rem;
+}
+h4 {
+  font-size: 1.777rem;
+}
+h5 {
+  font-size: 1.333rem;
+}
+
+.small-font {
+  font-size: 0.750rem;  
+}
