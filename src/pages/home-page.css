@@ -1,0 +1,119 @@
+.home-section {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home_main {
+  height: 100vh;
+  width: 100%;
+  max-width: 1200px;
+  /* display: flex;
+  flex-direction: column; */
+  padding: 0;
+  /* position: relative; */
+}
+
+.navbar-bottom {
+  height: 8vh;
+  z-index: 10;
+}
+.navbar-row {
+  height: 8vh;
+  justify-content: space-around;
+  align-items: center;
+}
+.customBackdrop {
+  /* opacity: 0;
+  background: none; */
+  z-index: 5;
+
+}
+
+.h3_film_strip {
+  width: 100%;
+  height: fit-content;
+  /* --background: #0b0815; */
+
+  --background: rgba(11, 8, 21, .75);
+  /* --background: rgba(0, 0, 0, .5); */
+  --size: 5px;
+  background-image:
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, transparent var(--size), var(--background) var(--size));
+  background-size: calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), 100% calc(100% - var(--size) * 3);
+  background-repeat: repeat-x;
+  background-position: 0 var(--size), top left, 0 calc(100% - var(--size)), bottom left, 0 var(--size);
+  padding: calc(var(--size) * 3) calc(var(--size) * 2.5);
+  box-sizing: border-box;
+  /* color: #702c53; */
+  color: #efecf8;
+  /* color: #c15f6f; */
+  /* font-family: "Bebas Neue";
+  font-size: 1.5rem; */
+  letter-spacing: 1px;
+}
+
+.top-outline {
+  outline: 1px solid #0b0815;
+}
+.h1_logo {
+  text-align: center;
+  --background: rgba(0, 0, 0, .35);
+  --size: 10px;
+  background-image:
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, transparent var(--size), var(--background) var(--size));
+  background-size: calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), 100% calc(100% - var(--size) * 3);
+  background-repeat: repeat-x;
+  background-position: 0 var(--size), top left, 0 calc(100% - var(--size)), bottom left, 0 var(--size);
+  padding: calc(var(--size) * 3) calc(var(--size) * 2.5);
+  box-sizing: border-box;
+  /* filter: sepia(1) brightness(0.9) grayscale(.2); */
+  letter-spacing: 2px;
+}
+
+.filmStrip {
+  --background: rgba(0, 0, 0, .35);
+  --size: 10px;
+  background-image:
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, transparent var(--size), var(--background) var(--size));
+  background-size: calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), 100% calc(100% - var(--size) * 3);
+  background-repeat: repeat-x;
+  background-position: 0 var(--size), top left, 0 calc(100% - var(--size)), bottom left, 0 var(--size);
+  padding: calc(var(--size) * 3) calc(var(--size) * 2.5);
+  box-sizing: border-box;
+  filter: sepia(1) brightness(0.9) grayscale(.2);
+
+}
+
+
+
+.filmImage {
+  --s: 0.5rem; /* control the size */
+  --c: #222;
+ 
+  width: calc(20*var(--s));
+  aspect-ratio: 2;
+  background: 
+    conic-gradient(at 50% var(--s),var(--c) 75%,#0000 0) 
+    0 0/calc(2*var(--s)) calc(100% - var(--s)) padding-box;
+  border: var(--s) solid var(--c);
+  padding: calc(var(--s)*2.5) calc(var(--s)*1.5);
+  box-sizing: content-box;
+  /* you can add a filter for an oldish effect 
+  filter: sepia(1) brightness(0.9) grayscale(.2);
+  */
+}

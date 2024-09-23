@@ -1,10 +1,11 @@
-import './App.css'
+import HomePage from './pages/HomePage'
 
 function App() {
 
   return (
     <>
-      <h1>Filmvisarna</h1>
+      {/* <h1>Filmvisarna</h1> */}
+      <HomePage />
     </>
   )
 }
