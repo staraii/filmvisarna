@@ -228,7 +228,7 @@ export default function HomePage() {
           {showMenu ? (
             <Row xs={3} md={3} lg={3} className="navbar-row">
               <Col>
-                <Nav.Link href="#login">Logga in</Nav.Link>
+                <Nav.Link href="/register">Logga in</Nav.Link>
               </Col>
               <Col>
                 <Nav.Link href="#blimedlem">Bli medlem</Nav.Link>
