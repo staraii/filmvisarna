@@ -33,6 +33,7 @@ body {
 h1, h2, h3, h4, h5 {
   font-family: var(--title-font);
   font-weight: 700;
+  color: var(--accent-color);
 }
 h1 {
   font-size: 4.210rem;
@@ -49,7 +50,6 @@ h4 {
 h5 {
   font-size: 1.333rem;
 }
-
 .small-font {
   font-size: 0.750rem;  
 }
