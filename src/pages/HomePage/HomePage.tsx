@@ -1,5 +1,4 @@
 import { useState } from "react";
-import MobileNavBar from "../../components/MobileNavBar/MobileNavBar";
 import WideNavBar from "../../components/WideNavBar/WideNavBar";
 import "./home-page.css";
 import Container from "react-bootstrap/Container";
@@ -258,7 +257,6 @@ export default function HomePage() {
           </Row>
         </Container>
       </main>
-      <MobileNavBar />
     </section>
   );
 }

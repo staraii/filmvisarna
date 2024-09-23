@@ -1,13 +1,18 @@
-import HomePage from './pages/HomePage/HomePage'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage/HomePage';
+import Register from './components/Register';
+
 
 function App() {
 
   return (
-    <>
-      {/* <h1>Filmvisarna</h1> */}
-      <HomePage />
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
