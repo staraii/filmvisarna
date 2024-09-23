@@ -1,0 +1,10 @@
+
+.wide-navbar {
+  @media (min-width: 1024px){
+    display: flex;
+    margin-bottom: 1.5rem;
+  }
+  @media (max-width: 1023px){
+    display: none;
+  }
+}
