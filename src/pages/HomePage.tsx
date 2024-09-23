@@ -13,6 +13,7 @@ import Nav from "react-bootstrap/Nav";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Card from "react-bootstrap/Card";
+import MovieCalendar from "../component/MovieCalendar/MovieCalendar";
 //import Offcanvas from "react-bootstrap/Offcanvas";
 
 const visningar = [
@@ -99,10 +100,8 @@ const visningar = [
   },
 ];
 
-
-
 export default function HomePage() {
-  const [salong, setSalong] = useState < number[]|[]>([]);
+  const [salong, setSalong] = useState<number[] | []>([]);
   const handleChangeSalong = (val: number[] | []) => setSalong(val);
   const [showMenu, setShowMenu] = useState(true);
   //const handleShowMenu = () => setShowMenu((showMenu) => !showMenu)
@@ -232,6 +231,9 @@ export default function HomePage() {
               </Col>
               <Col>
                 <Nav.Link href="#blimedlem">Bli medlem</Nav.Link>
+              </Col>
+              <Col>
+                <Nav.Link href="#biokalendern">Bio Kalendern</Nav.Link>
               </Col>
               <Col>
                 <Nav.Link href="#avboka">Avboka platser</Nav.Link>

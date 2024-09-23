@@ -1,0 +1,43 @@
+.Movie-Calendar {
+  text-align: center;
+}
+
+.Weeks {}
+
+.Days {
+  width: 85%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+.Days img {
+  max-width: 15rem;
+  display: block;
+  /* Ensure the image is treated as a block element */
+  margin: 0 auto 15px;
+  /* Center the image horizontally and add bottom margin */
+  border-radius: 5px;
+}
+
+.accordion-button {
+  transition: background-color 0.3s ease;
+}
+
+.Poster-Description {
+  background-color: #c15f6f42;
+  max-width: 17rem;
+  /* Matches the image width */
+  margin: 0 auto 20px;
+  /* Center the Poster-Description */
+  text-align: center;
+  /* Center the text inside */
+  padding: 10px;
+  /* Add padding for text */
+  border-radius: 5px;
+  display: flex;
+  /* Add flexbox to center contents */
+  flex-direction: column;
+  /* Stack the image and text vertically */
+  align-items: center;
+  /* Center content horizontally */
+}

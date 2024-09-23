@@ -1,13 +1,14 @@
-import HomePage from './pages/HomePage'
+import MovieCalendar from "./component/MovieCalendar/MovieCalendar";
+import HomePage from "./pages/HomePage";
 
 function App() {
-
   return (
     <>
       {/* <h1>Filmvisarna</h1> */}
-      <HomePage />
+      {/*<HomePage /> */}
+      <MovieCalendar />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
