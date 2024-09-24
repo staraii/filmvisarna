@@ -68,19 +68,20 @@ export default function BookingPage() {
 
   return (
     <>
-      <body className=" h-auto d-flex flex-column container">
+      <body className=" h-auto d-flex flex-column container ">
         <div className="container text-center booking-header">
-          <div className="row">
-            <div className="col">
-              <h1 className="pt-5">Heat</h1>
+          <div className="row pt-4">
+            <div className=" col d-flex align-items-center">
+              <h1 className="">Heat</h1>
             </div>
-            <span className="col"></span>
-            <div className="col">
-              <p>onsdag 18 sep</p>
-              <p>21:00-22:43</p>
+            <span className="col d-flex align-items-center">
+              <h5>onsdag 18 sep</h5>
+              <h5 className="p-1">21:00-22:43</h5>
+            </span>
+            <span className="col d-flex align-items-center">
               <p>(Sv.text) (Eng.tal)</p>
-              <p>12+</p>
-            </div>
+              <p> 12+</p>
+            </span>
           </div>
         </div>
         <div className="d-flex w-100 justify-content-center">
