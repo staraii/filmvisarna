@@ -1,6 +1,6 @@
 //import HomePage from './pages/HomePage'
 
-import MoveDetailsPage from "./pages/MoveDetailsPage"
+//import MoveDetailsPage from "./pages/MoveDetailsPage"
 
 
 function App() {
@@ -9,7 +9,7 @@ function App() {
     <>
       {/* <h1>Filmvisarna</h1> */}
       {/*<HomePage />*/}
-      <MoveDetailsPage/>
+      {/*/<MoveDetailsPage/>*/}
     </>
   )
 }
