@@ -16,13 +16,15 @@ export default function App(){
             <section className="app-section">
               <Router>
                 <WideNavBar />
-                
                 <Routes>
                   <Route path="/" element={<HomePage />} />
-                  <Route path="/Register" element={<Register />} />
-                  <Route path="/film" element={<MoveDetailsPage />} />
+                  {/* <Route path="/filmer" element={<Movies />} /> */}
+                  {/* <Route path="/visningar" element={} /> */}
+                  <Route path="/filmer" element={<MoveDetailsPage />} />
+                  <Route path="/blimedlem" element={<Register />} />
+                  <Route path="/loggain" element={<LoginPage />} />
                   <Route path="/boka" element={<BookingPage />} />
-                   <Route path="/loggain" element={<LoginPage />} />
+                  {/* <Route path="/avboka" element={<CancelBooking />} /> */}
                 </Routes>
                 <MobileNavBar />
               </Router>

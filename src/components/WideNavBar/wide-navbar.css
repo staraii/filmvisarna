@@ -26,7 +26,7 @@
 .wide-navbar {
   display: flex;
   margin-bottom: 1.5rem;
-  color: #c15f6f;
+  color: #efecf8;
 
   /* Hides navbar when screen is smaller than 768px  */
   @media only screen and (max-width: 767px){
