@@ -1,10 +1,35 @@
+.logo-menu-header {
+  width: 100%;
+  max-width: 1040px;
+  display: flex;
+  flex-direction: column;
+}
 
+.h1_logo {
+  text-align: center;
+  --background: rgba(112, 44, 83, .2);
+  --size: 10px;
+  background-image:
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, transparent var(--size), var(--background) var(--size));
+  background-size: calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), 100% calc(100% - var(--size) * 3);
+  background-repeat: repeat-x;
+  background-position: 0 var(--size), top left, 0 calc(100% - var(--size)), bottom left, 0 var(--size);
+  padding: calc(var(--size) * 3) calc(var(--size) * 2.5);
+  box-sizing: border-box;
+  letter-spacing: 4px;
+  font-size: 3rem;
+}
 .wide-navbar {
-  @media (min-width: 768px){
-    display: flex;
-    margin-bottom: 1.5rem;
-  }
-  @media (max-width: 767px){
+  display: flex;
+  margin-bottom: 1.5rem;
+  color: #c15f6f;
+
+  /* Hides navbar when screen is smaller than 768px  */
+  @media only screen and (max-width: 767px){
     display: none;
   }
 }

@@ -4,24 +4,28 @@ import Register from './pages/Register/Register';
 import MoveDetailsPage from "./pages/MoveDetailsPage";
 import BookingPage from "./pages/BookingPage";
 import MobileNavBar from './components/MobileNavBar/MobileNavBar';
+import WideNavBar from './components/WideNavBar/WideNavBar';
 
 
 
 
 export default function App(){
         return (
-     <>
-      <Router>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/film" element={<MoveDetailsPage />} />
-          <Route path="/boka" element={<BookingPage />} />
-        </Routes>
-      </Router>
-      <MobileNavBar />
-    </>
-  );
+          <>
+            <section className="app-section">
+              <Router>
+                <WideNavBar />
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/blimedlem" element={<Register />} />
+                  <Route path="/film" element={<MoveDetailsPage />} />
+                  <Route path="/boka" element={<BookingPage />} />
+                </Routes>
+                <MobileNavBar />
+              </Router>
+            </section>
+          </>
+        );
 }
 
 

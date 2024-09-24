@@ -1,5 +1,4 @@
 import { useState } from "react";
-import WideNavBar from "../../components/WideNavBar/WideNavBar";
 import "./home-page.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -12,7 +11,6 @@ import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-
 import Stack from "react-bootstrap/Stack";
 
 const visningar = [
@@ -116,8 +114,6 @@ export default function HomePage() {
   return (
     <section className="home-section">
       <main className="home_main">
-        <h1 className="h1_logo my-4">Filmvisarna</h1>
-        <WideNavBar />
         <Carousel interval={5000} className="mb-2">
           <Carousel.Item>
             <Image src="/sleepers_slide.jpg" alt="Sleepers" fluid />
