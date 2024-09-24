@@ -1,12 +1,12 @@
 
 .navbar-bottom {
-  @media (max-width: 1023px){
+  @media (max-width: 767px){
     display: flex;
     height: 8vh;
     flex-direction: row;
     justify-content: space-around;
   }
-  @media (min-width: 1024px){
+  @media (min-width: 768px){
     display: none;
   }
  
