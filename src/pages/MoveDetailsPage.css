@@ -1,0 +1,30 @@
+h1{
+  text-align: center;
+}
+
+.trailerPost {
+  display: block;
+  margin: 0 auto;
+  width: 90vw;
+  max-width: 37.5rem;
+  cursor: pointer;
+}
+
+.see-more-container {
+  text-align: left;
+}
+
+.see-more-btn {
+  display: block;
+  padding-left: 0;
+  text-decoration: underline;
+}
+
+.carouselMoveDetail{
+  width: 25rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
