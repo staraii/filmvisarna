@@ -5,6 +5,7 @@ import MoveDetailsPage from "./pages/MoveDetailsPage";
 import BookingPage from "./pages/BookingPage";
 import MobileNavBar from './components/MobileNavBar/MobileNavBar';
 import WideNavBar from './components/WideNavBar/WideNavBar';
+import LoginPage from './components/Login-pop-up/LoginMobile';
 
 
 
@@ -21,6 +22,7 @@ export default function App(){
                   <Route path="/Register" element={<Register />} />
                   <Route path="/film" element={<MoveDetailsPage />} />
                   <Route path="/boka" element={<BookingPage />} />
+                   <Route path="/loggain" element={<LoginPage />} />
                 </Routes>
                 <MobileNavBar />
               </Router>

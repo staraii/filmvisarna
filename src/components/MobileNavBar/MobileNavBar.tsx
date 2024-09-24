@@ -2,10 +2,18 @@ import { useState } from "react";
 import "./mobile-navbar.css";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
+import { useNavigate } from "react-router-dom";
 import Offcanvas from "react-bootstrap/Offcanvas";
 
 export default function MobileNavBar() {
   const [showMenu, setShowMenu] = useState(false);
+    const navigate = useNavigate();
+
+     // Function to handle navigation to the register page
+  const handleRegisterClick = () => {
+    navigate('/register'); // Navigate to the Register page
+  };
+
   return (
     <Navbar fixed="bottom" bg="primary" className="navbar-bottom">
       <Nav.Link href="/" className="icon-link">
@@ -76,7 +84,8 @@ export default function MobileNavBar() {
         <Offcanvas.Body className="d-flex flex-column justify-content-end pb-5 mb-5">
           <Nav.Link href="/avboka">Avboka platser</Nav.Link>
           <Nav.Link href="/loggain">Logga in</Nav.Link>
-          <Nav.Link href="/blimedlem">Bli medlem</Nav.Link>
+           {/* Navigate to register page on click */}
+        <Nav.Link className="fw-medium" onClick={handleRegisterClick}>Bli medlem</Nav.Link>
         </Offcanvas.Body>
       </Offcanvas>
     </Navbar>
