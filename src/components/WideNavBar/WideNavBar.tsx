@@ -1,14 +1,21 @@
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./wide-navbar.css";
 import LoginModal from "../Login-pop-up/LoginModal";
 
 export default function WideNavBar() {
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleLoginShow = () => setShowLoginModal(true);
   const handleLoginClose = () => setShowLoginModal(false);
+
+   // Function to handle navigation to the register page
+  const handleRegisterClick = () => {
+    navigate('/register'); // Navigate to the Register page
+  };
 
   return (
     <header className="logo-menu-header">
@@ -33,9 +40,8 @@ export default function WideNavBar() {
           Logga in
         </Nav.Link>
 
-        <Nav.Link href="/blimedlem" className="fw-medium">
-          Bli medlem
-        </Nav.Link>
+         {/* Navigate to register page on click */}
+        <Nav.Link className="fw-medium" onClick={handleRegisterClick}>Bli medlem</Nav.Link>
       </Navbar>
 
       {/* Login Modal */}
