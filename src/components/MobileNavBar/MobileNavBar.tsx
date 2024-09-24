@@ -21,7 +21,7 @@ export default function MobileNavBar() {
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="32"
-          fill="#c15f6f"
+          fill="#efecf8"
           className="bi bi-house"
           viewBox="0 0 16 16"
         >
@@ -33,7 +33,7 @@ export default function MobileNavBar() {
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="32"
-          fill="#c15f6f"
+          fill="#efecf8"
           className="bi bi-film"
           viewBox="0 0 16 16"
         >
@@ -45,7 +45,7 @@ export default function MobileNavBar() {
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="32"
-          fill="#c15f6f"
+          fill="#efecf8"
           className="bi bi-calendar3"
           viewBox="0 0 16 16"
         >
@@ -62,7 +62,7 @@ export default function MobileNavBar() {
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="32"
-          fill="#c15f6f"
+          fill="#efecf8"
           className="bi bi-three-dots"
           viewBox="0 0 16 16"
         >
@@ -84,8 +84,10 @@ export default function MobileNavBar() {
         <Offcanvas.Body className="d-flex flex-column justify-content-end pb-5 mb-5">
           <Nav.Link href="/avboka">Avboka platser</Nav.Link>
           <Nav.Link href="/loggain">Logga in</Nav.Link>
-           {/* Navigate to register page on click */}
-        <Nav.Link className="fw-medium" onClick={handleRegisterClick}>Bli medlem</Nav.Link>
+          {/* Navigate to register page on click */}
+          <Nav.Link className="fw-medium" onClick={handleRegisterClick}>
+            Bli medlem
+          </Nav.Link>
         </Offcanvas.Body>
       </Offcanvas>
     </Navbar>
