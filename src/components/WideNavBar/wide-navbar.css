@@ -25,11 +25,13 @@
 }
 .wide-navbar {
   display: flex;
-  margin-bottom: 1.5rem;
+  justify-content: space-between; /* Align items properly */
+  align-items: center; /* Center items vertically */
+  margin-bottom: 1.5rem; /* Space below navbar */
   color: #c15f6f;
 
-  /* Hides navbar when screen is smaller than 768px  */
-  @media only screen and (max-width: 767px){
+  /* Hide navbar on smaller screens */
+  @media only screen and (max-width: 767px) {
     display: none;
   }
 }
