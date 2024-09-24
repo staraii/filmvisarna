@@ -28,20 +28,26 @@
 .Poster-Description {
   background-color: #c15f6f42;
   max-width: 17rem;
-  margin: 1rem;
+  margin: 10px;
   text-align: center;
   padding: 10px;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
   align-items: center;
+
 }
 
 .Poster-Description h4 {
   margin-top: 1rem;
+  font-size: 2rem;
 }
 
-@media (min-width: 768px) {
+.Poster-Description p {
+  font-size: 1.1rem;
+}
+
+@media (min-width: 670px) {
   .Poster-Container {
     flex-direction: row;
   }
@@ -49,6 +55,18 @@
   .Poster-Description {
     flex: 1 1 calc(33.33% - 20px);
     max-width: none;
+  }
+
+  .Days {
+    width: 75%;
+  }
+
+  .carousel-control-prev {
+    left: 2rem;
+  }
+
+  .carousel-control-next {
+    right: 2rem;
   }
 }
 
@@ -58,9 +76,9 @@
 }
 
 .carousel-control-prev {
-  left: 3rem;
+  left: 5rem;
 }
 
 .carousel-control-next {
-  right: 3rem;
+  right: 5rem;
 }

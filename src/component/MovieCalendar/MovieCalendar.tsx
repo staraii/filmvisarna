@@ -14,26 +14,15 @@ function MovieCalendar() {
       </div>
       <div className="Weeks">
         <Carousel slide={false} indicators={false} interval={null} wrap={false}>
-          <Carousel.Item>
-            <div className="carousel-text">
-              <h3>Vecka 40</h3>
-            </div>
-          </Carousel.Item>
-          <Carousel.Item>
-            <div className="carousel-text">
-              <h3>Vecka 41</h3>
-            </div>
-          </Carousel.Item>
-          <Carousel.Item>
-            <div className="carousel-text">
-              <h3>Vecka 42</h3>
-            </div>
-          </Carousel.Item>
-          <Carousel.Item>
-            <div className="carousel-text">
-              <h3>Vecka 43</h3>
-            </div>
-          </Carousel.Item>
+          {["Vecka 40", "Vecka 41", "Vecka 42", "Vecka 43"].map(
+            (week, index) => (
+              <Carousel.Item key={index}>
+                <div className="carousel-text">
+                  <h3>{week}</h3>
+                </div>
+              </Carousel.Item>
+            )
+          )}
         </Carousel>
       </div>
       <div className="Days">
@@ -52,21 +41,19 @@ function MovieCalendar() {
               <Accordion.Body>
                 <div className="Poster-Container">
                   <div className="Poster-Description">
-                    <img src={Sleepers} alt="" />
+                    <img src={Sleepers} alt="Sleepers" />
                     <h4>17:00 - 2t 27m</h4>
                     <p>Drama, Thriller</p>
                     <p>1996</p>
                   </div>
-
                   <div className="Poster-Description">
-                    <img src={Titanic} alt="" />
+                    <img src={Titanic} alt="Titanic" />
                     <h4>19:00 - 3t 14m</h4>
                     <p>Romantik, Drama, Historisk</p>
                     <p>1997</p>
                   </div>
-
                   <div className="Poster-Description">
-                    <img src={Pippi} alt="" />
+                    <img src={Pippi} alt="Pippi" />
                     <h4>22:30 - 1t 34m</h4>
                     <p>Barn</p>
                     <p>1970</p>
