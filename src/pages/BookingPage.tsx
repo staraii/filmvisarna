@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function BookingPage() {
   const [tickets, setTickets] = useState<number>(2);
   const [selectedSeat, setSelectedSeat] = useState<string[]>([]);
+  const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
 
   const seats = {
     1: 8,
@@ -16,20 +17,36 @@ export default function BookingPage() {
     7: 12,
     8: 12,
   };
+  function displaySeats(row: number, index: number, seatCount: number) {
+    let hoveredSeatIds: string[] = [];
+    for (let i = 0; i < tickets; i++) {
+      if (index + i < seatCount) {
+        hoveredSeatIds.push(`${row}:${index + i + 1}`);
+      }
+    }
+    setHoveredSeats(hoveredSeatIds);
+  }
 
   const seatGrid = Object.entries(seats).map(([row, seatCount]) => (
     <div key={row} className="d-flex flex-row-reverse">
       <div className="">
         {Array.from({ length: seatCount })
-          .map((_, index) => (
-            <button
-              onClick={() => handleSeatSelect(Number(row), index)}
-              key={index}
-              className="seat"
-            >
-              {index + 1}
-            </button>
-          ))
+          .map((_, index) => {
+            const seatId = `${row}:${index + 1}`;
+
+            return (
+              <button
+                onClick={() => handleSeatSelect(Number(row), index + 1)}
+                onMouseOver={() => displaySeats(Number(row), index, seatCount)}
+                key={seatId}
+                className={`seat ${
+                  hoveredSeats.includes(seatId) ? "hovered-seat" : ""
+                }`}
+              >
+                {index + 1}
+              </button>
+            );
+          })
           .reverse()}
       </div>
     </div>
@@ -38,14 +55,14 @@ export default function BookingPage() {
 
   function handleSeatSelect(row: number, index: number) {
     //med stolen row och index som utgångspunkt, välj sedan row + antalet biljetter som valts
+    setSelectedSeat([]);
     let seat = index + 1;
 
     for (let i = 0; i < tickets; i++) {
       setSelectedSeat((oldSelectedSeat) => [
         ...oldSelectedSeat,
-        row + ":" + (seat + i) + " ",
+        row + ":" + (seat + i - 1) + " ",
       ]);
-      console.log(selectedSeat);
     }
   }
 
