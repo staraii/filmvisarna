@@ -15,9 +15,10 @@ export default function App(){
             <section className="app-section">
               <Router>
                 <WideNavBar />
+                
                 <Routes>
                   <Route path="/" element={<HomePage />} />
-                  <Route path="/blimedlem" element={<Register />} />
+                  <Route path="/Register" element={<Register />} />
                   <Route path="/film" element={<MoveDetailsPage />} />
                   <Route path="/boka" element={<BookingPage />} />
                 </Routes>
