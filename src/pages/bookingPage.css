@@ -26,14 +26,8 @@
   height: 50px;
   background-color: #702c53;
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border: 1px solid black;
   border-radius: 4px;
-}
-.seat:hover {
-  background-color: #c15f6f;
 }
 .seat-selected {
   background-color: #c15f6f;
@@ -43,4 +37,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+}
+button:hover {
+  background-color: #c15f6f;
 }
