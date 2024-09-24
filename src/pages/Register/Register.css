@@ -1,0 +1,45 @@
+.register-container {
+  display: flex;
+  align-items: center;
+  /* Change to center for vertical alignment */
+  justify-content: center;
+  min-height: 80vh;
+  margin-top: 80px;
+  background-color: #0b0815;
+}
+
+.register-form {
+  background-color: rgb(44, 35, 35);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-family: 'Poppins', sans-serif;
+  color: #702c53;
+}
+
+p {
+  font-family: 'Poppins', sans-serif;
+  color: #ffffff;
+}
+
+button {
+  background-color: #702c53;
+  border-color: #702c53;
+}
+
+button:hover {
+  background-color: #551a3a;
+  border-color: #551a3a;
+}
+
+/* Styling the form inputs to make them larger */
+.form-control {
+  height: 40px;
+  font-size: 1.2rem;
+  /* Use full width */
+  width: 100%;
+}
+
