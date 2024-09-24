@@ -10,13 +10,15 @@
   margin-top: 20px;
 }
 
+.Poster-Container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .Days img {
-  max-width: 15rem;
-  display: block;
-  /* Ensure the image is treated as a block element */
-  margin: 0 auto 15px;
-  /* Center the image horizontally and add bottom margin */
-  border-radius: 5px;
+  max-width: 100%;
+  height: auto;
 }
 
 .accordion-button {
@@ -26,18 +28,39 @@
 .Poster-Description {
   background-color: #c15f6f42;
   max-width: 17rem;
-  /* Matches the image width */
-  margin: 0 auto 20px;
-  /* Center the Poster-Description */
+  margin: 1rem;
   text-align: center;
-  /* Center the text inside */
   padding: 10px;
-  /* Add padding for text */
   border-radius: 5px;
   display: flex;
-  /* Add flexbox to center contents */
   flex-direction: column;
-  /* Stack the image and text vertically */
   align-items: center;
-  /* Center content horizontally */
+}
+
+.Poster-Description h4 {
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .Poster-Container {
+    flex-direction: row;
+  }
+
+  .Poster-Description {
+    flex: 1 1 calc(33.33% - 20px);
+    max-width: none;
+  }
+}
+
+.carousel-text h3 {
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+.carousel-control-prev {
+  left: 3rem;
+}
+
+.carousel-control-next {
+  right: 3rem;
 }
