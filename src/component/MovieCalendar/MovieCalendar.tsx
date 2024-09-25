@@ -1,6 +1,8 @@
 import "./MovieCalendar.css";
 import Carousel from "react-bootstrap/Carousel";
 import Accordion from "react-bootstrap/Accordion";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 import Pippi from "../../../public/pippi_poster.jpg";
 import Sleepers from "../../../public/sleepers_poster.jpg";
 import Titanic from "../../../public/titanic_poster.jpg";
@@ -41,22 +43,43 @@ function MovieCalendar() {
               <Accordion.Body>
                 <div className="Poster-Container">
                   <div className="Poster-Description">
-                    <img src={Sleepers} alt="Sleepers" />
-                    <h4>17:00 - 2t 27m</h4>
-                    <p>Drama, Thriller</p>
-                    <p>1996</p>
+                    <Card style={{ width: "16rem" }}>
+                      <Card.Img variant="top" src={Pippi} />
+                      <Card.Body>
+                        <Card.Title>Pippi (1970)</Card.Title>
+                        <Card.Text>17:00</Card.Text>
+                        <Card.Text>Barn</Card.Text>
+                        <Button className="Movie-Button" variant="primary">
+                          Boka nu
+                        </Button>
+                      </Card.Body>
+                    </Card>
                   </div>
                   <div className="Poster-Description">
-                    <img src={Titanic} alt="Titanic" />
-                    <h4>19:00 - 3t 14m</h4>
-                    <p>Romantik, Drama, Historisk</p>
-                    <p>1997</p>
+                    <Card style={{ width: "16rem" }}>
+                      <Card.Img variant="top" src={Titanic} />
+                      <Card.Body>
+                        <Card.Title>Titanic (1997)</Card.Title>
+                        <Card.Text>19:00</Card.Text>
+                        <Card.Text>Romantik, Drama</Card.Text>
+                        <Button className="Movie-Button" variant="primary">
+                          Boka nu
+                        </Button>
+                      </Card.Body>
+                    </Card>
                   </div>
                   <div className="Poster-Description">
-                    <img src={Pippi} alt="Pippi" />
-                    <h4>22:30 - 1t 34m</h4>
-                    <p>Barn</p>
-                    <p>1970</p>
+                    <Card style={{ width: "16rem" }}>
+                      <Card.Img variant="top" src={Sleepers} />
+                      <Card.Body>
+                        <Card.Title>Sleepers (1996)</Card.Title>
+                        <Card.Text>22:00</Card.Text>
+                        <Card.Text>Drama, Thriller</Card.Text>
+                        <Button className="Movie-Button" variant="primary">
+                          Boka nu
+                        </Button>
+                      </Card.Body>
+                    </Card>
                   </div>
                 </div>
               </Accordion.Body>

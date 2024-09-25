@@ -31,11 +31,9 @@
   margin: 10px;
   text-align: center;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 8px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-
 }
 
 .Poster-Description h4 {
@@ -54,19 +52,18 @@
 
   .Poster-Description {
     flex: 1 1 calc(33.33% - 20px);
-    max-width: none;
   }
 
   .Days {
-    width: 75%;
+    width: 65%;
   }
 
   .carousel-control-prev {
-    left: 2rem;
+    left: 10rem;
   }
 
   .carousel-control-next {
-    right: 2rem;
+    right: 10rem;
   }
 }
 
@@ -81,4 +78,8 @@
 
 .carousel-control-next {
   right: 5rem;
+}
+
+.Movie-Button {
+  background-color: #c15f6f;
 }
