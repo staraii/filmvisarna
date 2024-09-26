@@ -1,0 +1,64 @@
+/* footer.css */
+.footer {
+  background-color: #0b0815;
+  /* Match the background color of your site */
+  color: #efecf8;
+  /* Light text color */
+  padding: 20px 0;
+  /* Padding for the footer */
+  text-align: left;
+}
+
+.footer h5 {
+  color: #c15f6f;
+  /* Accent color for headings */
+  margin-bottom: 10px;
+  /* Space below headings */
+  text-align: left;
+  
+}
+
+.footer ul {
+  padding-left: 0;
+  /* Remove default padding */
+  text-align: left;
+}
+
+.footer a {
+  color: #efecf8;
+  /* Ensure links are visible */
+  text-decoration: none;
+  /* Remove underline */
+  
+}
+
+.footer a:hover {
+  color: #c15f6f;
+  /* Change color on hover for better UX */
+}
+
+.footer-separator {
+  border: none;
+  /* Remove default border */
+  height: 1px;
+  /* Set height for the line */
+  background-color: #c15f6f;
+  /* Line color */
+  margin: 20px 0;
+  /* Space around the line */
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+  .footer .row {
+    flex-direction: column;
+    /* Stack columns on small screens */
+    text-align: left;
+    /* Keep text left aligned on small screens */
+  }
+
+  .footer .col-md-4 {
+    margin-bottom: 20px;
+    /* Add space between stacked items */
+  }
+}
