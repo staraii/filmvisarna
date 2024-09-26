@@ -10,27 +10,25 @@ import LoginPage from './components/Login-pop-up/LoginMobile';
 
 
 
-export default function App(){
-        return (
-          <>
-            <section className="app-section">
-              <Router>
-                <WideNavBar />
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  {/* <Route path="/filmer" element={<Movies />} /> */}
-                  {/* <Route path="/visningar" element={} /> */}
-                  <Route path="/filmer" element={<MoveDetailsPage />} />
-                  <Route path="/blimedlem" element={<Register />} />
-                  <Route path="/loggain" element={<LoginPage />} />
-                  <Route path="/boka" element={<BookingPage />} />
-                  {/* <Route path="/avboka" element={<CancelBooking />} /> */}
-                </Routes>
-                <MobileNavBar />
-              </Router>
-            </section>
-          </>
-        );
+export default function App() {
+  return (
+    <section className="app-section">
+      <Router>
+        <WideNavBar />
+        <div className="content-container">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/film" element={<MoveDetailsPage />} />
+            <Route path="/boka" element={<BookingPage />} />
+            <Route path="/loggain" element={<LoginPage />} />
+          </Routes>
+        </div>
+        <MobileNavBar />
+        <Footer />
+      </Router>
+    </section>
+  );
 }
 
 
