@@ -3,7 +3,7 @@
   height: 8vh;
   flex-direction: row;
   justify-content: space-around;
-  color: #c15f6f;
+  color: #efecf8;
 
   /* Hides navbar when screen size is bigger than 767px */
   @media only screen and (min-width: 768px){
