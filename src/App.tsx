@@ -6,6 +6,8 @@ import BookingPage from "./pages/BookingPage";
 import MobileNavBar from './components/MobileNavBar/MobileNavBar';
 import WideNavBar from './components/WideNavBar/WideNavBar';
 import LoginPage from './components/Login-pop-up/LoginMobile';
+import Footer from './components/Footer/Footer'; 
+import "./App.css";
 
 
 
@@ -30,5 +32,4 @@ export default function App() {
     </section>
   );
 }
-
 
