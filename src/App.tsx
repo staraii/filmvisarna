@@ -5,8 +5,7 @@ function App() {
   return (
     <>
       {/* <h1>Filmvisarna</h1> */}
-      {/*<HomePage /> */}
-      <MovieCalendar />
+      <HomePage />
     </>
   );
 }

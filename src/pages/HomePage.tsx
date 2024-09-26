@@ -233,9 +233,6 @@ export default function HomePage() {
                 <Nav.Link href="#blimedlem">Bli medlem</Nav.Link>
               </Col>
               <Col>
-                <Nav.Link href="#biokalendern">Bio Kalendern</Nav.Link>
-              </Col>
-              <Col>
                 <Nav.Link href="#avboka">Avboka platser</Nav.Link>
               </Col>
             </Row>
