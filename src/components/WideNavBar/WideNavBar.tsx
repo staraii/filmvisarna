@@ -34,7 +34,7 @@ export default function WideNavBar() {
         <Nav.Link className="fw-medium" onClick={handleLoginShow}>
           Logga in
         </Nav.Link>
-        <Nav.Link className="fw-medium" onClick={() => navigate("/blimedlem")}>Bli medlem</Nav.Link>
+        <Nav.Link className="fw-medium" onClick={() => navigate("/register")}>Bli medlem</Nav.Link>
       </Navbar>
 
       {/* Login Modal */}

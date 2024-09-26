@@ -76,34 +76,17 @@ const Register = () => {
             </Row>
 
             {/* New Row for Phone Number and Postal Code */}
-            <Row className="mb-3">
-              <Col xs={6}>
-                <Form.Group controlId="formPhoneNumber">
-                  <Form.Label>Telefonnummer</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Ange ditt telefonnummer"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col xs={6}>
-                <Form.Group controlId="formPostalCode">
-                  <Form.Label>Postnummer</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Ange ditt postnummer"
-                    name="postalCode"
-                    value={formData.postalCode}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+            <Form.Group controlId="formEmail" className="mb-3">
+              <Form.Label>Telefonnummer</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Ange ditt telefonnummer"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
             {/* New Row for Password and Confirm Password */}
             <Row className="mb-3">
