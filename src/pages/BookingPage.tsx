@@ -1,11 +1,27 @@
 import "./bookingPage.css";
+import { Row, Col, Container, Stack, Button } from "react-bootstrap";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function BookingPage() {
+  const [ticketAdult, setticketAdult] = useState<number>(2);
+  const [ticketChild, setTicketChild] = useState<number>(0);
+  const [ticketSenior, setTicketSenior] = useState<number>(0);
   const [tickets, setTickets] = useState<number>(2);
+
   const [selectedSeat, setSelectedSeat] = useState<string[]>([]);
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
+
+  //För mockupen ska vara godkänd måste man kunna välja 3 olika biljetter, fixa padding mellan biljetter och stolar, ta bort siffror från stolarna, fixa mobilvyn,
+  //bokningsknappen ska vara stylad bättre, hur ska det se ut om man har 3 biljetter men highlightar de 2 sista i stolsraden? skriva om
+  //bootstrap till bootrap react, dela upp i komponenter?. mockup data för redan bokade platser
+
+  //fixade route till boka, fixade biljetter, bokningsknapp, fungerar i mobilvy ner till 368 pixlar(finns något bootstrap relaterat som inte vill gå under viss width)
+  //tbd begränsningar
+
+  useEffect(() => {
+    setTickets(ticketAdult + ticketSenior + ticketChild);
+  }, [ticketAdult, ticketSenior, ticketChild]);
 
   const seats = {
     1: 8,
@@ -35,16 +51,15 @@ export default function BookingPage() {
             const seatId = `${row}:${index + 1}`;
 
             return (
-              <button
+              <Button
                 onClick={() => handleSeatSelect(Number(row), index + 1)}
                 onMouseOver={() => displaySeats(Number(row), index, seatCount)}
                 key={seatId}
                 className={`seat ${
                   hoveredSeats.includes(seatId) ? "hovered-seat" : ""
                 }`}
-              >
-                {index + 1}
-              </button>
+                variant=""
+              ></Button>
             );
           })
           .reverse()}
@@ -92,28 +107,62 @@ export default function BookingPage() {
 
         <div className="w-100 h-100 bg-black p-3 d-flex flex-column">
           <h4>Stora salongen</h4>
-          <section className="d-flex align-items-center">
-            <button
-              onClick={() => setTickets((prevTickets) => prevTickets + 1)}
-              className=""
-            >
-              +
-            </button>
-            <p className="m-2">{tickets}</p>
-            <button
-              onClick={() =>
-                setTickets((prevTickets) => Math.max(prevTickets - 1, 0))
-              }
-              className=""
-            >
-              -
-            </button>
-            <p className="m-2">Biljetter</p>
-          </section>
+          <Stack className="p-1 ">
+            <Stack direction="horizontal">
+              <Button
+                onClick={() =>
+                  setticketAdult((prevTickets) => Math.max(prevTickets - 1, 0))
+                }
+              >
+                -
+              </Button>
+              <p className="m-3 ">{ticketAdult}</p>
+              <Button
+                onClick={() => setticketAdult((prevTickets) => prevTickets + 1)}
+              >
+                +
+              </Button>
+              <p className="m-2">Standard: 140 kr</p>
+            </Stack>
+            <Stack direction="horizontal">
+              <Button
+                onClick={() =>
+                  setTicketChild((prevTickets) => Math.max(prevTickets - 1, 0))
+                }
+              >
+                -
+              </Button>
+              <p className="m-3">{ticketChild}</p>
+              <Button
+                onClick={() => setTicketChild((prevTickets) => prevTickets + 1)}
+              >
+                +
+              </Button>
+              <p className="m-2">Barn: 80 kr</p>
+            </Stack>
+            <Stack direction="horizontal">
+              <Button
+                onClick={() =>
+                  setTicketSenior((prevTickets) => Math.max(prevTickets - 1, 0))
+                }
+              >
+                -
+              </Button>
+              <p className="m-3">{ticketSenior}</p>
+              <Button
+                onClick={() =>
+                  setTicketSenior((prevTickets) => prevTickets + 1)
+                }
+              >
+                +
+              </Button>
+              <p className="m-2">Senior : 120 kr</p>
+            </Stack>
+          </Stack>
 
-          <div className="d-flex flex-column seat-container align-items-center">
+          <Stack className="seat-container pt-5 mx-auto justify-content-center align-items-center">
             {seatGrid}
-          </div>
+          </Stack>
         </div>
       </body>
       <footer className="d-flex w-100 justify-content-center align-items-center container booking-header flex-row justify-content-around">
@@ -121,9 +170,14 @@ export default function BookingPage() {
         <span>
           <p>Biljetter: {tickets}</p>
           <p>Platser: {selectedSeat}</p>
-          <p>Att betala: {tickets * 150}kr</p>
+          <p>
+            Att betala:{" "}
+            {ticketAdult * 140 + ticketChild * 80 + ticketSenior * 120}kr
+          </p>
         </span>
-        <button>Boka</button>
+        <Button className="booking-btn">
+          <h5 className="m-1">Boka</h5>
+        </Button>
       </footer>
     </>
   );

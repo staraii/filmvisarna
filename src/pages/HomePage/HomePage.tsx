@@ -6,12 +6,13 @@ import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
 import Image from "react-bootstrap/Image";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton"
+import DropdownButton from "react-bootstrap/DropdownButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
+import { Link } from "react-router-dom";
 
 const visningar = [
   {
@@ -22,7 +23,7 @@ const visningar = [
     sub: "(Sv. text)",
     age: "15+",
     img: "/titanic_poster.jpg",
-    status: "Low"
+    status: "Low",
   },
   {
     title: "Sleepers",
@@ -32,7 +33,7 @@ const visningar = [
     sub: "(Sv. text)",
     age: "15+",
     img: "/sleepers_poster.jpg",
-    status: "Medium"
+    status: "Medium",
   },
   {
     title: "Pippi",
@@ -42,7 +43,7 @@ const visningar = [
     sub: "(Sv. text)",
     age: "8+",
     img: "/pippi_poster.jpg",
-    status: "Medium"
+    status: "Medium",
   },
   {
     title: "Pippi",
@@ -52,7 +53,7 @@ const visningar = [
     sub: "(Sv. text)",
     age: "8+",
     img: "/pippi_poster.jpg",
-    status: "Many"
+    status: "Many",
   },
   {
     title: "Titanic",
@@ -62,7 +63,7 @@ const visningar = [
     sub: "(Sv. text)",
     age: "15+",
     img: "/titanic_poster.jpg",
-    status: "Many"
+    status: "Many",
   },
   {
     title: "Sleepers",
@@ -72,7 +73,7 @@ const visningar = [
     sub: "(Sv. text)",
     age: "15+",
     img: "/sleepers_poster.jpg",
-    status: "Low"
+    status: "Low",
   },
   {
     title: "Sleepers",
@@ -82,7 +83,7 @@ const visningar = [
     sub: "(Sv. text)",
     age: "15+",
     img: "/sleepers_poster.jpg",
-    status: "Many"
+    status: "Many",
   },
   {
     title: "Pippi",
@@ -92,7 +93,7 @@ const visningar = [
     sub: "(Sv. text)",
     age: "8+",
     img: "/pippi_poster.jpg",
-    status: "Low"
+    status: "Low",
   },
   {
     title: "Titanic",
@@ -102,14 +103,12 @@ const visningar = [
     sub: "(Sv. text)",
     age: "15+",
     img: "/titanic_poster.jpg",
-    status: "Low"
+    status: "Low",
   },
 ];
 
-
-
 export default function HomePage() {
-  const [salong, setSalong] = useState < number[]|[]>([]);
+  const [salong, setSalong] = useState<number[] | []>([]);
   const handleChangeSalong = (val: number[] | []) => setSalong(val);
   return (
     <section className="home-section">
@@ -240,7 +239,7 @@ export default function HomePage() {
                       {"  "}
                       {visning.sub}
                     </Card.Text>
-                    <Card.Link>
+                    <Card.Link as={Link} to="/boka">
                       <Button>Boka</Button>
                     </Card.Link>
                     <Card.Link>
