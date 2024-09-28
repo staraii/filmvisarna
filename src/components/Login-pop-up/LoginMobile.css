@@ -5,10 +5,7 @@
   /* Ensures full width in smaller screens */
 }
 
-h2 {
-  font-size: 20px;
-  /* Same font size for both 576px and 767px */
-}
+
 
 /* Style for links */
 .login-link {
@@ -58,6 +55,10 @@ button.btn-md {
     flex-wrap: nowrap;
     /* Prevent line breaks */
   }
+    h2 {
+      font-size: 20px;
+      /* Same font size for both 576px and 767px */
+    }
 }
 
 /* Special adjustments between 576px and 767px */
