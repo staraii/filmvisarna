@@ -59,3 +59,15 @@ button:hover {
 
 }
 
+/* CSS for hidden eyes icon */
+.password-toggle-icon {
+  position: absolute;
+  /* Center vertically */
+  transform: translateY(50%);
+  /* Offset for perfect centering */
+  color: #ffffff;
+  /* Adjust color as needed */
+  margin-right: 10px;
+}
+
+
