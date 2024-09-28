@@ -156,8 +156,8 @@ const Register = () => {
 
             {/* Button Section */}
             <div className="d-flex justify-content-center">
-              <Button variant="primary" type="submit" className="btn-md">
-                Registera
+              <Button variant="primary" type="submit" className="btn-md register-button">
+                Registrera
               </Button>
             </div>
           </Form>
