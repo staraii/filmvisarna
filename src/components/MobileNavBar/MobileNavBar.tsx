@@ -84,10 +84,7 @@ export default function MobileNavBar() {
           <Nav.Link className="fw-medium" onClick={() => handleNavigation("/loggain")}>
             Logga in
           </Nav.Link>
-          <Nav.Link
-            className="fw-medium"
-            onClick={() => handleNavigation("/blimedlem")}
-          >
+         <Nav.Link className="fw-medium" onClick={() => handleNavigation("/register")}>
             Bli medlem
           </Nav.Link>
         </Offcanvas.Body>
