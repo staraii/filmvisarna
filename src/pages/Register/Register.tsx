@@ -10,6 +10,7 @@ interface FormData {
   postalCode: string;
   email: string;
   password: string;
+  confirmPassword: string; // Added this to handle confirmPassword input
 }
 
 const Register = () => {
@@ -20,6 +21,7 @@ const Register = () => {
     postalCode: '',
     email: '',
     password: '',
+    confirmPassword: '', // Initialize with empty string
   });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -76,13 +78,13 @@ const Register = () => {
             </Row>
 
             {/* New Row for Phone Number and Postal Code */}
-            <Form.Group controlId="formEmail" className="mb-3">
+            <Form.Group controlId="formPhoneNumber" className="mb-3">
               <Form.Label>Telefonnummer</Form.Label>
               <Form.Control
-                type="email"
+                type="text"
                 placeholder="Ange ditt telefonnummer"
-                name="email"
-                value={formData.email}
+                name="phoneNumber"
+                value={formData.phoneNumber}
                 onChange={handleChange}
                 required
               />
@@ -110,6 +112,7 @@ const Register = () => {
                     type="password"
                     placeholder="Bekräfta ditt lösenord"
                     name="confirmPassword"
+                    value={formData.confirmPassword}  // Bind the value to the state
                     onChange={handleChange}
                     required
                   />
@@ -151,10 +154,12 @@ const Register = () => {
               />
             </Form.Group>
 
-            {/* Smaller Button Below Checkboxes */}
-            <Button variant="primary" type="submit" className="w-50 btn-medium">
-              Skapa nytt konto
-            </Button>
+            {/* Button Section */}
+            <div className="d-flex justify-content-center">
+              <Button variant="primary" type="submit" className="btn-md">
+                Registera
+              </Button>
+            </div>
           </Form>
         </Col>
       </Row>
