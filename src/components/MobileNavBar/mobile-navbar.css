@@ -1,6 +1,6 @@
 .navbar-bottom {
   display: flex;
-  height: 8vh;
+  /* height: 8vh; */
   flex-direction: row;
   justify-content: space-around;
   color: #efecf8;
