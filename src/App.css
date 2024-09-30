@@ -1,16 +1,45 @@
 #root {
   max-width: 1280px;
+  /* Max width for larger screens */
   margin: 0 auto;
   /* Center horizontally */
   text-align: center;
+  /* Center text */
+  width: 100%;
+  /* Use full width on smaller screens */
+  min-width: 1000px;
+  /* Minimum width for better readability */
+  display: flex;
+    /* Use flexbox for centering */
+    justify-content: center;
+    /* Center child content horizontally */
+  
+
+}
+
+/* Media query for screens smaller than 1000px */
+@media (max-width: 1000px) {
+  #root {
+    min-width: 100%;
+    /* Allow full width on smaller screens */
+    padding: 0 10px;
+    /* Adjust padding for smaller screens */
+  }
 }
 
 .app-section {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* This ensures the section takes at least the full height of the viewport */
+  /* Ensures the section takes at least the full height of the viewport */
 }
 
+/* Optional: Adding styles to child elements to ensure they also center */
+.app-section>div {
+  max-width: 100%;
+  /* Ensure children do not overflow */
+  margin: 0 auto;
+  /* Center children within the app-section */
+}
 
 

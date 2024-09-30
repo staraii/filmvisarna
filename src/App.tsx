@@ -6,8 +6,12 @@ import MoveDetailsPage from "./pages/MoveDetailsPage";
 import BookingPage from "./pages/BookingPage";
 import MobileNavBar from "./components/MobileNavBar/MobileNavBar";
 import WideNavBar from "./components/WideNavBar/WideNavBar";
-import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
+import BookingConfirmationPage from "./pages/BookingConfirmation";
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
+import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
+import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
+
+
 import "./App.css";
 
 export default function App() {
@@ -40,7 +44,14 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/film" element={<MoveDetailsPage />} />
             <Route path="/boka" element={<BookingPage />} />
+
+      
+            <Route
+              path="/order-bekraftelse"
+              element={<BookingConfirmationPage />}
+            </Route>
             <Route path="/bio-kalender" element={<MovieCalendar />} />
+            <Route path="/avboka" element={<CancelTickets />} />
           </Routes>
         </div>
         <MobileNavBar />
@@ -55,7 +66,4 @@ export default function App() {
     </section>
   );
 }
-
-
-
 

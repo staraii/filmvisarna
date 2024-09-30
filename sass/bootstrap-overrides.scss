@@ -9,15 +9,13 @@ $tertiary: #c15f6f;
 //$font-size-root: calc(15px + 0.390625vw);
 
 
-
 // Icon links
 // scss-docs-start icon-link-variables
 // $icon-link-gap:               .375rem !default;
 // $icon-link-underline-offset:  .25em !default;
-$icon-link-icon-size:         2em !default;
+$icon-link-icon-size: 2em !default;
 // $icon-link-icon-transition:   .2s ease-in-out transform !default;
 // $icon-link-icon-transform:    translate3d(.25em, 0, 0) !default;
-
 
 // $carousel-caption-width:             100%;
 // $carousel-caption-padding-y:         0rem;
@@ -31,8 +29,8 @@ $icon-link-icon-size:         2em !default;
 
 //$offcanvas-backdrop-bg:             none;
 
-$offcanvas-bg-color:                $primary;
-$offcanvas-horizontal-width:        250px !default;
+$offcanvas-bg-color: $primary;
+$offcanvas-horizontal-width: 250px !default;
 // $offcanvas-color:                   var(--#{$prefix}body-color) !default;
 
 // scss-docs-start offcanvas-variables
@@ -50,17 +48,13 @@ $offcanvas-horizontal-width:        250px !default;
 // $offcanvas-backdrop-bg:             $modal-backdrop-bg !default;
 // $offcanvas-backdrop-opacity:        $modal-backdrop-opacity !default;
 
-
-
 // -------------------------- BODY ------------------------
 //
 $body-color: $text-color;
 
-
 $body-bg: $background;
 $body-secondary-bg: $primary;
 $body-tertiary-bg: $secondary;
-
 
 // Settings for the `<body>` element.
 
@@ -77,11 +71,8 @@ $body-tertiary-bg: $secondary;
 
 // $body-emphasis-color:       $black !default;
 
-
-
 // Style p element.
 //$paragraph-margin-bottom:   1rem !default;
-
 
 // Grid breakpoints
 //
@@ -101,8 +92,6 @@ $body-tertiary-bg: $secondary;
 
 //@include _assert-ascending($grid-breakpoints, "$grid-breakpoints");
 //@include _assert-starts-at-zero($grid-breakpoints, "$grid-breakpoints");
-
-
 
 // Grid containers
 //
@@ -131,9 +120,6 @@ $body-tertiary-bg: $secondary;
 // Container padding
 
 //$container-padding-x: $grid-gutter-width !default;
-
-
-
 
 // Components
 //
@@ -207,13 +193,6 @@ $body-tertiary-bg: $secondary;
 // scss-docs-end aspect-ratios
 // stylelint-enable function-disallowed-list
 
-
-
-
-
-
-
-
 // ------------- FONTS ---------------------------
 
 // Typography
@@ -259,9 +238,6 @@ $body-tertiary-bg: $secondary;
 // $h6-font-size:                $font-size-base !default;
 // scss-docs-end font-variables
 
-
-
-
 // ----- FONT SIZES -------
 // scss-docs-start font-sizes
 // $font-sizes: (
@@ -274,9 +250,6 @@ $body-tertiary-bg: $secondary;
 // ) !default;
 // scss-docs-end font-sizes
 
-
-
-
 // ---- HEADINGS ---------
 // scss-docs-start headings-variables
 // $headings-margin-bottom:      $spacer * .5 !default;
@@ -286,7 +259,6 @@ $body-tertiary-bg: $secondary;
 // $headings-line-height:        1.2 !default;
 // $headings-color:              inherit !default;
 // scss-docs-end headings-variables
-
 
 // ----- DISPLAY HEADINGS ------
 // scss-docs-start display-headings
@@ -298,11 +270,6 @@ $body-tertiary-bg: $secondary;
 //   5: 3rem,
 //   6: 2.5rem
 // ) !default;
-
-
-
-
-
 
 // ------------------- BUTTONS ------------------------------------------------
 // Buttons
@@ -336,7 +303,7 @@ $body-tertiary-bg: $secondary;
 // $btn-active-box-shadow:       inset 0 3px 5px rgba($black, .125) !default;
 
 // $btn-link-color:              var(--#{$prefix}link-color) !default;
-// $btn-link-hover-color:        var(--#{$prefix}link-hover-color) !default;
+//$btn-link-hover-color:        var(--#{$prefix}link-hover-color) !default;
 // $btn-link-disabled-color:     $gray-600 !default;
 // $btn-link-focus-shadow-rgb:   to-rgb(mix(color-contrast($link-color), $link-color, 15%)) !default;
 
@@ -356,9 +323,6 @@ $body-tertiary-bg: $secondary;
 // $btn-active-border-shade-amount:  25% !default;
 // $btn-active-border-tint-amount:   10% !default;
 // scss-docs-end btn-variables
-
-
-
 
 // Dropdowns
 //
@@ -415,10 +379,6 @@ $body-tertiary-bg: $secondary;
 // $dropdown-dark-header-color:        $gray-500 !default;
 // scss-docs-end dropdown-dark-variables
 
-
-
-
-
 // ----------------------------------------CARDS -----------------------------------------
 
 // scss-docs-start card-variables
@@ -443,10 +403,6 @@ $body-tertiary-bg: $secondary;
 // $card-group-margin:                 $grid-gutter-width * .5 !default;
 // scss-docs-end card-variables
 
-
-
-
-
 // ----------------------------- IMAGE THUMBNAILS ----------------------------
 
 // scss-docs-start thumbnail-variables
@@ -458,15 +414,12 @@ $body-tertiary-bg: $secondary;
 // $thumbnail-box-shadow:              var(--#{$prefix}box-shadow-sm) !default;
 // scss-docs-end thumbnail-variables
 
-
 // ---------------------------------- FIGURES --------------------------------------
 
 // scss-docs-start figure-variables
 // $figure-caption-font-size:          $small-font-size !default;
 // $figure-caption-color:              var(--#{$prefix}secondary-color) !default;
 // scss-docs-end figure-variables
-
-
 
 // ----------------------------------------  CAROUSEL ------------------------------------
 
@@ -505,11 +458,6 @@ $body-tertiary-bg: $secondary;
 // $carousel-dark-caption-color:        $black !default;
 // $carousel-dark-control-icon-filter:  invert(1) grayscale(100) !default;
 // scss-docs-end carousel-dark-variables
-
-
-
-
-
 
 // ----------------------------- OFFCANVAS ----------------------------
 

@@ -11,6 +11,7 @@
   width: 100%;
   max-width: 1040px;
   margin-bottom: 4rem;
+  z-index: 1;
 }
 
 .h3_film_strip {
@@ -35,4 +36,13 @@
 
 .top-outline {
   outline: 1px solid #0b0815;
+}
+
+/* Target mobile view (screen width of 768px or less) */
+@media (max-width: 768px) {
+  .home-section {
+    padding-bottom: 80px;
+    
+    /* Adjust the height to match your mobile navbar height */
+  }
 }
