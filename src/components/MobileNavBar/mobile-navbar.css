@@ -16,6 +16,26 @@
   color: #efecf8;
 }
 
+.some-links {
+  opacity: 0.6;
+  text-align: right;
+}
+.some-links-link {
+  width: 1px;
+  opacity: 0;
+  margin-block: auto;
+}
+.some-links-wrapper {
+  width: 100%;  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  opacity: 0.6;
+
+
+}
+
 
 
 
