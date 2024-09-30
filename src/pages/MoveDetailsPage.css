@@ -37,15 +37,20 @@ h1{
   width: 22.5rem;
   cursor: pointer;
 }
-
-.carousel-control-prev {
+.carouselMoveDetail .carousel-control-prev{
   left: -9%;
-  /* Flyttar vänstra pilen längre till vänster */
 }
 
-.carousel-control-next {
+.carouselMoveDetail .carousel-control-next {
   right: -9%;
-  /* Flyttar vänstra pilen längre till vänster */
+}
+
+.calendar-carousel .carousel-control-next{
+  right: -9%;
+}
+
+.calendar-carousel .carousel-control-prev {
+  left: -9%;
 }
 
 .see-more-container {
@@ -113,17 +118,27 @@ h1{
 }
 
 .calendar-item{
-  width: 145px;
+  width: 132px;
   margin: 5px;
   border: solid rgb(0, 0, 0) 1px;
   text-align: center;
 }
 
 .square-card {
-  width: 6.5rem;
-  height: 6.5rem;
+  width: 5.5rem;
+  height: 5.5rem;
   margin: 0;
   cursor: pointer;
+}
+
+.square-card .card-body {
+  padding: 0;
+  padding-top: 10px;
+}
+
+.calendar-card .card-body{
+  padding: 0;
+  padding-top: 10px;
 }
 
 .square-card:hover {
@@ -133,6 +148,7 @@ h1{
 
 .square-card .card-body {
   border-radius: 10px;
+  font-size: 85%;
 }
 
 /* better solution is needed */
@@ -167,5 +183,9 @@ h1{
 @media (min-width: 1400px) {
   .calendar-item7 {
     display: block;
+  }
+  .calendar-carousel .carousel-control-prev,
+  .calendar-carousel .carousel-control-next {
+  display: none !important;
   }
 }

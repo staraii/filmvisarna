@@ -61,10 +61,9 @@ function MoveDetailsPage() {
   return (
     <>
       <Container>
-        <h1>Filmvisarna</h1>
         <Container className="d-flex flex-column align-items-center">
           <Row className="d-flex flex-column flex-md-row ">
-            <Col xs={12} md={12} lg={6} xl={6} xxl={8} className='move-trailer-container'>
+            <Col xs={12} md={12} lg={6} xl={6} xxl={6} className='move-trailer-container'>
               <div className="move-trailer-container embed-responsive embed-responsive-16by9">
                 <iframe
                   className="move-trailer-size embed-responsive-item"
@@ -126,7 +125,7 @@ function MoveDetailsPage() {
               <Card>
                 <Card.Body>
                   <Card.Title>Film Detaljer</Card.Title>
-                  <Card.Text className="mb-0" >
+                  <Card.Text className="mb-0 see-more-container" >
                     <strong>Regissör:</strong> David Fincher
                     <br />
                     <strong>Åldersgräns:</strong> 12 år
@@ -157,7 +156,7 @@ function MoveDetailsPage() {
               <Card>
                 <Card.Body>
                   <Card.Title>Recensioner</Card.Title>
-                  <Card.Text className="mb-0">
+                  <Card.Text className="mb-0 see-more-container">
                     <strong>{reviews[currentReviewIndex].source}</strong>
                     <br />
                     "{reviews[currentReviewIndex].quote}"
@@ -220,7 +219,7 @@ function MoveDetailsPage() {
         {/* karusell ------------------------------------------------------------------- */}
 
         <Container className="calendar-container mt-5">
-          <Carousel interval={null} indicators={true} controls={true} className="calendar-carousel">
+          <Carousel interval={null} indicators={false} controls={true} className="calendar-carousel">
             <CarouselItem className="calendar-item calendar-item1">
               <Card  className="calendar-card">
                 <Card.Header>
