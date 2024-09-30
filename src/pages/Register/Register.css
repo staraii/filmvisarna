@@ -1,11 +1,11 @@
 .register-container {
   display: flex;
   align-items: center;
-  /* Change to center for vertical alignment */
   justify-content: center;
   min-height: 80vh;
-  margin-top: 80px;
+  margin-top: 20px;
   background-color: #0b0815;
+  padding-bottom: 70px;
 }
 
 .register-form {
@@ -13,11 +13,18 @@
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+}
+
+.register-button {
+  margin-bottom: 30px;
+  /* Adjust this value as needed for spacing from the bottom */
 }
 
 h2 {
   font-family: 'Poppins', sans-serif;
   color: #702c53;
+  margin-top: 0;
 }
 
 p {
@@ -25,10 +32,6 @@ p {
   color: #ffffff;
 }
 
-button {
-  background-color: #702c53;
-  border-color: #702c53;
-}
 
 button:hover {
   background-color: #551a3a;
@@ -39,7 +42,32 @@ button:hover {
 .form-control {
   height: 40px;
   font-size: 1.2rem;
-  /* Use full width */
   width: 100%;
 }
+
+/* Add media query to adjust margin based on mobile view */
+@media (max-width: 768px) {
+  button {
+    margin-bottom: 70px;
+    /* Extra margin on mobile view for more space */
+  }
+
+    .register-button {
+      margin-bottom: 30px;
+      /* Space below the button for mobile */
+    }
+
+}
+
+/* CSS for hidden eyes icon */
+.password-toggle-icon {
+  position: absolute;
+  /* Center vertically */
+  transform: translateY(50%);
+  /* Offset for perfect centering */
+  color: #ffffff;
+  /* Adjust color as needed */
+  margin-right: 10px;
+}
+
 

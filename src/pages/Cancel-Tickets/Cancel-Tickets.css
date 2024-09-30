@@ -1,0 +1,18 @@
+.Cancel-Tickets {
+  width: 1024px;
+}
+
+.Cancel-Tickets-Text {
+  margin: 1.5rem;
+}
+
+.Input-Fields textarea {
+  resize: none;
+  overflow: hidden;
+}
+
+.Input-Fields .form-label {
+  text-align: left;
+  display: block;
+  margin-bottom: 8px;
+}

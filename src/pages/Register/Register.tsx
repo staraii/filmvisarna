@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import './Register.css'; // Optional: Create a CSS file for custom styles
 
 interface FormData {
@@ -10,6 +11,7 @@ interface FormData {
   postalCode: string;
   email: string;
   password: string;
+  confirmPassword: string; // Added this to handle confirmPassword input
 }
 
 const Register = () => {
@@ -20,7 +22,11 @@ const Register = () => {
     postalCode: '',
     email: '',
     password: '',
+    confirmPassword: '',
   });
+   // state variables for showing and hidding passwords
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -75,61 +81,59 @@ const Register = () => {
               </Col>
             </Row>
 
-            {/* New Row for Phone Number and Postal Code */}
-            <Row className="mb-3">
-              <Col xs={6}>
-                <Form.Group controlId="formPhoneNumber">
-                  <Form.Label>Telefonnummer</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Ange ditt telefonnummer"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-              <Col xs={6}>
-                <Form.Group controlId="formPostalCode">
-                  <Form.Label>Postnummer</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Ange ditt postnummer"
-                    name="postalCode"
-                    value={formData.postalCode}
-                    onChange={handleChange}
-                    required
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+            {/* New Row for Phone Number */}
+            <Form.Group controlId="formPhoneNumber" className="mb-3">
+              <Form.Label>Telefonnummer</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Ange ditt telefonnummer"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                required
+              />
+            </Form.Group>
 
-            {/* New Row for Password and Confirm Password */}
+          {/* New Row for Password and Confirm Password */}
             <Row className="mb-3">
-              <Col xs={6}>
+              <Col xs={6} className="position-relative">
                 <Form.Group controlId="formPassword">
                   <Form.Label>Lösenord</Form.Label>
                   <Form.Control
-                    type="password"
+                    type={showPassword ? 'text' : 'password'} // Toggle visibility
                     placeholder="Ange ditt lösenord"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     required
                   />
+                  <span
+                    className="password-toggle-icon"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ cursor: 'pointer', position: 'absolute', right: '10px', top: '35%' }}
+                  >
+                    {showPassword ? <EyeSlash /> : <Eye />}
+                  </span>
                 </Form.Group>
               </Col>
-              <Col xs={6}>
+              <Col xs={6} className="position-relative">
                 <Form.Group controlId="formConfirmPassword">
                   <Form.Label>Bekräfta lösenord</Form.Label>
                   <Form.Control
-                    type="password"
+                    type={showConfirmPassword ? 'text' : 'password'} // Toggle visibility
                     placeholder="Bekräfta ditt lösenord"
                     name="confirmPassword"
+                    value={formData.confirmPassword}
                     onChange={handleChange}
                     required
                   />
+                  <span
+                    className="password-toggle-icon"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    style={{ cursor: 'pointer', position: 'absolute', right: '10px', top: '35%' }}
+                  >
+                    {showConfirmPassword ? <EyeSlash /> : <Eye />}
+                  </span>
                 </Form.Group>
               </Col>
             </Row>
@@ -168,10 +172,12 @@ const Register = () => {
               />
             </Form.Group>
 
-            {/* Smaller Button Below Checkboxes */}
-            <Button variant="primary" type="submit" className="w-50 btn-medium">
-              Skapa nytt konto
-            </Button>
+            {/* Button Section */}
+            <div className="d-flex justify-content-center">
+              <Button variant="primary" type="submit" className="btn-md register-button">
+                Registrera
+              </Button>
+            </div>
           </Form>
         </Col>
       </Row>
