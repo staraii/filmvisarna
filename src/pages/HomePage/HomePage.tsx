@@ -6,12 +6,12 @@ import Row from "react-bootstrap/Row";
 import Carousel from "react-bootstrap/Carousel";
 import Image from "react-bootstrap/Image";
 import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton"
+import DropdownButton from "react-bootstrap/DropdownButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Stack from "react-bootstrap/Stack";
+import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
-
 
 const visningar = [
   {
@@ -81,6 +81,7 @@ const visningar = [
     sub: "Sv. text",
     age: "15+",
     img: "/titanic_poster.jpg",
+
     slide: "/titanic_slide.jpg",
     status: "Many",
   },
@@ -95,6 +96,7 @@ const visningar = [
     sub: "Sv. text",
     age: "15+",
     img: "/sleepers_poster.jpg",
+
     slide: "/sleepers_slide.jpg",
     status: "Low",
   },
@@ -137,6 +139,7 @@ const visningar = [
     sub: "Sv. text",
     age: "15+",
     img: "/titanic_poster.jpg",
+
     slide: "/titanic_slide.jpg",
     status: "Low",
   },
@@ -144,7 +147,7 @@ const visningar = [
 
 
 export default function HomePage() {
-  const [salong, setSalong] = useState < number[]|[]>([]);
+  const [salong, setSalong] = useState<number[] | []>([]);
   const handleChangeSalong = (val: number[] | []) => setSalong(val);
   return (
     <section className="home-section">
@@ -237,6 +240,55 @@ export default function HomePage() {
                 </ToggleButton>
               </ToggleButtonGroup>
             </Stack>
+          </Row>
+          <Row className="">
+            <Col>Kommande visningar</Col>
+          </Row>
+          <Row>
+            <Stack direction="horizontal" gap={3}>
+              <p className="d-flex flex-row align-items-center gap-2">
+                <div className="less-tickets-circle"></div>
+                Färre lediga platser
+              </p>
+              <p className="d-flex flex-row align-items-center gap-2">
+                <div className="sold-out-circle"></div>
+                Utsålt
+              </p>
+            </Stack>
+          </Row>
+          <Row xs={2} sm={3} lg={4} className="row-gap-5 pt-5">
+            {visningar.map((visning, visIndex) => (
+              <Col key={visIndex}>
+                <Card
+                  border={
+                    visning.status === "Low"
+                      ? "danger"
+                      : visning.status === "Medium"
+                      ? "warning"
+                      : "secondary"
+                  }
+                >
+                  <Card.Img variant="top" src={visning.img} />
+                  <Card.Body>
+                    <Card.Text>{visning.date}</Card.Text>
+                    <Card.Text>{visning.time}</Card.Text>
+                    <Card.Text className="fw-lighter">{visning.age}</Card.Text>
+                    <Card.Text className="fw-lighter">
+                      {visning.lang}
+                      {"  "}
+                      {visning.sub}
+                    </Card.Text>
+                    <Card.Link as={Link} to="/boka">
+                      <Button>Boka</Button>
+                    </Card.Link>
+                    <Card.Link>
+                      <Button>Info</Button>
+                    </Card.Link>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
           </Row>      
           <Container fluid>
             <Row
