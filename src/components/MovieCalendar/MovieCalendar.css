@@ -1,18 +1,25 @@
-.Movie-Calendar {
-  text-align: center;
-  width: 1024px;
-}
+
 
 .Days {
-  width: 85%;
+  width: 100%;
+  /* Use full width */
+  max-width: 1024px;
+  /* Limit max width for larger screens */
   margin: 0 auto;
   margin-top: 20px;
 }
+
 
 .Poster-Container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  /* Full width for the poster container */
+  max-width: 1024px;
+  /* Ensure consistency with Days */
+  margin: 0 auto;
+  /* Center the Poster Container */
 }
 
 .Days img {
@@ -27,12 +34,15 @@
 .Poster-Description {
   background-color: #c15f6f42;
   max-width: 17rem;
+  /* Fixed width for descriptions */
   margin: 10px;
   text-align: center;
   padding: 10px;
   border-radius: 8px;
   display: flex;
   align-items: center;
+  flex-direction: column;
+  /* Stack title and text vertically */
 }
 
 .Poster-Description h4 {
@@ -44,28 +54,35 @@
   font-size: 1.1rem;
 }
 
+/* Responsive adjustments */
 @media (min-width: 670px) {
   .Poster-Container {
     flex-direction: row;
+    /* Horizontal layout on larger screens */
   }
 
   .Poster-Description {
     flex: 1 1 calc(33.33% - 20px);
+    /* Three items per row with spacing */
   }
 
   .Days {
     width: 90%;
+    /* Use 90% width on larger screens */
   }
 
   .carousel-control-prev {
     left: 10rem;
+    /* Control positioning for larger screens */
   }
 
   .carousel-control-next {
     right: 10rem;
+    /* Control positioning for larger screens */
   }
 }
 
+/* Carousel text styles */
 .carousel-text h3 {
   font-size: 24px;
   margin-top: 10px;
@@ -73,29 +90,39 @@
 
 .carousel-control-prev {
   left: 5rem;
+  /* Control positioning for smaller screens */
 }
 
 .carousel-control-next {
   right: 5rem;
+  /* Control positioning for smaller screens */
 }
 
 .Movie-Button {
   background-color: #c15f6f;
+  /* Button color */
   flex-shrink: 0;
+  /* Prevent button from shrinking */
   font-size: 1.2rem;
+  /* Font size */
 }
 
-
+/* Time Button Container */
 .Time-Button-Container {
   display: flex;
   align-items: center;
   justify-content: space-around;
   margin: 0;
   background-color: #c15f6f42;
+  /* Background color for time buttons */
   border-radius: 0.5rem;
+  /* Rounded corners */
 }
 
+/* Movie Time Text */
 .Movie-Time p {
   font-size: 1.5rem;
+  /* Font size */
   margin: 1rem 0rem 0rem 0rem;
+  /* Margin for spacing */
 }
