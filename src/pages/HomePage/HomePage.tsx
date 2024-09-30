@@ -10,6 +10,7 @@ import DropdownButton from "react-bootstrap/DropdownButton"
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Stack from "react-bootstrap/Stack";
+import Footer from "../../components/Footer/Footer";
 
 
 const visningar = [
@@ -254,6 +255,8 @@ export default function HomePage() {
           </Container>
         </Container>
       </main>
+        {/* Footer is added here */}
+      <Footer />
     </section>
   );
 }

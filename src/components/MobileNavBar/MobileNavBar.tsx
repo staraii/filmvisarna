@@ -52,22 +52,19 @@ export default function MobileNavBar() {
           <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
         </svg>
       </Nav.Link>
-      <button
-        type="button"
-        onClick={() => setShowMenu((showMenu) => !showMenu)}
-        className="menu-button"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="42"
-          height="42"
-          fill="#efecf8"
-          className="bi bi-three-dots"
-          viewBox="0 0 16 16"
-        >
-          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-        </svg>
-      </button>
+     {/* Icon Link for Menu Button */}
+  <Nav.Link className="menu-link" onClick={() => setShowMenu((showMenu) => !showMenu)}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="42"
+      height="42"
+      fill="#efecf8"
+      className="bi bi-three-dots"
+      viewBox="0 0 16 16"
+    >
+      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+    </svg>
+  </Nav.Link>
       <Offcanvas
         show={showMenu}
         onHide={() => setShowMenu((showMenu) => !showMenu)}
@@ -93,10 +90,7 @@ export default function MobileNavBar() {
           >
             Logga in
           </Nav.Link>
-          <Nav.Link
-            className="fw-medium"
-            onClick={() => handleNavigation("/blimedlem")}
-          >
+         <Nav.Link className="fw-medium" onClick={() => handleNavigation("/register")}>
             Bli medlem
           </Nav.Link>
         </Offcanvas.Body>

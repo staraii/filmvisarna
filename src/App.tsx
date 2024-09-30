@@ -9,6 +9,7 @@ import LoginPage from "./components/Login-pop-up/LoginMobile";
 import Footer from "./components/Footer/Footer";
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 
+
 import "./App.css";
 
 export default function App() {
@@ -27,8 +28,8 @@ export default function App() {
           </Routes>
         </div>
         <MobileNavBar />
-        <Footer />
       </Router>
     </section>
   );
 }
+
