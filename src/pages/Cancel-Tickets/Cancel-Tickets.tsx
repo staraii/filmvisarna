@@ -41,7 +41,7 @@ function CancelTickets() {
       {/* Modal-komponent som visas baserat på state */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Din biljett är avbokad</Modal.Title>
+          <Modal.Title>Biljetten är avbokad</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>Din biljett har blivit avbokad. Tack för att du kontaktade oss!</p>
