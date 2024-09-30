@@ -133,22 +133,23 @@ const visningar = [
 
 
 export default function HomePage() {
-  const [salong, setSalong] = useState<number[] | []>([]);
-  const handleChangeSalong = (val: number[] | []) => setSalong(val);
+  const [salong, setSalong] = useState<number[]>([]);
+  const handleChangeSalong = (val: number[]) => setSalong(val);
 
   return (
     <section className="home-section">
       <main className="home_main">
         {/* Carousel Component */}
         <Carousel interval={5000} className="mb-2">
-          <Carousel.Item>
-            <Image src="/sleepers_slide.jpg" alt="Sleepers" fluid />
-            <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
-              <h3 className="text-secondary mb-0">Sleepers</h3>
-              <p className="m-auto">Drama thriller (1996)</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          {/* Add other Carousel items here */}
+          {visningar.map((visning, index) => (
+            <Carousel.Item key={index}>
+              <Image src={visning.slide} alt={visning.title} fluid />
+              <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
+                <h3 className="text-secondary mb-0">{visning.title}</h3>
+                <p className="m-auto">{visning.genre.join(", ")}</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+          ))}
         </Carousel>
 
         {/* Main Content Area */}
@@ -165,7 +166,7 @@ export default function HomePage() {
                 >
                   <Dropdown.Item as="button">Fredag 20/9</Dropdown.Item>
                   <Dropdown.Item as="button">Lördag 21/9</Dropdown.Item>
-                  <Dropdown.Item as="button">Söndag 21/9</Dropdown.Item>
+                  <Dropdown.Item as="button">Söndag 22/9</Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton
                   id="Åldergräns"
