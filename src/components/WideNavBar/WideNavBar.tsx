@@ -23,8 +23,11 @@ export default function WideNavBar() {
         <Nav.Link className="fw-medium" onClick={() => navigate("/filmer")}>
           Filmer
         </Nav.Link>
-        <Nav.Link className="fw-medium" onClick={() => navigate("/visningar")}>
-          Visningar
+        <Nav.Link
+          className="fw-medium"
+          onClick={() => navigate("/bio-kalender")}
+        >
+          Bio kalender
         </Nav.Link>
         <Nav.Link className="fw-medium" onClick={() => navigate("/avboka")}>
           Avboka biljetter

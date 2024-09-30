@@ -1,112 +1,146 @@
 import { useState } from "react";
 import "./home-page.css";
+import ScreeningCard from "./ScreeningCard/ScreeningCard";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
 import Image from "react-bootstrap/Image";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton"
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 import Footer from "../../components/Footer/Footer";
+
 
 const visningar = [
   {
     title: "Titanic",
-    date: "fredag 20/9",
+    genre: ["Drama", "Romantik"],
+    day: "fre",
+    date: "20/9",
     time: "17.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/titanic_poster.jpg",
-    status: "Low"
+    slide: "/titanic_slide.jpg",
+    status: "Low",
   },
   {
     title: "Sleepers",
-    date: "fredag 20/9",
+    genre: ["Drama", "Thriller"],
+    day: "fre",
+    date: "20/9",
     time: "19.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Lilla salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/sleepers_poster.jpg",
-    status: "Medium"
+    slide: "/sleepers_slide.jpg",
+    status: "Medium",
   },
   {
     title: "Pippi",
-    date: "fredag 20/9",
+    genre: ["Svensk", "Barnfilm"],
+    day: "fre",
+    date: "20/9",
     time: "21.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Lilla salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "8+",
     img: "/pippi_poster.jpg",
-    status: "Medium"
+    slide: "/pippi_slide.jpg",
+    status: "Medium",
   },
   {
     title: "Pippi",
-    date: "lördag 21/9",
+    genre: ["Svensk", "Barnfilm"],
+    day: "lör",
+    date: "21/9",
     time: "15.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "8+",
     img: "/pippi_poster.jpg",
-    status: "Many"
+    slide: "/pippi_slide.jpg",
+    status: "Many",
   },
   {
     title: "Titanic",
-    date: "lördag 21/9",
+    genre: ["Drama", "Romantik"],
+    day: "lör",
+    date: "21/9",
     time: "19.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Lilla salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/titanic_poster.jpg",
-    status: "Many"
+    slide: "/titanic_slide.jpg",
+    status: "Many",
   },
   {
     title: "Sleepers",
-    date: "lördag 20/9",
+    genre: ["Drama", "Thriller"],
+    day: "lör",
+    date: "20/9",
     time: "21.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/sleepers_poster.jpg",
-    status: "Low"
+    slide: "/sleepers_slide.jpg",
+    status: "Low",
   },
   {
     title: "Sleepers",
-    date: "söndag 21/9",
+    genre: ["Drama", "Thriller"],
+    day: "sön",
+    date: "21/9",
     time: "15.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Lilla salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/sleepers_poster.jpg",
-    status: "Many"
+    slide: "/sleepers_slide.jpg",
+    status: "Many",
   },
   {
     title: "Pippi",
-    date: "söndag 22/9",
+    genre: ["Svensk", "Barnfilm"],
+    day: "sön",
+    date: "22/9",
     time: "17.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "8+",
     img: "/pippi_poster.jpg",
-    status: "Low"
+    slide: "/pippi_slide.jpg",
+    status: "Low",
   },
   {
     title: "Titanic",
-    date: "söndag 21/9",
+    genre: ["Drama", "Romantik"],
+    day: "sön",
+    date: "21/9",
     time: "19.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/titanic_poster.jpg",
-    status: "Low"
+    slide: "/titanic_slide.jpg",
+    status: "Low",
   },
 ];
-
 
 
 export default function HomePage() {
@@ -203,55 +237,22 @@ export default function HomePage() {
                 </ToggleButton>
               </ToggleButtonGroup>
             </Stack>
-          </Row>
-          <Row className="">
-            <Col>Kommande visningar</Col>
-          </Row>
-          <Row>
-            <Stack direction="horizontal" gap={3}>
-              <p className="d-flex flex-row align-items-center gap-2">
-                <div className="less-tickets-circle"></div>
-                Färre lediga platser
-              </p>
-              <p className="d-flex flex-row align-items-center gap-2">
-                <div className="sold-out-circle"></div>
-                Utsålt
-              </p>
-            </Stack>
-          </Row>
-          <Row xs={2} sm={3} lg={4} className="row-gap-5 pt-5">
-            {visningar.map((visning, visIndex) => (
-              <Col key={visIndex}>
-                <Card
-                  border={
-                    visning.status === "Low"
-                      ? "danger"
-                      : visning.status === "Medium"
-                      ? "warning"
-                      : "secondary"
-                  }
-                >
-                  <Card.Img variant="top" src={visning.img} />
-                  <Card.Body>
-                    <Card.Text>{visning.date}</Card.Text>
-                    <Card.Text>{visning.time}</Card.Text>
-                    <Card.Text className="fw-lighter">{visning.age}</Card.Text>
-                    <Card.Text className="fw-lighter">
-                      {visning.lang}
-                      {"  "}
-                      {visning.sub}
-                    </Card.Text>
-                    <Card.Link>
-                      <Button>Boka</Button>
-                    </Card.Link>
-                    <Card.Link>
-                      <Button>Info</Button>
-                    </Card.Link>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
-          </Row>
+          </Row>      
+          <Container fluid>
+            <Row
+              className="d-flex flex-row flex-wrap mb-5 row-gap-4"
+              xs={1}
+              sm={2}
+              md={2}
+              lg={3}
+              xl={3}
+              xxl={3}
+            >
+                {visningar.map((v, vIndex) => (
+                        <ScreeningCard key={vIndex} {...v} />
+                ))}
+            </Row>
+          </Container>
         </Container>
       </main>
         {/* Footer is added here */}

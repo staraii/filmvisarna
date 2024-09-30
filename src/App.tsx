@@ -1,15 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage/HomePage';
-import Register from './pages/Register/Register';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage/HomePage";
+import Register from "./pages/Register/Register";
 import MoveDetailsPage from "./pages/MoveDetailsPage";
 import BookingPage from "./pages/BookingPage";
-import LoginPage from './components/Login-pop-up/LoginMobile';
-import WideNavBar from './components/WideNavBar/WideNavBar';
-import MobileNavBar from './components/MobileNavBar/MobileNavBar';
+import MobileNavBar from "./components/MobileNavBar/MobileNavBar";
+import WideNavBar from "./components/WideNavBar/WideNavBar";
+import LoginPage from "./components/Login-pop-up/LoginMobile";
+import Footer from "./components/Footer/Footer";
+import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 
 
-
-
+import "./App.css";
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
             <Route path="/film" element={<MoveDetailsPage />} />
             <Route path="/boka" element={<BookingPage />} />
             <Route path="/loggain" element={<LoginPage />} />
+            <Route path="/bio-kalender" element={<MovieCalendar />} />
           </Routes>
         </div>
         <MobileNavBar />
@@ -30,6 +32,4 @@ export default function App() {
     </section>
   );
 }
-
-
 
