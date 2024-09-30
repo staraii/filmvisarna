@@ -2,6 +2,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import { useNavigate } from "react-router-dom";
 
 
 type ScreeningCardProps = {
@@ -20,6 +21,7 @@ type ScreeningCardProps = {
 }
 
 export default function ScreeningCard({ img, slide, lang, sub, age, date, time, status, day }: ScreeningCardProps) {
+  const navigate = useNavigate();
   return (
     <Col xs={12}>
       <Card border="border-dark rounded" className="screening-card shadow-lg">
@@ -40,6 +42,7 @@ export default function ScreeningCard({ img, slide, lang, sub, age, date, time, 
                       border: "2px solid #0b0815",
                       aspectRatio: "2 / 3",
                     }}
+                    onClick={() => navigate("/film")}
                   />
                 </Col>
               </Row>
@@ -117,6 +120,7 @@ export default function ScreeningCard({ img, slide, lang, sub, age, date, time, 
                   border: "1px solid #ac9ed9",
                   color: "#ac9ed9",
                 }}
+                onClick={() => navigate("/boka")}
               >
                 Boka
               </Button>
