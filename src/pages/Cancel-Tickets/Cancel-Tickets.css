@@ -1,4 +1,6 @@
-.Cancel-Tickets {}
+.Cancel-Tickets {
+  width: 1024px;
+}
 
 .Cancel-Tickets-Text {
   margin: 1.5rem;
