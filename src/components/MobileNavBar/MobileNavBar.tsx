@@ -10,8 +10,8 @@ export default function MobileNavBar() {
   const navigate = useNavigate();
   const handleNavigation = (path: string) => {
     setShowMenu(false);
-    navigate(`${path}`)
-  }
+    navigate(`${path}`);
+  };
 
   return (
     <Navbar fixed="bottom" bg="primary" className="navbar-bottom">
@@ -39,7 +39,7 @@ export default function MobileNavBar() {
           <path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm4 0v6h8V1zm8 8H4v6h8zM1 1v2h2V1zm2 3H1v2h2zM1 7v2h2V7zm2 3H1v2h2zm-2 3v2h2v-2zM15 1h-2v2h2zm-2 3v2h2V4zm2 3h-2v2h2zm-2 3v2h2v-2zm2 3h-2v2h2z" />
         </svg>
       </Nav.Link>
-      <Nav.Link className="icon-link" onClick={() => navigate("/visningar")}>
+      <Nav.Link className="icon-link" onClick={() => navigate("/bio-kalender")}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="32"
@@ -52,22 +52,19 @@ export default function MobileNavBar() {
           <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
         </svg>
       </Nav.Link>
-      <button
-        type="button"
-        onClick={() => setShowMenu((showMenu) => !showMenu)}
-        className="menu-button"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="42"
-          height="42"
-          fill="#efecf8"
-          className="bi bi-three-dots"
-          viewBox="0 0 16 16"
-        >
-          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-        </svg>
-      </button>
+     {/* Icon Link for Menu Button */}
+  <Nav.Link className="menu-link" onClick={() => setShowMenu((showMenu) => !showMenu)}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="42"
+      height="42"
+      fill="#efecf8"
+      className="bi bi-three-dots"
+      viewBox="0 0 16 16"
+    >
+      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+    </svg>
+  </Nav.Link>
       <Offcanvas
         show={showMenu}
         onHide={() => setShowMenu((showMenu) => !showMenu)}
@@ -81,16 +78,19 @@ export default function MobileNavBar() {
           {/* Empty element, just to make closing X visible */}
         </Offcanvas.Header>
         <Offcanvas.Body className="d-flex flex-column justify-content-end pb-5 mb-5">
-          <Nav.Link className="fw-medium" onClick={() => handleNavigation("/avboka")}>
+          <Nav.Link
+            className="fw-medium"
+            onClick={() => handleNavigation("/avboka")}
+          >
             Avboka platser
-          </Nav.Link>
-          <Nav.Link className="fw-medium" onClick={() => handleNavigation("/loggain")}>
-            Logga in
           </Nav.Link>
           <Nav.Link
             className="fw-medium"
-            onClick={() => handleNavigation("/blimedlem")}
+            onClick={() => handleNavigation("/loggain")}
           >
+            Logga in
+          </Nav.Link>
+         <Nav.Link className="fw-medium" onClick={() => handleNavigation("/register")}>
             Bli medlem
           </Nav.Link>
         </Offcanvas.Body>

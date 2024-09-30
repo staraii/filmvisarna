@@ -8,6 +8,8 @@ import WideNavBar from "./components/WideNavBar/WideNavBar";
 import LoginPage from "./components/Login-pop-up/LoginMobile";
 import Footer from "./components/Footer/Footer";
 import BookingConfirmationPage from "./pages/BookingConfirmation";
+import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
+import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
 import "./App.css";
 
 export default function App() {
@@ -26,10 +28,11 @@ export default function App() {
               path="/order-bekraftelse"
               element={<BookingConfirmationPage />}
             ></Route>
+            <Route path="/bio-kalender" element={<MovieCalendar />} />
+            <Route path="/avboka" element={<CancelTickets />} />
           </Routes>
         </div>
         <MobileNavBar />
-        <Footer />
       </Router>
     </section>
   );

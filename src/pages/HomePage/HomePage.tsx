@@ -1,111 +1,150 @@
 import { useState } from "react";
 import "./home-page.css";
+import ScreeningCard from "./ScreeningCard/ScreeningCard";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Carousel from "react-bootstrap/Carousel";
 import Image from "react-bootstrap/Image";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
 import { Link } from "react-router-dom";
+import Footer from "../../components/Footer/Footer";
 
 const visningar = [
   {
     title: "Titanic",
-    date: "fredag 20/9",
+    genre: ["Drama", "Romantik"],
+    day: "fre",
+    date: "20/9",
     time: "17.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/titanic_poster.jpg",
+    slide: "/titanic_slide.jpg",
     status: "Low",
   },
   {
     title: "Sleepers",
-    date: "fredag 20/9",
+    genre: ["Drama", "Thriller"],
+    day: "fre",
+    date: "20/9",
     time: "19.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Lilla salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/sleepers_poster.jpg",
+    slide: "/sleepers_slide.jpg",
     status: "Medium",
   },
   {
     title: "Pippi",
-    date: "fredag 20/9",
+    genre: ["Svensk", "Barnfilm"],
+    day: "fre",
+    date: "20/9",
     time: "21.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Lilla salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "8+",
     img: "/pippi_poster.jpg",
+    slide: "/pippi_slide.jpg",
     status: "Medium",
   },
   {
     title: "Pippi",
-    date: "lördag 21/9",
+    genre: ["Svensk", "Barnfilm"],
+    day: "lör",
+    date: "21/9",
     time: "15.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "8+",
     img: "/pippi_poster.jpg",
+    slide: "/pippi_slide.jpg",
     status: "Many",
   },
   {
     title: "Titanic",
-    date: "lördag 21/9",
+    genre: ["Drama", "Romantik"],
+    day: "lör",
+    date: "21/9",
     time: "19.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Lilla salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/titanic_poster.jpg",
+
+    slide: "/titanic_slide.jpg",
     status: "Many",
   },
   {
     title: "Sleepers",
-    date: "lördag 20/9",
+    genre: ["Drama", "Thriller"],
+    day: "lör",
+    date: "20/9",
     time: "21.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/sleepers_poster.jpg",
+
+    slide: "/sleepers_slide.jpg",
     status: "Low",
   },
   {
     title: "Sleepers",
-    date: "söndag 21/9",
+    genre: ["Drama", "Thriller"],
+    day: "sön",
+    date: "21/9",
     time: "15.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Lilla salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/sleepers_poster.jpg",
+    slide: "/sleepers_slide.jpg",
     status: "Many",
   },
   {
     title: "Pippi",
-    date: "söndag 22/9",
+    genre: ["Svensk", "Barnfilm"],
+    day: "sön",
+    date: "22/9",
     time: "17.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "8+",
     img: "/pippi_poster.jpg",
+    slide: "/pippi_slide.jpg",
     status: "Low",
   },
   {
     title: "Titanic",
-    date: "söndag 21/9",
+    genre: ["Drama", "Romantik"],
+    day: "sön",
+    date: "21/9",
     time: "19.00",
-    lang: "(Eng. tal)",
-    sub: "(Sv. text)",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
     age: "15+",
     img: "/titanic_poster.jpg",
+
+    slide: "/titanic_slide.jpg",
     status: "Low",
   },
 ];
+
 
 export default function HomePage() {
   const [salong, setSalong] = useState<number[] | []>([]);
@@ -250,8 +289,26 @@ export default function HomePage() {
               </Col>
             ))}
           </Row>
+          </Row>      
+          <Container fluid>
+            <Row
+              className="d-flex flex-row flex-wrap mb-5 row-gap-4"
+              xs={1}
+              sm={2}
+              md={2}
+              lg={3}
+              xl={3}
+              xxl={3}
+            >
+                {visningar.map((v, vIndex) => (
+                        <ScreeningCard key={vIndex} {...v} />
+                ))}
+            </Row>
+          </Container>
         </Container>
       </main>
+        {/* Footer is added here */}
+      <Footer />
     </section>
   );
 }
