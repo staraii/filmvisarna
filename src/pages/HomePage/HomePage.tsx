@@ -10,24 +10,10 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Stack from "react-bootstrap/Stack";
-import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer";
 
 const visningar = [
-  {
-    title: "Titanic",
-    genre: ["Drama", "Romantik"],
-    day: "fre",
-    date: "20/9",
-    time: "17.00",
-    theatre: "Stora salongen",
-    lang: "Eng. tal",
-    sub: "Sv. text",
-    age: "15+",
-    img: "/titanic_poster.jpg",
-    slide: "/titanic_slide.jpg",
-    status: "Low",
-  },
+
   {
     title: "Sleepers",
     genre: ["Drama", "Thriller"],
@@ -149,9 +135,11 @@ const visningar = [
 export default function HomePage() {
   const [salong, setSalong] = useState<number[] | []>([]);
   const handleChangeSalong = (val: number[] | []) => setSalong(val);
+
   return (
     <section className="home-section">
       <main className="home_main">
+        {/* Carousel Component */}
         <Carousel interval={5000} className="mb-2">
           <Carousel.Item>
             <Image src="/sleepers_slide.jpg" alt="Sleepers" fluid />
@@ -160,40 +148,13 @@ export default function HomePage() {
               <p className="m-auto">Drama thriller (1996)</p>
             </Carousel.Caption>
           </Carousel.Item>
-          <Carousel.Item>
-            <Image src="/titanic_slide.jpg" alt="Titanic" fluid />
-            <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
-              <h3 className="text-secondary mb-0">Titanic</h3>
-              <p className="m-auto">Romantiskt drama (1997)</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <Image src="/pippi_slide.jpg" fluid />
-            <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
-              <h3 className="text-secondary mb-0">Pippi Långstrump</h3>
-              <p className="m-auto">På de sju haven (1970)</p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <Image src="/sleepers_slide.jpg" fluid />
-            <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
-              <h3 className="text-secondary mb-0">Sleepers</h3>
-              <p className="m-auto">
-                fwivoghdofvdnoig oifj oivj oiwvj oiwvjoiwv j
-              </p>
-            </Carousel.Caption>
-          </Carousel.Item>
-          <Carousel.Item>
-            <Image src="/sleepers_slide.jpg" fluid />
-            <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
-              <h3 className="text-secondary mb-0">Sleepers</h3>
-              <p className="m-auto">Sleepers</p>
-            </Carousel.Caption>
-          </Carousel.Item>
+          {/* Add other Carousel items here */}
         </Carousel>
 
+        {/* Main Content Area */}
         <Container fluid className="position-relative mt-5 pt-3 pb-5">
-          <Row className="sticky-top bg-body top-outline mb-5" fluid>
+          {/* Filters Section */}
+          <Row className="sticky-top bg-body top-outline mb-5">
             <Stack direction="vertical" gap={3} className="py-3">
               <Stack direction="horizontal" gap={3}>
                 <DropdownButton
@@ -218,6 +179,8 @@ export default function HomePage() {
                   <Dropdown.Item as="button">Från 15 år</Dropdown.Item>
                 </DropdownButton>
               </Stack>
+
+              {/* ToggleButtonGroup for Theater Selection */}
               <ToggleButtonGroup
                 type="checkbox"
                 value={salong}
@@ -241,73 +204,40 @@ export default function HomePage() {
               </ToggleButtonGroup>
             </Stack>
           </Row>
-          <Row className="">
-            <Col>Kommande visningar</Col>
+
+          {/* Upcoming Screenings Section */}
+          <Row className="mb-5">
+            <h3>Kommande visningar</h3>
           </Row>
-          <Row>
+          <Row className="mb-3">
             <Stack direction="horizontal" gap={3}>
               <p className="d-flex flex-row align-items-center gap-2">
-                <div className="less-tickets-circle"></div>
-                Färre lediga platser
+                <span className="less-tickets-circle"></span> Färre lediga platser
               </p>
               <p className="d-flex flex-row align-items-center gap-2">
-                <div className="sold-out-circle"></div>
-                Utsålt
+                <span className="sold-out-circle"></span> Utsålt
               </p>
             </Stack>
           </Row>
-          <Row xs={2} sm={3} lg={4} className="row-gap-5 pt-5">
-            {visningar.map((visning, visIndex) => (
-              <Col key={visIndex}>
-                <Card
-                  border={
-                    visning.status === "Low"
-                      ? "danger"
-                      : visning.status === "Medium"
-                      ? "warning"
-                      : "secondary"
-                  }
-                >
-                  <Card.Img variant="top" src={visning.img} />
-                  <Card.Body>
-                    <Card.Text>{visning.date}</Card.Text>
-                    <Card.Text>{visning.time}</Card.Text>
-                    <Card.Text className="fw-lighter">{visning.age}</Card.Text>
-                    <Card.Text className="fw-lighter">
-                      {visning.lang}
-                      {"  "}
-                      {visning.sub}
-                    </Card.Text>
-                    <Card.Link as={Link} to="/boka">
-                      <Button>Boka</Button>
-                    </Card.Link>
-                    <Card.Link>
-                      <Button>Info</Button>
-                    </Card.Link>
-                  </Card.Body>
-                </Card>
-              </Col>
+
+          {/* Screening Cards using ScreeningCard component */}
+          <Row
+            className="d-flex flex-row flex-wrap mb-5 row-gap-4"
+            xs={1}
+            sm={2}
+            md={2}
+            lg={3}
+            xl={3}
+            xxl={3}
+          >
+            {visningar.map((v, vIndex) => (
+              <ScreeningCard key={vIndex} {...v} />
             ))}
           </Row>
-          </Row>      
-          <Container fluid>
-            <Row
-              className="d-flex flex-row flex-wrap mb-5 row-gap-4"
-              xs={1}
-              sm={2}
-              md={2}
-              lg={3}
-              xl={3}
-              xxl={3}
-            >
-                {visningar.map((v, vIndex) => (
-                        <ScreeningCard key={vIndex} {...v} />
-                ))}
-            </Row>
-          </Container>
         </Container>
       </main>
-        {/* Footer is added here */}
+
+      {/* Footer */}
       <Footer />
     </section>
   );
