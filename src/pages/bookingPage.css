@@ -50,4 +50,6 @@
 }
 .booked-seat {
   background-color: red;
+  cursor: not-allowed;
+  pointer-events: none;
 }

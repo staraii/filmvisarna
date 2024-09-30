@@ -11,7 +11,6 @@ export default function BookingPage() {
 
   const [selectedSeat, setSelectedSeat] = useState<string[]>([]);
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
-  const [bookedSeats, setBookedSeats] = useState<string[]>([]);
 
   //För mockupen ska vara godkänd måste man kunna välja 3 olika biljetter, fixa padding mellan biljetter och stolar, ta bort siffror från stolarna, fixa mobilvyn,
   //bokningsknappen ska vara stylad bättre, hur ska det se ut om man har 3 biljetter men highlightar de 2 sista i stolsraden? skriva om
@@ -20,7 +19,7 @@ export default function BookingPage() {
   //fixade route till boka, fixade biljetter, bokningsknapp, fungerar i mobilvy ner till 368 pixlar(finns något bootstrap relaterat som inte vill gå under viss width)
   //tbd begränsningar, bokningsbekräftelse, mockup data för stolar
 
-  const preBooked = ["5:2", "5:3"];
+  const preBooked = ["5:2", "5:3", "2:4", "2:5", "7:7", "7:8", "7:9"];
 
   useEffect(() => {
     setTickets(ticketAdult + ticketSenior + ticketChild);
@@ -45,9 +44,6 @@ export default function BookingPage() {
     }
     setHoveredSeats(hoveredSeatIds);
   }
-  function handleBookedSeats(preBooked: string[]) {
-    //kod här för att hantera fulla säten
-  }
 
   const seatGrid = Object.entries(seats).map(([row, seatCount]) => (
     <div key={row} className="d-flex flex-row-reverse">
@@ -55,13 +51,13 @@ export default function BookingPage() {
         {Array.from({ length: seatCount })
           .map((_, index) => {
             const seatId = `${row}:${index + 1}`;
-
+            const isPreBooked = preBooked.includes(seatId);
             return (
               <Button
                 onClick={() => handleSeatSelect(Number(row), index + 1)}
                 onMouseOver={() => displaySeats(Number(row), index, seatCount)}
                 key={seatId}
-                className={`seat ${
+                className={`seat ${isPreBooked ? "booked-seat" : ""} ${
                   hoveredSeats.includes(seatId) ? "hovered-seat" : ""
                 }`}
                 variant=""
@@ -86,32 +82,32 @@ export default function BookingPage() {
       ]);
     }
   }
-  handleBookedSeats(preBooked);
+
   return (
     <>
       <body className=" h-auto d-flex flex-column container ">
-        <div className="container text-center booking-header">
-          <div className="row pt-4">
-            <div className=" col d-flex align-items-center">
+        <Stack className="container booking-header">
+          <Row className="pt-4">
+            <Col className=" ">
               <h1 className="">Heat</h1>
-            </div>
-            <span className="col d-flex align-items-center">
+            </Col>
+            <Col className="pt-2">
               <h5>onsdag 18 sep</h5>
-              <h5 className="p-1">21:00-22:43</h5>
-            </span>
-            <span className="col d-flex align-items-center">
+              <h5 className="">21:00-22:43</h5>
+            </Col>
+            <Col className="pt-2">
               <p>(Sv.text) (Eng.tal)</p>
               <p> 12+</p>
-            </span>
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </Stack>
         <div className="d-flex w-100 justify-content-center">
           <section className="container bg-white w-50 row">
             <div className="border-2 border-black"></div>
           </section>
         </div>
 
-        <div className="w-100 h-100 bg-black p-3 d-flex flex-column">
+        <div className="w-100 h-100 border-end border-start p-3 d-flex flex-column">
           <h4>Stora salongen</h4>
           <Stack className="p-1 ">
             <Stack direction="horizontal">
@@ -171,7 +167,7 @@ export default function BookingPage() {
           </Stack>
         </div>
       </body>
-      <footer className="d-flex w-100 justify-content-center align-items-center container booking-header flex-row justify-content-around">
+      <footer className="d-flex justify-content-center align-items-center container booking-header flex-row justify-content-around ">
         <h4>Order:</h4>
         <span>
           <p>Biljetter: {tickets}</p>
