@@ -12,6 +12,7 @@ import ToggleButton from "react-bootstrap/ToggleButton";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Stack from "react-bootstrap/Stack";
+import Footer from "../../components/Footer/Footer";
 
 const visningar = [
   {
@@ -253,6 +254,8 @@ export default function HomePage() {
           </Row>
         </Container>
       </main>
+        {/* Footer is added here */}
+      <Footer />
     </section>
   );
 }

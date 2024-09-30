@@ -4,8 +4,9 @@ import Register from './pages/Register/Register';
 import MoveDetailsPage from "./pages/MoveDetailsPage";
 import BookingPage from "./pages/BookingPage";
 import LoginPage from './components/Login-pop-up/LoginMobile';
-import LayoutWithFooter from './layouts/LayoutWithFooter';
-import LayoutWithoutFooter from './layouts/LayoutWithoutFooter';
+import WideNavBar from './components/WideNavBar/WideNavBar';
+import MobileNavBar from './components/MobileNavBar/MobileNavBar';
+
 
 
 
@@ -14,20 +15,17 @@ export default function App() {
   return (
     <section className="app-section">
       <Router>
-        <Routes>
-          {/* Routes that include the footer */}
-          <Route element={<LayoutWithFooter />}>
+        <WideNavBar />
+        <div className="content-container">
+          <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/film" element={<MoveDetailsPage />} />
             <Route path="/boka" element={<BookingPage />} />
-          </Route>
-
-          {/* Routes that do not include the footer */}
-          <Route element={<LayoutWithoutFooter />}>
-            <Route path="/register" element={<Register />} />
             <Route path="/loggain" element={<LoginPage />} />
-          </Route>
-        </Routes>
+          </Routes>
+        </div>
+        <MobileNavBar />
       </Router>
     </section>
   );
