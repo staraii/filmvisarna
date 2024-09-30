@@ -11,13 +11,16 @@ export default function BookingPage() {
 
   const [selectedSeat, setSelectedSeat] = useState<string[]>([]);
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
+  const [bookedSeats, setBookedSeats] = useState<string[]>([]);
 
   //För mockupen ska vara godkänd måste man kunna välja 3 olika biljetter, fixa padding mellan biljetter och stolar, ta bort siffror från stolarna, fixa mobilvyn,
   //bokningsknappen ska vara stylad bättre, hur ska det se ut om man har 3 biljetter men highlightar de 2 sista i stolsraden? skriva om
   //bootstrap till bootrap react, dela upp i komponenter?. mockup data för redan bokade platser
 
   //fixade route till boka, fixade biljetter, bokningsknapp, fungerar i mobilvy ner till 368 pixlar(finns något bootstrap relaterat som inte vill gå under viss width)
-  //tbd begränsningar
+  //tbd begränsningar, bokningsbekräftelse, mockup data för stolar
+
+  const preBooked = ["5:2", "5:3"];
 
   useEffect(() => {
     setTickets(ticketAdult + ticketSenior + ticketChild);
@@ -41,6 +44,9 @@ export default function BookingPage() {
       }
     }
     setHoveredSeats(hoveredSeatIds);
+  }
+  function handleBookedSeats(preBooked: string[]) {
+    //kod här för att hantera fulla säten
   }
 
   const seatGrid = Object.entries(seats).map(([row, seatCount]) => (
@@ -80,7 +86,7 @@ export default function BookingPage() {
       ]);
     }
   }
-
+  handleBookedSeats(preBooked);
   return (
     <>
       <body className=" h-auto d-flex flex-column container ">
@@ -175,9 +181,20 @@ export default function BookingPage() {
             {ticketAdult * 140 + ticketChild * 80 + ticketSenior * 120}kr
           </p>
         </span>
-        <Button className="booking-btn">
-          <h5 className="m-1">Boka</h5>
-        </Button>
+        <div>
+          <input
+            className="m-2"
+            type="text"
+            name=""
+            id=""
+            placeholder="E-post"
+          />
+          <a href="/order-bekraftelse">
+            <Button className="booking-btn">
+              <h5 className="m-1">Boka</h5>
+            </Button>
+          </a>
+        </div>
       </footer>
     </>
   );

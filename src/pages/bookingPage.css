@@ -48,3 +48,6 @@
 .seat:hover {
   background-color: #c15f6f;
 }
+.booked-seat {
+  background-color: red;
+}
