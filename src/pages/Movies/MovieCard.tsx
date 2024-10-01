@@ -23,7 +23,7 @@ export default function MovieCard({title, year, genres, lang, sub, age, poster}:
           <Col xs={12} className="movie-card">
             <Card.Img src={poster} className="shadow-lg w-100 movie-card-img" />
             <Card.Body className="movie-card-body d-flex flex-column align-items-center w-100">
-              <div className="movie-card-content-wrapper">
+              <div className="movie-card-content-wrapper py-1">
                 <Card.Title className="movie-card-title">
                   {title} ({year})
                 </Card.Title>
@@ -36,7 +36,7 @@ export default function MovieCard({title, year, genres, lang, sub, age, poster}:
                   <small>{age}</small>
                 </Card.Text>
                 <Link to="/film">
-                  <Button variant="secondary" className="mt-1 mb-1">
+                  <Button variant="outline-secondary" className="mt-1 mb-1">
                     Mera info
                   </Button>
                 </Link>
