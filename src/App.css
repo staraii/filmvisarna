@@ -22,8 +22,7 @@
   #root {
     min-width: 100%;
     /* Allow full width on smaller screens */
-    padding: 0 10px;
-    /* Adjust padding for smaller screens */
+
   }
 }
 

@@ -10,7 +10,7 @@ import BookingConfirmationPage from "./pages/BookingConfirmation";
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
 import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
-
+import LoginPage from "./components/Login-pop-up/LoginMobile";
 
 import "./App.css";
 
@@ -44,26 +44,24 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/film" element={<MoveDetailsPage />} />
             <Route path="/boka" element={<BookingPage />} />
-
-      
             <Route
               path="/order-bekraftelse"
               element={<BookingConfirmationPage />}
-            </Route>
+            />
             <Route path="/bio-kalender" element={<MovieCalendar />} />
             <Route path="/avboka" element={<CancelTickets />} />
+            <Route path="/loggain" element={<LoginPage />} />
           </Routes>
         </div>
         <MobileNavBar />
+        
+        {/* Render LoginModal outside of the Routes to ensure a single instance */}
+        <LoginModal
+          show={showLoginModal}
+          handleClose={handleLoginClose}
+          onLogin={onLoginClick}
+        />
       </Router>
-
-      {/* Render LoginModal outside of the Router to ensure single instance */}
-      <LoginModal
-        show={showLoginModal}
-        handleClose={handleLoginClose}
-        onLogin={onLoginClick}
-      />
     </section>
   );
 }
-

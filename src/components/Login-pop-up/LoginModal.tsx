@@ -8,7 +8,7 @@ interface LoginModalProps {
 
 const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
   const handleLogin = () => {
-    alert("You are logged in!"); // Show alert
+    alert("Du är inloggad"); // Show alert
     onLogin(); // Call the login function passed from App
   };
 
