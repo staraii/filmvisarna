@@ -9,6 +9,7 @@ import WideNavBar from "./components/WideNavBar/WideNavBar";
 import BookingConfirmationPage from "./pages/BookingConfirmation";
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
+import Movies from "./pages/Movies/Movies";
 import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
 
 import "./App.css";
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<Register />} />
             <Route path="/film" element={<MoveDetailsPage />} />
+            <Route path="/filmer" element={<Movies />} />
             <Route path="/boka" element={<BookingPage />} />
 
             <Route
