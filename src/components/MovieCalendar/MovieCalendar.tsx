@@ -46,8 +46,16 @@ function MovieCalendar() {
                     <Card style={{ width: "16rem" }}>
                       <Card.Img variant="top" src={Pippi} />
                       <Card.Body>
-                        <Card.Title>Pippi (1970)</Card.Title>
-                        <Card.Text>Barn</Card.Text>
+                        <Card.Title>Pippi Långstrump (1970)</Card.Title>
+                        <div className="Genre-Age">
+                          <Card.Text className="Genre">
+                            Barnlitteratur
+                          </Card.Text>
+                          <Card.Text className="Age Age-8">
+                            <p>8+</p>
+                          </Card.Text>
+                        </div>
+
                         <div className="Time-Button-Container">
                           <Card.Text className="Movie-Time">
                             <p>17:00</p>
@@ -67,7 +75,14 @@ function MovieCalendar() {
                       <Card.Img variant="top" src={Titanic} />
                       <Card.Body>
                         <Card.Title>Titanic (1997)</Card.Title>
-                        <Card.Text>Romantik, Drama</Card.Text>
+                        <div className="Genre-Age">
+                          <Card.Text className="Genre">
+                            Romantik, Drama
+                          </Card.Text>
+                          <Card.Text className="Age Age-15">
+                            <p>15+</p>
+                          </Card.Text>
+                        </div>
                         <div className="Time-Button-Container">
                           <Card.Text className="Movie-Time">
                             <p>19:00</p>
@@ -87,7 +102,15 @@ function MovieCalendar() {
                       <Card.Img variant="top" src={Sleepers} />
                       <Card.Body>
                         <Card.Title>Sleepers (1996)</Card.Title>
-                        <Card.Text>Drama, Thriller</Card.Text>
+                        <div className="Genre-Age">
+                          <Card.Text className="Genre">
+                            Drama, Thriller
+                          </Card.Text>
+                          <Card.Text className="Age Age-15">
+                            <p>15+</p>
+                          </Card.Text>
+                        </div>
+
                         <div className="Time-Button-Container">
                           <Card.Text className="Movie-Time">
                             <p>22:00</p>
