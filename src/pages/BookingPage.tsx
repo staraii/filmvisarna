@@ -37,11 +37,20 @@ export default function BookingPage() {
   };
   function displaySeats(row: number, index: number, seatCount: number) {
     let hoveredSeatIds: string[] = [];
+
     for (let i = 0; i < tickets; i++) {
-      if (index + i < seatCount) {
-        hoveredSeatIds.push(`${row}:${index + i + 1}`);
+      const currentSeatIndex = index + i + 1;
+      const seatId = `${row}:${currentSeatIndex}`;
+
+      // If any seat in the range is prebooked or exceeds seat count, keep the previous hover state
+      if (currentSeatIndex > seatCount || preBooked.includes(seatId)) {
+        return; // Exit early, keeping the previous hovered seats
       }
+
+      hoveredSeatIds.push(seatId); // Add seatId to the new hovered set
     }
+
+    // If all seats are valid, clear the previous hovered seats and update with the new selection
     setHoveredSeats(hoveredSeatIds);
   }
 
@@ -54,12 +63,14 @@ export default function BookingPage() {
             const isPreBooked = preBooked.includes(seatId);
             return (
               <Button
-                onClick={() => handleSeatSelect(Number(row), index + 1)}
+                onClick={() => handleSeatSelect()}
                 onMouseOver={() => displaySeats(Number(row), index, seatCount)}
                 key={seatId}
                 className={`seat ${isPreBooked ? "booked-seat" : ""} ${
                   hoveredSeats.includes(seatId) ? "hovered-seat" : ""
-                }`}
+                }
+                  ${selectedSeat.includes(seatId) ? "seat-selected" : ""} }
+                `}
                 variant=""
               ></Button>
             );
@@ -70,17 +81,15 @@ export default function BookingPage() {
   ));
   //gör om sätena till en klass? seatgrid constructor
 
-  function handleSeatSelect(row: number, index: number) {
-    //med stolen row och index som utgångspunkt, välj sedan row + antalet biljetter som valts
-    setSelectedSeat([]);
-    let seat = index + 1;
+  function handleSeatSelect() {
+    let seatIds: string[] = [];
 
     for (let i = 0; i < tickets; i++) {
-      setSelectedSeat((oldSelectedSeat) => [
-        ...oldSelectedSeat,
-        row + ":" + (seat + i - 1) + " ",
-      ]);
+      let seat = hoveredSeats[i];
+      if (seat) seatIds.push(seat);
     }
+
+    setSelectedSeat(seatIds);
   }
 
   return (
@@ -171,8 +180,13 @@ export default function BookingPage() {
         <h4>Order:</h4>
         <span>
           <p>Biljetter: {tickets}</p>
-          <p>Platser: {selectedSeat}</p>
-          <p>
+          <Row xs="auto">
+            <p>Platser: </p>
+            {selectedSeat.map((seat, key) => (
+              <p key={key}>{seat + " "}</p>
+            ))}
+          </Row>
+          <p className="pt-1">
             Att betala:{" "}
             {ticketAdult * 140 + ticketChild * 80 + ticketSenior * 120}kr
           </p>

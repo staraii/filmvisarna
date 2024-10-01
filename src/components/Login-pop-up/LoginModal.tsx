@@ -1,15 +1,15 @@
+import { Modal, Button, Form } from "react-bootstrap";
 
-import { LoginModalProps } from '../../utils/Types';
-import { Modal, Button, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import './LoginModal.css';
+interface LoginModalProps {
+  show: boolean;
+  handleClose: () => void;
+  onLogin: () => void; // Ensure this prop is passed in
+}
 
-const LoginModal = ({ show, handleClose }: LoginModalProps) => {
-  const navigate = useNavigate();  // Hook to handle navigation
-
-  const handleRegisterClick = () => {
-    handleClose(); // Close the modal before navigating
-    navigate('/register');  // Navigate to the register page
+const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
+  const handleLogin = () => {
+    alert("You are logged in!"); // Show alert
+    onLogin(); // Call the login function passed from App
   };
 
   return (
@@ -28,29 +28,22 @@ const LoginModal = ({ show, handleClose }: LoginModalProps) => {
             <Form.Label>Lösenord</Form.Label>
             <Form.Control type="password" placeholder="Ange ditt lösenord" />
           </Form.Group>
-          
-            {/* Checkbox and Login Button in one row */}
+
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <Form.Check 
-              type="checkbox" 
-              id="rememberMe" 
-              label="Kom ihåg mig" 
-            />
-            <Button variant="primary" type="submit" className="btn-md">
+            <Form.Check type="checkbox" id="rememberMe" label="Kom ihåg mig" />
+            <Button variant="primary" type="button" onClick={handleLogin}>
               Logga in
             </Button>
           </div>
-
         </Form>
 
-        {/* Text and Register Link Below */}
         <div className="text-center mt-3">
           <p>
-             <span className="register-link" onClick={handleRegisterClick}>
+            <span className="register-link" onClick={handleClose}>
               Glömt ditt lösenord?
-            </span>
-              {" | "}
-            <span className="register-link" onClick={handleRegisterClick}>
+            </span>{" "}
+            |{" "}
+            <span className="register-link" onClick={handleClose}>
               Bli medlem
             </span>
           </p>
@@ -61,3 +54,5 @@ const LoginModal = ({ show, handleClose }: LoginModalProps) => {
 };
 
 export default LoginModal;
+
+

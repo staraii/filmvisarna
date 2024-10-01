@@ -1,16 +1,17 @@
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
+import { WideNavBarProps } from "../../utils/Types"; // Make sure to import the type
+
 import "./wide-navbar.css";
-import LoginModal from "../Login-pop-up/LoginModal";
 
-export default function WideNavBar() {
-  const [showLoginModal, setShowLoginModal] = useState(false);
+const WideNavBar = ({
+  isLoggedIn,
+  onLoginClick,
+  onLogout,
+}: WideNavBarProps) => {
   const navigate = useNavigate();
-
-  const handleLoginShow = () => setShowLoginModal(true);
-  const handleLoginClose = () => setShowLoginModal(false);
 
   return (
     <header className="logo-menu-header">
@@ -37,15 +38,29 @@ export default function WideNavBar() {
           Avboka biljetter
         </Nav.Link>
 
-        {/* Open Login Modal on Click */}
-        <Nav.Link className="fw-medium" onClick={handleLoginShow}>
-          Logga in
-        </Nav.Link>
-        <Nav.Link className="fw-medium" onClick={() => navigate("/register")}>Bli medlem</Nav.Link>
+        {/* Show login or logout based on isLoggedIn */}
+        {isLoggedIn ? (
+          <Nav.Link className="fw-medium" onClick={onLogout}>
+            Logga ut
+          </Nav.Link>
+        ) : (
+          <>
+            <Nav.Link className="fw-medium" onClick={onLoginClick}>
+              Logga in
+            </Nav.Link>
+            <Nav.Link
+              className="fw-medium"
+              onClick={() => navigate("/register")}
+            >
+              Bli medlem
+            </Nav.Link>
+          </>
+        )}
       </Navbar>
 
-      {/* Login Modal */}
-      <LoginModal show={showLoginModal} handleClose={handleLoginClose} />
+      {/* Login Modal is controlled in App, so no need to include it here */}
     </header>
   );
-}
+};
+
+export default WideNavBar;
