@@ -1,4 +1,4 @@
-import { Row, Col, Container, Stack, Button } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 
 export default function BookingConfirmationPage() {
   return (

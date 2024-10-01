@@ -12,13 +12,6 @@ export default function BookingPage() {
   const [selectedSeat, setSelectedSeat] = useState<string[]>([]);
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
 
-  //För mockupen ska vara godkänd måste man kunna välja 3 olika biljetter, fixa padding mellan biljetter och stolar, ta bort siffror från stolarna, fixa mobilvyn,
-  //bokningsknappen ska vara stylad bättre, hur ska det se ut om man har 3 biljetter men highlightar de 2 sista i stolsraden? skriva om
-  //bootstrap till bootrap react, dela upp i komponenter?. mockup data för redan bokade platser
-
-  //fixade route till boka, fixade biljetter, bokningsknapp, fungerar i mobilvy ner till 368 pixlar(finns något bootstrap relaterat som inte vill gå under viss width)
-  //tbd begränsningar, bokningsbekräftelse, mockup data för stolar
-
   const preBooked = ["5:2", "5:3", "2:4", "2:5", "7:7", "7:8", "7:9"];
 
   useEffect(() => {
@@ -41,16 +34,11 @@ export default function BookingPage() {
     for (let i = 0; i < tickets; i++) {
       const currentSeatIndex = index + i + 1;
       const seatId = `${row}:${currentSeatIndex}`;
-
-      // If any seat in the range is prebooked or exceeds seat count, keep the previous hover state
       if (currentSeatIndex > seatCount || preBooked.includes(seatId)) {
-        return; // Exit early, keeping the previous hovered seats
+        return;
       }
-
-      hoveredSeatIds.push(seatId); // Add seatId to the new hovered set
+      hoveredSeatIds.push(seatId);
     }
-
-    // If all seats are valid, clear the previous hovered seats and update with the new selection
     setHoveredSeats(hoveredSeatIds);
   }
 
@@ -79,7 +67,6 @@ export default function BookingPage() {
       </div>
     </div>
   ));
-  //gör om sätena till en klass? seatgrid constructor
 
   function handleSeatSelect() {
     let seatIds: string[] = [];
@@ -94,10 +81,10 @@ export default function BookingPage() {
 
   return (
     <>
-      <body className=" h-auto d-flex flex-column container ">
-        <Stack className="container booking-header">
+      <Stack className="">
+        <Stack className="container booking-header justify-content-center">
           <Row className="pt-4">
-            <Col className=" ">
+            <Col>
               <h1 className="">Heat</h1>
             </Col>
             <Col className="pt-2">
@@ -110,15 +97,10 @@ export default function BookingPage() {
             </Col>
           </Row>
         </Stack>
-        <div className="d-flex w-100 justify-content-center">
-          <section className="container bg-white w-50 row">
-            <div className="border-2 border-black"></div>
-          </section>
-        </div>
 
-        <div className="w-100 h-100 border-end border-start p-3 d-flex flex-column">
+        <Stack className="w-100 h-100 border-end border-start p-3 d-flex flex-column">
           <h4>Stora salongen</h4>
-          <Stack className="p-1 ">
+          <Stack className="p-1">
             <Stack direction="horizontal">
               <Button
                 onClick={() =>
@@ -127,13 +109,13 @@ export default function BookingPage() {
               >
                 -
               </Button>
-              <p className="m-3 ">{ticketAdult}</p>
+              <p className="m-3">{ticketAdult}</p>
               <Button
                 onClick={() => setticketAdult((prevTickets) => prevTickets + 1)}
               >
                 +
               </Button>
-              <p className="m-2">Standard: 140 kr</p>
+              <p className="m-3">Standard: 140 kr</p>
             </Stack>
             <Stack direction="horizontal">
               <Button
@@ -174,23 +156,9 @@ export default function BookingPage() {
           <Stack className="seat-container pt-5 mx-auto justify-content-center align-items-center">
             {seatGrid}
           </Stack>
-        </div>
-      </body>
-      <footer className="d-flex justify-content-center align-items-center container booking-header flex-row justify-content-around ">
-        <h4>Order:</h4>
-        <span>
-          <p>Biljetter: {tickets}</p>
-          <Row xs="auto">
-            <p>Platser: </p>
-            {selectedSeat.map((seat, key) => (
-              <p key={key}>{seat + " "}</p>
-            ))}
-          </Row>
-          <p className="pt-1">
-            Att betala:{" "}
-            {ticketAdult * 140 + ticketChild * 80 + ticketSenior * 120}kr
-          </p>
-        </span>
+        </Stack>
+      </Stack>
+      <footer className="d-flex justify-content-center align-items-center container booking-summary flex-row justify-content-around ">
         <div>
           <input
             className="m-2"
