@@ -13,6 +13,7 @@ import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct
 import LoginPage from "./components/Login-pop-up/LoginMobile";
 
 import "./App.css";
+import PasswordReset from "./components/Login-pop-up/passwordReset";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State for logged in status
@@ -29,6 +30,7 @@ export default function App() {
 
   const handleLoginShow = () => setShowLoginModal(true); // Show login modal
   const handleLoginClose = () => setShowLoginModal(false); // Hide login modal
+  
 
   return (
     <section className="app-section">
@@ -51,6 +53,8 @@ export default function App() {
             <Route path="/bio-kalender" element={<MovieCalendar />} />
             <Route path="/avboka" element={<CancelTickets />} />
             <Route path="/loggain" element={<LoginPage />} />
+             <Route path="/passwordreset" element={<PasswordReset />} />
+            
           </Routes>
         </div>
         <MobileNavBar />

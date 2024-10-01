@@ -1,5 +1,7 @@
 import { Modal, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import "./LoginModal.css"; // Ensure the path is correct
+
 
 interface LoginModalProps {
   show: boolean;
@@ -16,6 +18,11 @@ const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
 
 const handleRegister = () => {
     navigate("/register"); // Navigate to the register page
+    handleClose(); // Close the modal
+  };
+
+  const passwordReset = () => {
+    navigate("/passwordreset"); // Navigate to the register page
     handleClose(); // Close the modal
   };
 
@@ -46,7 +53,7 @@ const handleRegister = () => {
 
         <div className="text-center mt-3">
           <p>
-            <span className="register-link" onClick={handleClose}>
+            <span className="register-link" onClick={passwordReset}>
               Glömt ditt lösenord?
             </span>{" "}
             |{" "}
