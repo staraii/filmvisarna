@@ -1,4 +1,5 @@
 import { Modal, Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 interface LoginModalProps {
   show: boolean;
@@ -7,9 +8,15 @@ interface LoginModalProps {
 }
 
 const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
+   const navigate = useNavigate(); // Initialize the useNavigate hook
   const handleLogin = () => {
     alert("Du är inloggad"); // Show alert
     onLogin(); // Call the login function passed from App
+  };
+
+const handleRegister = () => {
+    navigate("/register"); // Navigate to the register page
+    handleClose(); // Close the modal
   };
 
   return (
@@ -43,7 +50,7 @@ const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
               Glömt ditt lösenord?
             </span>{" "}
             |{" "}
-            <span className="register-link" onClick={handleClose}>
+            <span className="register-link" onClick={handleRegister}>
               Bli medlem
             </span>
           </p>
