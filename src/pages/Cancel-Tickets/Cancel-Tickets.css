@@ -1,9 +1,14 @@
 .Cancel-Tickets {
   text-align: center;
-  
 }
 
+.Custom-Input::placeholder {
+  font-size: 0.9rem;
+}
 
+.Custom-Input {
+  font-size: 0.9rem;
+}
 
 .Cancel-Tickets-Text {
   margin: 1.5rem;
@@ -18,4 +23,17 @@
   text-align: left;
   display: block;
   margin-bottom: 8px;
+  display: flex;
+
+}
+
+@media (min-width: 460px) {
+  .Input-Fields {
+    width: 100%;
+    /* Ändra detta värde efter behov */
+  }
+
+  .Input-Fields .form-control {
+    width: 22rem;
+  }
 }

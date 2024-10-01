@@ -12,13 +12,6 @@ export default function BookingPage() {
   const [selectedSeat, setSelectedSeat] = useState<string[]>([]);
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
 
-  //För mockupen ska vara godkänd måste man kunna välja 3 olika biljetter, fixa padding mellan biljetter och stolar, ta bort siffror från stolarna, fixa mobilvyn,
-  //bokningsknappen ska vara stylad bättre, hur ska det se ut om man har 3 biljetter men highlightar de 2 sista i stolsraden? skriva om
-  //bootstrap till bootrap react, dela upp i komponenter?. mockup data för redan bokade platser
-
-  //fixade route till boka, fixade biljetter, bokningsknapp, fungerar i mobilvy ner till 368 pixlar(finns något bootstrap relaterat som inte vill gå under viss width)
-  //tbd begränsningar, bokningsbekräftelse, mockup data för stolar
-
   const preBooked = ["5:2", "5:3", "2:4", "2:5", "7:7", "7:8", "7:9"];
 
   useEffect(() => {
@@ -37,10 +30,14 @@ export default function BookingPage() {
   };
   function displaySeats(row: number, index: number, seatCount: number) {
     let hoveredSeatIds: string[] = [];
+
     for (let i = 0; i < tickets; i++) {
-      if (index + i < seatCount) {
-        hoveredSeatIds.push(`${row}:${index + i + 1}`);
+      const currentSeatIndex = index + i + 1;
+      const seatId = `${row}:${currentSeatIndex}`;
+      if (currentSeatIndex > seatCount || preBooked.includes(seatId)) {
+        return;
       }
+      hoveredSeatIds.push(seatId);
     }
     setHoveredSeats(hoveredSeatIds);
   }
@@ -54,12 +51,14 @@ export default function BookingPage() {
             const isPreBooked = preBooked.includes(seatId);
             return (
               <Button
-                onClick={() => handleSeatSelect(Number(row), index + 1)}
+                onClick={() => handleSeatSelect()}
                 onMouseOver={() => displaySeats(Number(row), index, seatCount)}
                 key={seatId}
                 className={`seat ${isPreBooked ? "booked-seat" : ""} ${
                   hoveredSeats.includes(seatId) ? "hovered-seat" : ""
-                }`}
+                }
+                  ${selectedSeat.includes(seatId) ? "seat-selected" : ""} }
+                `}
                 variant=""
               ></Button>
             );
@@ -68,27 +67,24 @@ export default function BookingPage() {
       </div>
     </div>
   ));
-  //gör om sätena till en klass? seatgrid constructor
 
-  function handleSeatSelect(row: number, index: number) {
-    //med stolen row och index som utgångspunkt, välj sedan row + antalet biljetter som valts
-    setSelectedSeat([]);
-    let seat = index + 1;
+  function handleSeatSelect() {
+    let seatIds: string[] = [];
 
     for (let i = 0; i < tickets; i++) {
-      setSelectedSeat((oldSelectedSeat) => [
-        ...oldSelectedSeat,
-        row + ":" + (seat + i - 1) + " ",
-      ]);
+      let seat = hoveredSeats[i];
+      if (seat) seatIds.push(seat);
     }
+
+    setSelectedSeat(seatIds);
   }
 
   return (
     <>
-      <body className=" h-auto d-flex flex-column container ">
-        <Stack className="container booking-header">
+      <Stack className="">
+        <Stack className="container booking-header justify-content-center">
           <Row className="pt-4">
-            <Col className=" ">
+            <Col>
               <h1 className="">Heat</h1>
             </Col>
             <Col className="pt-2">
@@ -101,15 +97,10 @@ export default function BookingPage() {
             </Col>
           </Row>
         </Stack>
-        <div className="d-flex w-100 justify-content-center">
-          <section className="container bg-white w-50 row">
-            <div className="border-2 border-black"></div>
-          </section>
-        </div>
 
-        <div className="w-100 h-100 border-end border-start p-3 d-flex flex-column">
+        <Stack className="w-100 h-100 border-end border-start p-3 d-flex flex-column">
           <h4>Stora salongen</h4>
-          <Stack className="p-1 ">
+          <Stack className="p-1">
             <Stack direction="horizontal">
               <Button
                 onClick={() =>
@@ -118,13 +109,13 @@ export default function BookingPage() {
               >
                 -
               </Button>
-              <p className="m-3 ">{ticketAdult}</p>
+              <p className="m-3">{ticketAdult}</p>
               <Button
                 onClick={() => setticketAdult((prevTickets) => prevTickets + 1)}
               >
                 +
               </Button>
-              <p className="m-2">Standard: 140 kr</p>
+              <p className="m-3">Standard: 140 kr</p>
             </Stack>
             <Stack direction="horizontal">
               <Button
@@ -165,18 +156,9 @@ export default function BookingPage() {
           <Stack className="seat-container pt-5 mx-auto justify-content-center align-items-center">
             {seatGrid}
           </Stack>
-        </div>
-      </body>
-      <footer className="d-flex justify-content-center align-items-center container booking-header flex-row justify-content-around ">
-        <h4>Order:</h4>
-        <span>
-          <p>Biljetter: {tickets}</p>
-          <p>Platser: {selectedSeat}</p>
-          <p>
-            Att betala:{" "}
-            {ticketAdult * 140 + ticketChild * 80 + ticketSenior * 120}kr
-          </p>
-        </span>
+        </Stack>
+      </Stack>
+      <footer className="d-flex justify-content-center align-items-center container booking-summary flex-row justify-content-around ">
         <div>
           <input
             className="m-2"
