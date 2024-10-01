@@ -5,13 +5,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 function CancelTickets() {
-  // Skapa state för att hantera visningen av modalen
   const [showModal, setShowModal] = useState(false);
-
-  // Funktion för att visa modalen
   const handleShowModal = () => setShowModal(true);
-
-  // Funktion för att dölja modalen
   const handleCloseModal = () => setShowModal(false);
 
   return (
@@ -32,7 +27,7 @@ function CancelTickets() {
         </Form>
       </div>
       <div className="Cancel-Tickets-Button">
-        {/* När knappen klickas, visa modalen */}
+        {/* När knappen klickas, visas modalen */}
         <Button variant="primary" onClick={handleShowModal}>
           Avboka
         </Button>
