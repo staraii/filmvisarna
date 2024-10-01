@@ -2,8 +2,14 @@
   padding-top: 154px;
 }
 .booking-header {
-  height: 150px;
   background-color: #ac9ed9;
+  @media (min-width: 1000px) {
+    width: 1000px;
+  }
+}
+.booking-summary {
+  background-color: #ac9ed9;
+  height: 150px;
 }
 .header-section {
   flex-direction: row;
