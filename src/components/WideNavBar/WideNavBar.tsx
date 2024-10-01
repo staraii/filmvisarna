@@ -25,7 +25,7 @@ const WideNavBar = ({
         <Nav.Link className="fw-medium" onClick={() => navigate("/")}>
           Hem
         </Nav.Link>
-        <Nav.Link className="fw-medium" onClick={() => navigate("/film")}>
+        <Nav.Link className="fw-medium" onClick={() => navigate("/filmer")}>
           Filmer
         </Nav.Link>
         <Nav.Link
