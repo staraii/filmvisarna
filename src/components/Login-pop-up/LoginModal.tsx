@@ -22,7 +22,7 @@ const handleRegister = () => {
   };
 
   const passwordReset = () => {
-    navigate("/passwordreset"); // Navigate to the register page
+    navigate("/forgot-password"); // Navigate to the register page
     handleClose(); // Close the modal
   };
 
