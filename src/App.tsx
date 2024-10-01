@@ -32,7 +32,6 @@ export default function App() {
 
   const handleLoginShow = () => setShowLoginModal(true); // Show login modal
   const handleLoginClose = () => setShowLoginModal(false); // Hide login modal
-  
 
   return (
     <section className="app-section">
@@ -59,10 +58,11 @@ export default function App() {
             <Route path="/loggain" element={<LoginPage />} />
              <Route path="/forgot-password" element={<PasswordReset />} />
             
+
           </Routes>
         </div>
         <MobileNavBar />
-        
+
         {/* Render LoginModal outside of the Routes to ensure a single instance */}
         <LoginModal
           show={showLoginModal}

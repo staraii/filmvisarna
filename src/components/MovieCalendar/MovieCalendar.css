@@ -44,7 +44,34 @@
   font-size: 1.1rem;
 }
 
-@media (min-width: 670px) {
+.Genre {
+  color: rgb(193, 193, 193);
+}
+
+.Genre-Age {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Age {
+  border-radius: 12px;
+  padding: 4px;
+  height: 30px;
+}
+
+.Age p {
+  font-size: 0.9rem;
+}
+
+.Age-15 {
+  background-color: rgb(114, 172, 0);
+}
+
+.Age-8 {
+  background-color: rgb(0, 162, 174);
+}
+
+@media (min-width: 763px) {
   .Poster-Container {
     flex-direction: row;
   }
@@ -59,6 +86,24 @@
 
   .carousel-control-next {
     right: 10rem;
+  }
+}
+
+@media (max-width: 763px) {
+  .accordion-item {
+    margin-bottom: 2px;
+  }
+
+  .accordion-body {
+    padding: 8px 10px;
+  }
+
+  .accordion-header {
+    padding: 5px 10px;
+  }
+
+  .accordion-header button {
+    margin: 0;
   }
 }
 
