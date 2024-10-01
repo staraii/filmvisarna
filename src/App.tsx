@@ -11,7 +11,6 @@ import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
 import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
 
-
 import "./App.css";
 
 export default function App() {
@@ -45,11 +44,10 @@ export default function App() {
             <Route path="/film" element={<MoveDetailsPage />} />
             <Route path="/boka" element={<BookingPage />} />
 
-      
             <Route
               path="/order-bekraftelse"
               element={<BookingConfirmationPage />}
-            </Route>
+            />
             <Route path="/bio-kalender" element={<MovieCalendar />} />
             <Route path="/avboka" element={<CancelTickets />} />
           </Routes>
@@ -66,4 +64,3 @@ export default function App() {
     </section>
   );
 }
-
