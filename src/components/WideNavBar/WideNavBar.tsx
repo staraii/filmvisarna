@@ -1,13 +1,16 @@
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 
-import { useNavigate } from "react-router-dom";
-import { WideNavBarProps } from '../../utils/Types';  // Make sure to import the type
+import { Link, useNavigate } from "react-router-dom";
+import { WideNavBarProps } from "../../utils/Types"; // Make sure to import the type
 
 import "./wide-navbar.css";
 
-
-const WideNavBar = ({ isLoggedIn, onLoginClick, onLogout }: WideNavBarProps) => {
+const WideNavBar = ({
+  isLoggedIn,
+  onLoginClick,
+  onLogout,
+}: WideNavBarProps) => {
   const navigate = useNavigate();
 
   return (
@@ -25,7 +28,10 @@ const WideNavBar = ({ isLoggedIn, onLoginClick, onLogout }: WideNavBarProps) => 
         <Nav.Link className="fw-medium" onClick={() => navigate("/film")}>
           Filmer
         </Nav.Link>
-        <Nav.Link className="fw-medium" onClick={() => navigate("/bio-kalender")}>
+        <Nav.Link
+          className="fw-medium"
+          onClick={() => navigate("/bio-kalender")}
+        >
           Bio kalender
         </Nav.Link>
         <Nav.Link className="fw-medium" onClick={() => navigate("/avboka")}>
@@ -42,7 +48,10 @@ const WideNavBar = ({ isLoggedIn, onLoginClick, onLogout }: WideNavBarProps) => 
             <Nav.Link className="fw-medium" onClick={onLoginClick}>
               Logga in
             </Nav.Link>
-            <Nav.Link className="fw-medium" onClick={() => navigate("/register")}>
+            <Nav.Link
+              className="fw-medium"
+              onClick={() => navigate("/register")}
+            >
               Bli medlem
             </Nav.Link>
           </>
