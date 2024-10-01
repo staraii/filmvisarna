@@ -1,49 +1,28 @@
 /* LoginModal.css */
-
-
-
-.login-modal-container .form-control {
-  width: 100%;
-  /* Make the input field full width */
-  padding: 10px;
-  /* Add padding inside the input */
-  border-radius: 4px;
-  /* Rounded corners */
-  border: 1px solid #cfd5db;
-  /* Border styling */
-}
-
-/* Ensure there's no line above the input fields */
-.login-modal-container .form-group {
-  margin-bottom: 15px;
-  /* Space between form groups */
-}
-
-/* Optional: For the label */
-.login-modal-container .form-label {
-  margin-bottom: 5px;
-  /* Space below the label */
-}
-
-/* Button styles */
-.login-modal-container .btn {
-  margin-top: 10px;
-  /* Space above the button */
-}
-
-/* Styling for register links */
 .register-link {
-  color: rgb(255, 255, 255);
-  /* Link color */
+  color: #ffffff;
   cursor: pointer;
-  /* Hand cursor on hover */
- 
 
 }
 
 .register-link:hover {
-  /* Change color on hover */
-  color: rgb(35, 32, 207);
-  /* Normal blue hover color */
+  color: #007bff;
 }
 
+.login-button {
+  width: 30%;
+  float: right;
+}
+
+/* Remove the border or shadow under the Modal.Header */
+.modal-header {
+  border-bottom: none;
+  /* Optional: reduce padding if needed */
+  padding-bottom: 0;
+}
+
+/* Adjust padding of the Modal.Body to bring inputs closer */
+.modal-body {
+  padding-top: 10px;
+  /* You can adjust this value */
+}
