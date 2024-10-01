@@ -1,4 +1,12 @@
-.Cancel-Tickets {}
+.Cancel-Tickets-Button {
+  color: #ac9ed9;
+  border: 1.5px solid #ac9ed9;
+}
+
+.Cancel-Tickets-Button:hover {
+  background-color: #ac9ed9;
+  color: #0b0815;
+}
 
 .Cancel-Tickets-Text {
   margin: 1.5rem;

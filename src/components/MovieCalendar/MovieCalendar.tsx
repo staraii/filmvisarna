@@ -52,7 +52,10 @@ function MovieCalendar() {
                           <Card.Text className="Movie-Time">
                             <p>17:00</p>
                           </Card.Text>
-                          <Button className="Movie-Button" variant="primary">
+                          <Button
+                            className="Movie-Button"
+                            variant="outline-primary"
+                          >
                             Boka nu
                           </Button>
                         </div>
@@ -69,7 +72,10 @@ function MovieCalendar() {
                           <Card.Text className="Movie-Time">
                             <p>19:00</p>
                           </Card.Text>
-                          <Button className="Movie-Button" variant="primary">
+                          <Button
+                            className="Movie-Button"
+                            variant="outline-primary"
+                          >
                             Boka nu
                           </Button>
                         </div>
@@ -86,7 +92,10 @@ function MovieCalendar() {
                           <Card.Text className="Movie-Time">
                             <p>22:00</p>
                           </Card.Text>
-                          <Button className="Movie-Button" variant="primary">
+                          <Button
+                            className="Movie-Button"
+                            variant="outline-primary"
+                          >
                             Boka nu
                           </Button>
                         </div>

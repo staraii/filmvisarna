@@ -31,14 +31,15 @@ function CancelTickets() {
           </Form.Group>
         </Form>
       </div>
-      <div className="Cancel-Tickets-Button">
-        {/* När knappen klickas, visa modalen */}
-        <Button variant="primary" onClick={handleShowModal}>
-          Avboka
-        </Button>
-      </div>
 
-      {/* Modal-komponent som visas baserat på state */}
+      <Button
+        className="Cancel-Tickets-Button"
+        variant="outline-primary"
+        onClick={handleShowModal}
+      >
+        Avboka
+      </Button>
+
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Biljetten är avbokad</Modal.Title>
@@ -47,7 +48,11 @@ function CancelTickets() {
           <p>Din biljett har blivit avbokad. Tack för att du kontaktade oss!</p>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button
+            className="Cancel-Tickets-Button"
+            variant="outline-primary"
+            onClick={handleCloseModal}
+          >
             Stäng
           </Button>
         </Modal.Footer>

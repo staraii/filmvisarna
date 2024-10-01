@@ -79,9 +79,15 @@
 }
 
 .Movie-Button {
-  background-color: #c15f6f;
+  color: #ac9ed9;
   flex-shrink: 0;
   font-size: 1.2rem;
+  border: 1.5px solid #ac9ed9;
+}
+
+.Movie-Button:hover {
+  background-color: #ac9ed9;
+  color: #0b0815;
 }
 
 
@@ -90,7 +96,6 @@
   align-items: center;
   justify-content: space-around;
   margin: 0;
-  background-color: #c15f6f42;
   border-radius: 0.5rem;
 }
 
