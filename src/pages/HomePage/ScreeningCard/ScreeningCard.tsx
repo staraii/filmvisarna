@@ -77,18 +77,12 @@ export default function ScreeningCard({ img, slide, lang, sub, age, date, time, 
           </Row>
           <Row>
             <Col xs={9}>
-              <Card.Text
-                className="fw-lighter text-start lang-sub-font"
-              >
+              <Card.Text className="fw-lighter text-start lang-sub-font">
                 {lang}, {sub}
               </Card.Text>
             </Col>
             <Col xs={3}>
-              <Card.Text
-                className="text-end age-font"
-              >
-                {age}
-              </Card.Text>
+              <Card.Text className="text-end age-font">{age}</Card.Text>
             </Col>
           </Row>
           <Row>
@@ -113,13 +107,9 @@ export default function ScreeningCard({ img, slide, lang, sub, age, date, time, 
           <Row className="">
             <Col xs={12} className="h-100 py-2">
               <Button
+                variant="outline-secondary"
                 as="button"
-                className="w-100"
-                style={{
-                  backgroundColor: "#0b0815",
-                  border: "1px solid #ac9ed9",
-                  color: "#ac9ed9",
-                }}
+                className="w-100 book-button-screening-card"
                 onClick={() => navigate("/boka")}
               >
                 Boka

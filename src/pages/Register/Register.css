@@ -48,7 +48,7 @@ button:hover {
 /* Add media query to adjust margin based on mobile view */
 @media (max-width: 768px) {
   button {
-    margin-bottom: 70px;
+    /* margin-bottom: 70px; */
     /* Extra margin on mobile view for more space */
   }
 
