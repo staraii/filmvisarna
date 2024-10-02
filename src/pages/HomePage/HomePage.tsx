@@ -11,9 +11,44 @@ import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Stack from "react-bootstrap/Stack";
 import Footer from "../../components/Footer/Footer";
+import { useNavigate } from "react-router-dom";
+
+
+const movies = [
+  {
+    title: "Pippi",
+    genre: ["Svensk", "Barn"],
+    year: "1970",
+    slide: "/pippi_slide.jpg",
+  },
+  {
+    title: "Sleepers",
+    genre: ["Drama", "Thriller"],
+    year: "1996",
+    slide: "/sleepers_slide.jpg",
+  },
+  {
+    title: "Titanic",
+    genre: ["Drama", "Romantik"],
+    year: "1997",
+    slide: "/titanic_slide.jpg",
+  },
+  {
+    title: "Fight Club",
+    genre: ["Drama"],
+    year: "1999",
+    slide: "/fight_club_slide.jpg",
+  },
+  {
+    title: "Heat",
+    genre: ["Action", "Drama"],
+    year: "1995",
+    slide: "/heat_slide.jpg",
+  }
+]
+
 
 const visningar = [
-
   {
     title: "Sleepers",
     genre: ["Drama", "Thriller"],
@@ -27,6 +62,20 @@ const visningar = [
     img: "/sleepers_poster.jpg",
     slide: "/sleepers_slide.jpg",
     status: "Medium",
+  },
+  {
+    title: "Heat",
+    genre: ["Action", "Drama"],
+    day: "fre",
+    date: "20/9",
+    time: "21.00",
+    theatre: "Stora salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
+    age: "15+",
+    img: "/HeatPoster.PNG",
+    slide: "/heat_slide.jpg",
+    status: "Low",
   },
   {
     title: "Pippi",
@@ -82,9 +131,22 @@ const visningar = [
     sub: "Sv. text",
     age: "15+",
     img: "/sleepers_poster.jpg",
-
     slide: "/sleepers_slide.jpg",
     status: "Low",
+  },
+  {
+    title: "Fight Club",
+    genre: ["Drama"],
+    day: "lör",
+    date: "21/9",
+    time: "21.00",
+    theatre: "Lilla salongen",
+    lang: "Eng. tal",
+    sub: "Sv. text",
+    age: "15+",
+    img: "/FightClubPoster.jpg",
+    slide: "/fight_club_slide.jpg",
+    status: "Medium",
   },
   {
     title: "Sleepers",
@@ -125,7 +187,6 @@ const visningar = [
     sub: "Sv. text",
     age: "15+",
     img: "/titanic_poster.jpg",
-
     slide: "/titanic_slide.jpg",
     status: "Low",
   },
@@ -133,20 +194,21 @@ const visningar = [
 
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const [salong, setSalong] = useState<number[]>([]);
   const handleChangeSalong = (val: number[]) => setSalong(val);
 
   return (
-    <section className="home-section">
+    <section className="home-section pb-xs-5">
       <main className="home_main">
         {/* Carousel Component */}
         <Carousel interval={5000} className="mb-2">
-          {visningar.map((visning, index) => (
-            <Carousel.Item key={index}>
-              <Image src={visning.slide} alt={visning.title} fluid />
+          {movies.map((movie, index) => (
+            <Carousel.Item key={index} onClick={() => navigate("/film")} style={{cursor: "pointer"}}>
+              <Image src={movie.slide} alt={movie.title} fluid />
               <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
-                <h3 className="text-secondary mb-0">{visning.title}</h3>
-                <p className="m-auto">{visning.genre.join(", ")}</p>
+                <h3 className="text-secondary mb-0">{movie.title}</h3>
+                <p className="m-auto">{movie.genre.join(", ")}</p>
               </Carousel.Caption>
             </Carousel.Item>
           ))}
@@ -210,7 +272,6 @@ export default function HomePage() {
           <Row className="mb-5">
             <h3>Kommande visningar</h3>
           </Row>
-          
           {/* Screening Cards using ScreeningCard component */}
           <Row
             className="d-flex flex-row flex-wrap mb-5 row-gap-4"
