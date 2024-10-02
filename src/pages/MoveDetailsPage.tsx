@@ -3,12 +3,12 @@ import { useState } from 'react';
 import './MoveDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
 import  FightClubPoster from '../assets/FightClubPoster.jpg'
-
+import { useNavigate } from "react-router-dom";
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
 function MoveDetailsPage() {
-
+const navigate = useNavigate();
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); 
   const toggleDescriptionText = () => {
@@ -81,7 +81,7 @@ function MoveDetailsPage() {
                   <Card.Title>
                     <h3>Fight Club</h3>
                   </Card.Title>
-                  <Button>Boka platser</Button>
+                  <Button onClick={() => navigate("/boka")} >Boka platser</Button>
                   <Card.Title className="mt-4" >OM Filmen</Card.Title>
                   <Card.Text className='see-more-container'>
                     {isDescriptionExpanded ? fullText : shortText}
@@ -212,7 +212,7 @@ function MoveDetailsPage() {
           <Col xs="auto">
             <Col className='seats-left' >33 Platser kvar</Col>
             <Col className='seats-left mt-2' >Salong 1</Col>
-            <Button className=' mt-3'>Boka platser</Button>
+            <Button onClick={() => navigate("/boka")} className=' mt-3'>Boka platser</Button>
           </Col>
         </Row>
 
@@ -227,21 +227,21 @@ function MoveDetailsPage() {
                 </Card.Header>
                 <Card.Body>
 
-                  <Card className="mb-3 square-card">
+                  <Card onClick={() => navigate("/boka")} className="mb-3 square-card">
                     <Card.Body className="bg-primary">
                       <Card.Title>22:00</Card.Title>
                       <Card.Text>Salong 2</Card.Text>
                     </Card.Body>
                   </Card>
 
-                  <Card className="mb-3 square-card">
+                  <Card onClick={() => navigate("/boka")} className="mb-3 square-card">
                     <Card.Body className="bg-primary">
                       <Card.Title>22:00</Card.Title>
                       <Card.Text>Salong 2</Card.Text>
                     </Card.Body>
                   </Card>
 
-                  <Card className="mb-3 square-card">
+                  <Card  onClick={() => navigate("/boka")} className="mb-3 square-card">
                     <Card.Body className="bg-primary">
                       <Card.Title>22:00</Card.Title>
                       <Card.Text>Salong 2</Card.Text>
