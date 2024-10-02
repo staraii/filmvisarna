@@ -52,7 +52,7 @@ const Register = ({ onLogin }: RegisterProps) => {
     }
 
     // Mock registration success
-    alert('Du är inloggad');
+    alert('Du har blivit medlem, välkommen till Filmvisarna');
     onLogin(); // Trigger the logged-in state change
 
     // Optionally, navigate to a different page after successful registration
