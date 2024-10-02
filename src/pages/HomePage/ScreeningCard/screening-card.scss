@@ -66,6 +66,10 @@ $card-filter-active: contrast(1) grayscale(0.2) opacity(0.20) sepia(0.9);
   font-size: clamp(1rem, 3.7vw, 1.2rem);
 }
 
+.book-button-screening-card {
+  background-color: #0b0815;
+}
+
 @include media-breakpoint-down(sm){
   @container screening-card (width < 320px){
     .overlay-image {
