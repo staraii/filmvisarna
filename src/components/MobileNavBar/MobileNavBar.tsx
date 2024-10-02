@@ -34,7 +34,6 @@ export default function MobileNavBar() {
           width="32"
           height="32"
           fill="#efecf8"
-          className="bi bi-film"
           viewBox="0 0 16 16"
         >
           <path d="M0 1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm4 0v6h8V1zm8 8H4v6h8zM1 1v2h2V1zm2 3H1v2h2zM1 7v2h2V7zm2 3H1v2h2zm-2 3v2h2v-2zM15 1h-2v2h2zm-2 3v2h2V4zm2 3h-2v2h2zm-2 3v2h2v-2zm2 3h-2v2h2z" />
@@ -46,26 +45,27 @@ export default function MobileNavBar() {
           width="32"
           height="32"
           fill="#efecf8"
-          className="bi bi-calendar3"
           viewBox="0 0 16 16"
         >
           <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z" />
           <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
         </svg>
       </Nav.Link>
-     {/* Icon Link for Menu Button */}
-  <Nav.Link className="menu-link" onClick={() => setShowMenu((showMenu) => !showMenu)}>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="42"
-      height="42"
-      fill="#efecf8"
-      className="bi bi-three-dots"
-      viewBox="0 0 16 16"
-    >
-      <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
-    </svg>
-  </Nav.Link>
+      {/* Icon Link for Menu Button */}
+      <Nav.Link
+        className="menu-link"
+        onClick={() => setShowMenu((showMenu) => !showMenu)}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="42"
+          height="42"
+          fill="#efecf8"
+          viewBox="0 0 16 16"
+        >
+          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+        </svg>
+      </Nav.Link>
       <Offcanvas
         show={showMenu}
         onHide={() => setShowMenu((showMenu) => !showMenu)}
@@ -73,17 +73,25 @@ export default function MobileNavBar() {
         backdrop={true}
         placement="end"
         name="end"
-        className="d-flex flex-column justify-content-end"
+        className="d-flex flex-column justify-content-around"
       >
         <Offcanvas.Header closeButton>
           {/* Empty element, just to make closing X visible */}
         </Offcanvas.Header>
-        <Offcanvas.Body className="d-flex flex-column justify-content-end pb-5 mb-5">
+        <Offcanvas.Body
+          className="d-flex flex-column justify-content-around mb-5"
+          style={{ overflow: "hidden" }}
+        >
           {/* SoMe icons */}
-          <Stack gap={4} className="mt-5">
-            <Nav.Link className="some-links">
+          <Stack gap={4} className="my-auto d-flex flex-column">
+            {/* Facebook */}
+            <Nav.Link
+              className="w-100 d-flex flex-row align-items-center  some-link facebook-link"
+              style={{ overflow: "hidden" }}
+            >
+              {/* <div className="at-facebook">@filmvisarna</div> */}
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="facebook-icon"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="42"
@@ -98,9 +106,18 @@ export default function MobileNavBar() {
                 />
               </svg>
             </Nav.Link>
-            <Nav.Link href="#messenger" className="some-links">
+            {/* Messenger */}
+            <Nav.Link
+              className="w-100 d-flex flex-row align-items-center some-link messenger-link"
+              style={{ overflow: "hidden" }}
+            >
+              {/* <div
+                className="at-messenger"
+              >
+                messenger
+              </div> */}
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="messenger-icon"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="42"
@@ -117,12 +134,15 @@ export default function MobileNavBar() {
                 />
               </svg>
             </Nav.Link>
+
+            {/* Instagram */}
             <Nav.Link
-              href="http://instagram.com/filmvisarna"
-              className="some-links"
+              className="w-100 d-flex flex-row align-items-center some-link instagram-link"
+              style={{ overflow: "hidden" }}
             >
+              {/* <div className="at-instagram">@filmvisarna</div> */}
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="instagram-icon"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="42"
@@ -138,9 +158,15 @@ export default function MobileNavBar() {
                 />
               </svg>
             </Nav.Link>
-            <Nav.Link href="http://x.com/filmvisarna" className="some-links">
+
+            {/* X */}
+            <Nav.Link
+              className="w-100 d-flex flex-row align-items-center some-link x-link"
+              style={{ overflow: "hidden" }}
+            >
+              {/* <div className="at-x">@filmvisarna</div> */}
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="x-icon"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="42"
@@ -151,12 +177,15 @@ export default function MobileNavBar() {
                 <path d="M13.795 10.533 20.68 2h-3.073l-5.255 6.517L7.69 2H1l7.806 10.91L1.47 22h3.074l5.705-7.07L15.31 22H22l-8.205-11.467Zm-2.38 2.95L9.97 11.464 4.36 3.627h2.31l4.528 6.317 1.443 2.02 6.018 8.409h-2.31l-4.934-6.89Z" />
               </svg>
             </Nav.Link>
+
+            {/* Mail */}
             <Nav.Link
-              href="mailto:filmvisarna@filmvisarna.se"
-              className="some-links"
+              className="w-100 d-flex flex-row align-items-center some-link mail-link"
+              style={{ overflow: "hidden" }}
             >
+              {/* <div className="at-mail">info@filmvisarna.se</div> */}
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="mail-icon"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="42"
@@ -172,9 +201,15 @@ export default function MobileNavBar() {
                 />
               </svg>
             </Nav.Link>
-            <Nav.Link className="some-links">
+
+            {/* Telefon */}
+            <Nav.Link
+              className="w-100 d-flex flex-row align-items-center some-link phone-link"
+              style={{ overflow: "hidden" }}
+            >
+              {/* <div className="at-phone">08 - 123 456</div> */}
               <svg
-                className="w-6 h-6 text-gray-800 dark:text-white"
+                className="phone-icon"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 width="42"
@@ -193,19 +228,23 @@ export default function MobileNavBar() {
             </Nav.Link>
           </Stack>
 
+          {/* Menu links */}
           <Nav.Link
-            className="fw-medium"
+            className="fw-medium mb-3"
             onClick={() => handleNavigation("/avboka")}
           >
             Avboka platser
           </Nav.Link>
           <Nav.Link
-            className="fw-medium"
+            className="fw-medium mb-3"
             onClick={() => handleNavigation("/loggain")}
           >
             Logga in
           </Nav.Link>
-         <Nav.Link className="fw-medium" onClick={() => handleNavigation("/register")}>
+          <Nav.Link
+            className="fw-medium"
+            onClick={() => handleNavigation("/register")}
+          >
             Bli medlem
           </Nav.Link>
         </Offcanvas.Body>
