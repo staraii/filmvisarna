@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import './Register.css'; // Optional: Create a CSS file for custom styles
 
@@ -11,10 +11,15 @@ interface FormData {
   postalCode: string;
   email: string;
   password: string;
-  confirmPassword: string; // Added this to handle confirmPassword input
+  confirmPassword: string;
 }
 
-const Register = () => {
+interface RegisterProps {
+  onLogin: () => void; // Add this prop to trigger login state
+}
+
+const Register = ({ onLogin }: RegisterProps) => {
+  const navigate = useNavigate(); // For navigation
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -24,7 +29,7 @@ const Register = () => {
     password: '',
     confirmPassword: '',
   });
-   // state variables for showing and hidding passwords
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -38,7 +43,20 @@ const Register = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+
+    // Perform form validation, if necessary
+
+    if (formData.password !== formData.confirmPassword) {
+      alert('Lösenord och bekräfta lösenord matchar inte.');
+      return;
+    }
+
+    // Mock registration success
+    alert('Du har blivit medlem, välkommen till Filmvisarna');
+    onLogin(); // Trigger the logged-in state change
+
+    // Optionally, navigate to a different page after successful registration
+    navigate('/'); // Redirect to some dashboard or homepage after registration
   };
 
   return (
