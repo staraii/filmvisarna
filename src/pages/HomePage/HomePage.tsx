@@ -210,17 +210,7 @@ export default function HomePage() {
           <Row className="mb-5">
             <h3>Kommande visningar</h3>
           </Row>
-          <Row className="mb-3">
-            <Stack direction="horizontal" gap={3}>
-              <p className="d-flex flex-row align-items-center gap-2">
-                <span className="less-tickets-circle"></span> Färre lediga platser
-              </p>
-              <p className="d-flex flex-row align-items-center gap-2">
-                <span className="sold-out-circle"></span> Utsålt
-              </p>
-            </Stack>
-          </Row>
-
+          
           {/* Screening Cards using ScreeningCard component */}
           <Row
             className="d-flex flex-row flex-wrap mb-5 row-gap-4"
