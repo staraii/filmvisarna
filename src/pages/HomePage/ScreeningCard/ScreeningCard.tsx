@@ -41,6 +41,7 @@ export default function ScreeningCard({ img, slide, lang, sub, age, date, time, 
                     style={{
                       border: "2px solid #0b0815",
                       aspectRatio: "2 / 3",
+                      cursor: "pointer",
                     }}
                     onClick={() => navigate("/film")}
                   />

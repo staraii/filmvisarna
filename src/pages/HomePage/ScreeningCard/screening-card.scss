@@ -33,6 +33,7 @@ $card-filter-active: contrast(1) grayscale(0.2) opacity(0.20) sepia(0.9);
   width: 100%;
   height: 100%;
   box-shadow: inset 5px 5px #ffffff;
+  user-select: none;
 }
 .screening-card:hover .overlay-image {
   filter: $card-filter-active;
