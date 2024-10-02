@@ -63,6 +63,7 @@ function MovieCalendar() {
                           <Button
                             className="Movie-Button"
                             variant="outline-primary"
+                            href="/boka"
                           >
                             Boka nu
                           </Button>
@@ -90,6 +91,7 @@ function MovieCalendar() {
                           <Button
                             className="Movie-Button"
                             variant="outline-primary"
+                            href="/boka"
                           >
                             Boka nu
                           </Button>
@@ -118,6 +120,7 @@ function MovieCalendar() {
                           <Button
                             className="Movie-Button"
                             variant="outline-primary"
+                            href="/boka"
                           >
                             Boka nu
                           </Button>
