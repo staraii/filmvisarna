@@ -204,7 +204,7 @@ export default function HomePage() {
         {/* Carousel Component */}
         <Carousel interval={5000} className="mb-2">
           {movies.map((movie, index) => (
-            <Carousel.Item key={index} onClick={() => navigate("/film")} style={{cursor: "pointer"}}>
+            <Carousel.Item key={index} onClick={() => navigate("/film")} style={{cursor: "pointer", userSelect: "none"}}>
               <Image src={movie.slide} alt={movie.title} fluid />
               <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
                 <h3 className="text-secondary mb-0">{movie.title}</h3>
