@@ -1,0 +1,82 @@
+.movie-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-in;
+  cursor: pointer;
+  user-select: none;
+}
+
+.movie-card-body {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  z-index: 10;
+  opacity: 0;
+  transition: all 0.4s ease-in;
+}
+
+.movie-card-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300%;
+  height: 100%;
+  transform: translateX(0%);
+  --background: rgba(11, 8, 21, .75);
+  --size: 5px;
+  background-image:
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to right, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, var(--background) var(--size), transparent var(--size)),
+    linear-gradient(to bottom, transparent var(--size), var(--background) var(--size));
+  background-size: calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), calc(var(--size) * 2) var(--size), 100% calc(100% - var(--size) * 3);
+  background-repeat: repeat-x;
+  background-position: 0 var(--size), top left, 0 calc(100% - var(--size)), bottom left, 0 var(--size);
+  padding: calc(var(--size) * 3) calc(var(--size) * 2.5);
+  box-sizing: border-box;
+  animation: 5s linear infinite forwards filmstrip;
+  z-index: 3;
+}
+
+.movie-card-content-wrapper {
+  z-index: 12;
+  align-self: center;
+}
+
+.movie-card-title {
+  font-size: clamp(1rem, 8vw, 2.2rem); 
+}
+
+.movie-card-genre {
+  font-size: clamp(0.8rem, 4vw, 1rem);
+}
+
+.movie-card-lang-age {
+  font-size: clamp(0.5rem, 3.5vw, 0.8rem);
+}
+
+@keyframes filmstrip {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.movie-card:hover .movie-card-body,
+.movie-card:active .movie-card-body,
+.movie-card:focus .movie-card-body {
+  opacity: 1;
+}
+
+.movie-card:hover .movie-card-img,
+.movie-card:active .movie-card-img,
+.movie-card:focus .movie-card-img {
+  filter: invert(30%) brightness(70%) opacity(50%);
+}
+
+

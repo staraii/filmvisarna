@@ -1,0 +1,164 @@
+//$card-filter: 
+$card-filter: contrast(2) grayscale(0) opacity(0.25) sepia(1);
+$card-filter-active: contrast(1) grayscale(0.2) opacity(0.20) sepia(0.9);
+@mixin statuscolor($statuscolor){
+  $circle-size: 0.8rem;
+  width: $circle-size;
+  height: $circle-size;
+  border-radius: calc($circle-size / 2);
+  background-color: $statuscolor;
+  content: "";
+}
+
+.card-img {
+  width: 35%;
+  height: auto;
+}
+
+.overlay-image {
+  aspect-ratio: 16 / 9;
+  width: auto;
+  //filter: contrast(1) grayscale(0.2) opacity(0.20) sepia(0.9);
+  filter: $card-filter;
+  object-fit: cover;
+
+
+}
+
+.screening-card {
+  container-name: screening-card;
+  container-type: inline-size;
+
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  box-shadow: inset 5px 5px #ffffff;
+  user-select: none;
+}
+.screening-card:hover .overlay-image {
+  filter: $card-filter-active;
+}
+.screening-card:focus .overlay-image {
+  filter: $card-filter-active;
+}
+.screening-card:active .overlay-image {
+  filter: $card-filter-active;
+}
+
+
+.tickets-status {
+  &.red::after {
+    @include statuscolor($red);
+  }
+  &.yellow::after {
+    @include statuscolor($yellow);
+  }
+  &.green::after {
+    @include statuscolor($green);
+  }
+}
+.date-time-font { 
+  font-size: clamp(3rem, 11vw, 6.2rem);
+}
+.lang-sub-font {
+  font-size: clamp(0.9rem, 3.5vw, 1.2rem);
+}
+.age-font {
+  font-size: clamp(1rem, 3.7vw, 1.2rem);
+}
+
+.book-button-screening-card {
+  background-color: #0b0815;
+}
+
+@include media-breakpoint-down(sm){
+  @container screening-card (width < 320px){
+    .overlay-image {
+      height: 110cqw;
+    }
+    .date-time-font {
+      font-size: clamp(3rem, 11vw, 6.2rem);
+    }
+  }
+  @container screening-card (width > 320px) and (width < 350px ){
+    .overlay-image {
+      height: 105cqw;
+    }
+    .date-time-font {
+      font-size: clamp(3rem, 14vw, 7rem);
+    }
+  }
+  @container screening-card (width > 350px) and (width < 400px){
+    .overlay-image {
+      height: 105cqw;
+    }
+    .date-time-font {
+      font-size: clamp(3.5rem, 15vw, 8rem);
+    }
+  }
+  @container screening-card (width > 400px) and (width < 450px){
+    .overlay-image {
+      height: 105cqw;
+    }
+    .date-time-font {
+      font-size: clamp(4rem, 16vw, 8.5rem);
+    }
+  }
+  @container screening-card (width > 450px) and (width < 550px){
+    .overlay-image {
+      height: 100cqw;
+    }
+    .date-time-font {
+      font-size: clamp(4rem, 16.5vw, 8.7rem);
+    }
+  }
+}
+@include media-breakpoint-up(sm){
+  @container screening-card (width > 200px){
+    .overlay-image {
+      //height: 110cqw;
+      height: clamp(290px, 115cqw, 320px);
+    }
+    .date-time-font {
+      font-size: clamp(2.5rem, 7vw, 7rem);
+    }
+    .lang-sub-font {
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    }
+    .age-font {
+      font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+    }
+  }
+  @container screening-card (width > 300px){
+    .overlay-image {
+      height: clamp(320px, 108cqw, 365px);
+    }
+    .date.time-font{
+      font-size: clamp(2.6rem, 13.5vw, 12rem);
+    }
+  }
+  @container screening-card (width > 350px){
+    .overlay-image {
+      height: clamp(380px, 104cqw, 435px);
+    }
+    .date-time-font {
+      font-size: clamp(3rem, 8vw, 5rem);
+    }
+  }
+}
+@include media-breakpoint-up(lg){
+  .overlay-image {
+    height: clamp(330px, 104cqw, 350px);
+  }
+  .date-time-font {
+    font-size: 3.2rem;
+  }
+}
+
+
+
+
+
+
+
+

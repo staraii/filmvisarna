@@ -1,0 +1,150 @@
+.Days {
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+
+.Poster-Container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.Days img {
+  max-width: 100%;
+  height: auto;
+}
+
+.accordion-button {
+  transition: background-color 0.3s ease;
+}
+
+.Poster-Description {
+  background-color: #1e1637;
+  max-width: 17rem;
+  margin: 10px;
+  text-align: center;
+  padding: 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Poster-Description h4 {
+  margin-top: 1rem;
+  font-size: 2rem;
+}
+
+.Poster-Description p {
+  font-size: 1.1rem;
+}
+
+.Genre {
+  color: rgb(193, 193, 193);
+}
+
+.Genre-Age {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Age {
+  border-radius: 12px;
+  padding: 4px;
+  height: 30px;
+}
+
+.Age p {
+  font-size: 0.9rem;
+}
+
+.Age-15 {
+  background-color: rgb(114, 172, 0);
+}
+
+.Age-8 {
+  background-color: rgb(0, 162, 174);
+}
+
+@media (min-width: 763px) {
+  .Poster-Container {
+    flex-direction: row;
+  }
+
+  .Poster-Description {
+    flex: 1 1 calc(33.33% - 20px);
+  }
+
+  .carousel-control-prev {
+    left: 10rem;
+  }
+
+  .carousel-control-next {
+    right: 10rem;
+  }
+}
+
+@media (max-width: 763px) {
+  .accordion-item {
+    margin-bottom: 2px;
+  }
+
+  .accordion-body {
+    padding: 8px 10px;
+  }
+
+  .accordion-header {
+    padding: 5px 10px;
+  }
+
+  .accordion-header button {
+    margin: 0;
+  }
+}
+
+.carousel-text h3 {
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+.carousel-control-prev {
+  left: 5rem;
+}
+
+.carousel-control-next {
+  right: 5rem;
+}
+
+.Movie-Button {
+  color: #ac9ed9;
+  background-color: #0b0815;
+  border: 1.5px solid #ac9ed9;
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.Movie-Button:hover {
+  border: 1.5px solid #ac9ed9;
+  color: #0b0815;
+  background-color: #ac9ed9;
+}
+
+.Time-Button-Container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 0;
+  background-color: #1e1637;
+  border-radius: 0.5rem;
+}
+
+.Movie-Time p {
+  font-size: 1.5rem;
+  margin: 1rem 0rem 0rem 0rem;
+}

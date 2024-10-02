@@ -1,0 +1,32 @@
+
+@import "./bootstrap-overrides.scss";
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+
+@import "./fonts.scss";
+@import "../src/pages/HomePage/ScreeningCard/screening-card.scss";
+@import "../src/pages/Movies/movie-card.scss";
+
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+body {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-section {
+  width: 100%;
+  max-width: 1024px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+}

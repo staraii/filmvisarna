@@ -1,0 +1,56 @@
+.navbar-bottom {
+  display: flex;
+  height: 8vh; /* Fixed height for navbar */
+  flex-direction: row;
+  justify-content: space-around; /* Space items evenly */
+  align-items: center; /* Center items vertically */
+  background-color: #0b0815; /* Background color for visibility */
+  color: #efecf8;
+  z-index: 1000; /* Ensure it is above other content */
+
+  .icon-link {
+    display: flex;
+    /* Ensure icons are centered */
+    justify-content: center;
+    /* Center the icons */
+    align-items: center;
+    /* Center the icons vertically */
+    height: 100%;
+    /* Ensure they fill the navbar height */
+  }
+  .menu-link {
+    display: flex;
+    /* Ensure the SVG is centered */
+    justify-content: center;
+    /* Center the icon */
+    align-items: center;
+    /* Center the icon vertically */
+    height: 100%;
+    /* Make it fill the height of the navbar */
+  }
+  .menu-button:hover {
+    background-color: #551a3a; /* Change background on hover */
+  }
+  /* Hides navbar when screen size is bigger than 767px */
+  @media only screen and (min-width: 768px) {
+    display: none;
+    /* Hide on larger screens */
+  }
+}
+
+
+
+/* ------ Offcanvas menu & some-links --------  */
+
+/* Icon transitions */
+.facebook-icon, .x-icon, .mail-icon, .phone-icon, .instagram-icon, .messenger-icon {
+  transition: all 0.4s ease-in-out;
+}
+
+.some-link {
+  opacity: 0.5;
+  &:hover {
+    opacity: 1;
+    transform: scale(105%) translateX(5%);
+  }
+}
