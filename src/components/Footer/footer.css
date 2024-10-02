@@ -50,15 +50,20 @@
 
 /* Responsive styles */
 @media (max-width: 767px) {
-  .footer .row {
-    flex-direction: column;
-    /* Stack columns on small screens */
-    text-align: left;
-    /* Keep text left aligned on small screens */
+  .footer .col-md-4 {
+    margin-bottom: 20px; /* Add space between stacked items */
   }
 
-  .footer .col-md-4 {
-    margin-bottom: 20px;
-    /* Add space between stacked items */
+  /* Update styles specifically for the "Följ oss" section */
+  .footer .social-icons {
+    display: flex; /* Use flexbox for layout */
+    justify-content: center; /* Center items in the row */
+    padding-left: 0; /* Remove default padding */
+    margin-top: 10px; /* Add space above icons */
+  }
+
+  .footer .social-icons li {
+    margin: 0 10px; /* Add horizontal margin for spacing */
+    
   }
 }
