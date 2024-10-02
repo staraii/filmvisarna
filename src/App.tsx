@@ -44,7 +44,7 @@ export default function App() {
         <div className="content-container">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/register" element={<Register />} />
+             <Route path="/register" element={<Register onLogin={onLoginClick} />} />
             <Route path="/film" element={<MoveDetailsPage />} />
             <Route path="/filmer" element={<Movies />} />
             <Route path="/boka" element={<BookingPage />} />
