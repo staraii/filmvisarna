@@ -38,13 +38,22 @@ const movies = [
     lang: "Eng.tal",
     sub: "Sv.text",
     age: "15+",
-    poster: "/HeatPoster.PNG",
+    poster: "/heat_poster.jpg",
+  },
+  {
+    title: "Fight Club",
+    year: "1999",
+    genres: "Drama",
+    lang: "Eng.tal",
+    sub: "Sv.text",
+    age: "15+",
+    poster: "/fight_club_poster.jpg",
   },
 ];
 
 export default function Movies() {
   return (
-    <Container as="main" fluid className="pb-5 mb-5">
+    <Container as="main" fluid className="pb-5 mb-5" style={{paddingInline: "2rem"}}>
       <Row>
         <Col xs={12}>
           <h3 className="my-4">Aktuella Filmer</h3>
