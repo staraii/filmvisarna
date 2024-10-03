@@ -42,15 +42,98 @@
 
 /* ------ Offcanvas menu & some-links --------  */
 
+
 /* Icon transitions */
 .facebook-icon, .x-icon, .mail-icon, .phone-icon, .instagram-icon, .messenger-icon {
   transition: all 0.4s ease-in-out;
 }
+.facebook-link::after {
+  content: "@filmvisarna";
+  padding-left: 1rem;
+  opacity: 0;
+  transform: translateX(5%);
+  transition: all 0.3s ease-in-out;
+}
+.facebook-link:hover, .facebook-link:active, .facebook-link:focus {
+  &::after {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+.messenger-link::after {
+  content: "messenger";
+  padding-left: 1rem;
+  opacity: 0;
+  transform: translateX(5%);
+  transition: all 0.3s ease-in-out;
+}
+.messenger-link:hover, .messenger-link:active, .messenger-link:focus {
+  &::after {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+.instagram-link::after {
+  content: "@filmvisarna";
+  padding-left: 1rem;
+  opacity: 0;
+  transform: translateX(5%);
+  transition: all 0.3s ease-in-out;
+}
+.instagram-link:hover, .instagram-link:active, .instagram-link:focus {
+  &::after {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+.x-link::after {
+  content: "@filmvisarna";
+  padding-left: 1rem;
+  opacity: 0;
+  transform: translateX(5%);
+  transition: all 0.3s ease-in-out;
+}
+.x-link:hover, .x-link:active, .x-link:focus {
+  &::after {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+.mail-link::after {
+  content: "info@filmvisarna.se";
+  padding-left: 1rem;
+  opacity: 0;
+  transform: translateX(5%);
+  transition: all 0.3s ease-in-out;
+}
+.mail-link:hover, .mail-link:active, .x-link:focus {
+  &::after {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+.phone-link::after {
+  content: "08 - 123 456";
+  padding-left: 1rem;
+  opacity: 0;
+  transform: translateX(5%);
+  transition: all 0.3s ease-in-out;
+}
+.phone-link:hover, .phone-link:active, .phone-link:focus {
+  &::after {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
 
 .some-link {
   opacity: 0.5;
-  &:hover {
+  /* &:hover {
     opacity: 1;
     transform: scale(105%) translateX(5%);
+  } */
+  &:hover {
+    opacity: 1;
+    transform: scale(80%) translateX(-5%);
   }
 }
