@@ -19,8 +19,8 @@ export const app = express();
 
 // Test route to see if server and db connection works as expected
 app.get("/api/names", async (_req, res) => {
-  const result = await db.query("SELECT Name FROM Users");
+  const result = await db.query("SELECT * FROM movies WHERE moviesCategories = 'Action';");
   res.json({ success: result[0]})
 })
 
-app.listen(SERVER_PORT);
+app.listen(SERVER_PORT); 

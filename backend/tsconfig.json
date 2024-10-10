@@ -15,10 +15,10 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declarationDir": "./serverDist",
-    "outDir": "./serverDist",
+    "declarationDir": "./backendDist",
+    "outDir": "./backendDist",
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["/*.ts", "index.ts"],
+  "exclude": ["backendDist"]
 }

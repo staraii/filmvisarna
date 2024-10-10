@@ -4,16 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "server:compile": "cd server && tsc",
-    "server:watch": "cd server && tsc --watch",
-    "server:run": "nodemon --env-file=.env server/serverDist/index.js",
-    "start": "npm run server:compile && concurrently \"npm run server:watch\" \"npm run server:run\" \"npm run dev\"",
-    "dev": "vite",
+    "backend:compile": "cd backend && tsc",
+    "backend:watch": "cd backend && tsc --watch",
+    "backend:run": "nodemon --env-file=.env backend/backendDist/index.js",
+    "start": "npm run backend:compile && concurrently \"npm run backend:watch\" \"npm run backend:run\" \"npm run dev\"",
+    "dev": "cd frontend && vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "express": "^4.21.0",
     "mysql2": "^3.11.3",
@@ -21,7 +22,9 @@
     "react-bootstrap": "^2.10.4",
     "react-bootstrap-icons": "^1.11.4",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.2"
+    "react-router-dom": "^6.26.2",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.18.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
