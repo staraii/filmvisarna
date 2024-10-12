@@ -11,6 +11,7 @@ import express from "express";
 import mysql from "mysql2/promise";
 import authRouter from "./routes/authRouter.js";
 import session from "express-session";
+import ticketRouter from "./routes/ticketRouter.js";
 // DB Config, loads values from .env
 const dbConfig = {
     host: process.env.DB_HOST,
@@ -33,6 +34,7 @@ app.use(session({
 }));
 // Routers
 app.use(authRouter);
+app.use(ticketRouter);
 // Test route to see if server and db connection works as expected
 app.get("/api/names", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield db.query("SELECT * FROM bookings WHERE userid = 1;");

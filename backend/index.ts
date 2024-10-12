@@ -2,6 +2,7 @@ import express from "express";
 import mysql, { PoolOptions } from "mysql2/promise";
 import authRouter from "./routes/authRouter.js";
 import session from "express-session";
+import ticketRouter from "./routes/ticketRouter.js";
 
 // DB Config, loads values from .env
 const dbConfig: PoolOptions = {
@@ -32,7 +33,7 @@ app.use(session({
 // Routers
 
 app.use(authRouter);
-
+app.use(ticketRouter);
 
 
 // Test route to see if server and db connection works as expected
