@@ -1,0 +1,1 @@
+{"version":3,"file":"screeningsRouter.js","sourceRoot":"","sources":["../routes/screeningsRouter.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,MAAM,SAAS,CAAC;AAC9B,OAAO,oBAAoB,MAAM,uCAAuC,CAAC;AAEzE,MAAM,MAAM,GAAG,OAAO,CAAC,MAAM,EAAE,CAAC;AAEhC,MAAM,CAAC,GAAG,CAAC,aAAa,EAAE,oBAAoB,CAAC,aAAa,CAAC,CAAC;AAI9D,eAAe,MAAM,CAAC"}

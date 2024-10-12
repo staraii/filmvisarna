@@ -17,8 +17,17 @@
     "emitDecoratorMetadata": true,
     "declarationDir": "./backendDist",
     "outDir": "./backendDist",
-    "typeRoots": ["node_modules/@types"]
+    "typeRoots": [
+      "node_modules/@types",  // Include the default types
+      "./@types"              // Include custom types directory
+    ]
   },
-  "include": ["/*.ts", "index.ts"],
-  "exclude": ["backendDist"]
+  "include": [
+    "./**/*.ts",             // Include all TypeScript files in the project
+    "./@types/**/*"          // Include all TypeScript files in the custom types directory
+  ],
+  "exclude": [
+    "backendDist",           // Exclude the output directory
+    "node_modules"           // Exclude node_modules
+  ]
 }

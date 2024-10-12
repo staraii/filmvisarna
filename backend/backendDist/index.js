@@ -9,6 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import express from "express";
 import mysql from "mysql2/promise";
+import authRouter from "./routes/authRouter.js";
+import session from "express-session";
 // DB Config, loads values from .env
 const dbConfig = {
     host: process.env.DB_HOST,
@@ -18,13 +20,22 @@ const dbConfig = {
     database: process.env.DB_NAME,
 };
 // Create connection pool / initializes database connection.
-const db = mysql.createPool(dbConfig);
+export const db = mysql.createPool(dbConfig);
 // Server
-const SERVER_PORT = process.env.SERVER_PORT || 5001;
+const SERVER_PORT = process.env.SERVER_PORT || 5002;
 export const app = express();
+app.use(express.json());
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'your_secret_key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // Use true if using HTTPS
+}));
+// Routers
+app.use(authRouter);
 // Test route to see if server and db connection works as expected
 app.get("/api/names", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield db.query("SELECT * FROM movies WHERE moviesCategories = 'Action';");
+    const result = yield db.query("SELECT * FROM bookings WHERE userid = 1;");
     res.json({ success: result[0] });
 }));
 app.listen(SERVER_PORT);
