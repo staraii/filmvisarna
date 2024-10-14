@@ -15,4 +15,24 @@ router.get("/screenings/:id", async (req, res) => {
   );
   res.json({ success: result[0] });
 });
+
+router.post("/screenings", async (req, res) => {
+  const reqBody = {
+    movieId: req.body.movieId,
+    theatreId: req.body.theatreId,
+    dateTime: req.body.dateTime,
+  };
+  let result = await screeningsController.createScreening(reqBody);
+  res.json({ success: result[0] });
+});
+
+router.put("/screenings/:id", async (_req, res) => {
+  let result = await screeningsController.getScreenings();
+  res.json({ success: result[0] });
+});
+router.delete("/screenings/:id", async (_req, res) => {
+  let result = await screeningsController.getScreenings();
+  res.json({ success: result[0] });
+});
+
 export default router;

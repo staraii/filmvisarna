@@ -11,4 +11,13 @@ export default class ScreeningsController {
     );
     return result;
   }
+  public async createScreening(data: any): Promise<any> {
+    const query = `
+    INSERT INTO screenings (movieId, theatreId, dateTime)
+    VALUES (?, ?, ?)
+  `;
+    const values = [data.movieId, data.theatreId, data.dateTime];
+    let result = await db.query(query, values);
+    return result;
+  }
 }
