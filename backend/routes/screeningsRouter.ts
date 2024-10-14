@@ -46,4 +46,10 @@ router.delete("/screenings/:id", async (req, res) => {
   res.json({ success: result[0] });
 });
 
+router.get("/screenings/search/:title", async (req, res) => {
+  let result = await screeningsController.getScreeningsByTitle(
+    req.params.title
+  );
+  res.json({ success: result[0] });
+});
 export default router;
