@@ -1,5 +1,6 @@
-// defines middleware function, Checks whether a user is logged in by verifying if the userId exists in the session 
+// defines middleware function, Checks whether a user is logged in by verifying if the userId exists in the session
 // protect certain routes, ensuring that only authenticated users can access specific resources
+// Session-based security layer / Gatekeeper 
 
 import { Request, Response, NextFunction } from "express";
 

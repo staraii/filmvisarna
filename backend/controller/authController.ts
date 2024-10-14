@@ -1,4 +1,4 @@
-// Control functions for user authentication, including registration,login,checking the logged-in user, and logout. 
+// Control functions and logic for user authentication, including registration,login,checking the logged-in user, and logout. 
 
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';

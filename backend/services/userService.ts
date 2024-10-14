@@ -1,5 +1,5 @@
 //Data service for user-related operations.
-// Bridge between logic and the database
+// Communication layer between the application logic and the database
 // Handle inserting users into the database and retreving user information when needed. 
 
 
@@ -21,7 +21,7 @@ export const createUser = async (userData: RegisterUser) => {
     return result;
   } catch (error) {
     console.error('Error inserting user:', error);
-    throw error; // Propagate the error to the caller
+    throw error; 
   }
 };
 
@@ -35,7 +35,7 @@ export const findUserByEmail = async (email: string) => {
     return rows[0];
   } catch (error) {
     console.error('Error finding user by email:', error);
-    throw error; // Propagate the error to the caller
+    throw error; 
   }
 };
 
@@ -49,6 +49,6 @@ export const findUserById = async (id: number) => {
     return rows[0];
   } catch (error) {
     console.error('Error finding user by ID:', error);
-    throw error; // Propagate the error to the caller
+    throw error; 
   }
 };
