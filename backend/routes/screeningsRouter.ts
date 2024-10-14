@@ -39,8 +39,10 @@ router.put("/screenings/:id", async (req, res) => {
   res.json({ success: result[0] });
 });
 
-router.delete("/screenings/:id", async (_req, res) => {
-  let result = await screeningsController.getScreenings();
+router.delete("/screenings/:id", async (req, res) => {
+  let result = await screeningsController.deleteScreening(
+    Number(req.params.id)
+  );
   res.json({ success: result[0] });
 });
 

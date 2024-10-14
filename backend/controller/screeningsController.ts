@@ -24,7 +24,12 @@ export default class ScreeningsController {
     const query = `UPDATE screenings SET movieId=?, theatreId=?, dateTime=? WHERE id=?`;
     const values = [data.movieId, data.theatreId, data.dateTime, id];
 
-    const result = await db.query(query, values);
+    let result = await db.query(query, values);
+    return result;
+  }
+  public async deleteScreening(id: number): Promise<any> {
+    const query = `DELETE FROM screenings WHERE id=?`;
+    let result = db.query(query, id);
     return result;
   }
 }
