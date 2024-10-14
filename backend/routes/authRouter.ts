@@ -1,13 +1,21 @@
 import { Router } from 'express';
-import { login, logout, register } from '../controller/authController.js';
+import { login, logout, getLoggedInUser,register } from '../controller/authController.js';
 
 const router = Router();
 
-// Update routes to include the '/api' prefix
+// POST: Register
 router.post('/api/register', register);
+
+// POST: Login
 router.post('/api/login', login);
-router.post('/api/logout', logout);
+
+// GET: Check if user is logged in
+router.get('/api/login', getLoggedInUser);
+
+// DELETE: Logout
+router.delete('/api/login', logout);
 
 export default router;
+
 
 

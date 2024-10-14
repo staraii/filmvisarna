@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import { createUser, findUserByEmail } from '../services/userService.js';
+import { createUser, findUserByEmail, findUserById } from '../services/userService.js';
 import { RegisterUser, LoginUser } from '../types/userTypes.js';
 
 // Registration function
@@ -32,7 +32,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// Login function
+// POST /api/login: Login Function
 export const login = async (req: Request, res: Response) => {
   const { email, password }: LoginUser = req.body;
 
@@ -47,7 +47,8 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    req.session.userId = user.id; // Ensure req.session is typed
+    // Save the user's ID in session
+    req.session.userId = user.id;
     res.json({ message: 'Login successful', user: { id: user.id, email: user.email, role: user.role } });
   } catch (error) {
     console.error('Error during login:', error);
@@ -55,7 +56,29 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-// Logout function
+// GET /api/login: Check if user is logged in
+export const getLoggedInUser = async (req: Request, res: Response) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: 'No user is logged in' });
+  }
+
+  try {
+    // Fetch the user by ID from the database
+    const user = await findUserById(req.session.userId);
+
+    if (!user) {
+      return res.status(401).json({ message: 'No user is logged in' });
+    }
+
+    // Return user details (excluding sensitive info)
+    res.json({ user: { id: user.id, email: user.email, role: user.role } });
+  } catch (error) {
+    console.error('Error fetching logged-in user:', error);
+    res.status(500).json({ message: 'Error fetching logged-in user' });
+  }
+};
+
+// DELETE /api/login: Logout Function
 export const logout = (req: Request, res: Response) => {
   req.session.destroy((err) => {
     if (err) {
@@ -65,7 +88,5 @@ export const logout = (req: Request, res: Response) => {
     res.json({ message: 'Logout successful' });
   });
 };
-
-
 
 
