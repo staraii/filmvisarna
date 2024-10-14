@@ -12,6 +12,7 @@
     "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
+    "skipLibCheck": true, // This option can help avoid type-checking issues with node_modules
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
