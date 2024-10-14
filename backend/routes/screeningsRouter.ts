@@ -9,4 +9,10 @@ router.get("/screenings", async (_req, res) => {
   res.json({ success: result[0] });
 });
 
+router.get("/screenings/:id", async (req, res) => {
+  let result = await screeningsController.getScreeningById(
+    Number(req.params.id)
+  );
+  res.json({ success: result[0] });
+});
 export default router;
