@@ -1,3 +1,7 @@
+// Main entry point for Express application.
+// Set up server, Connects to Mysql database.
+
+
 import express from "express";
 import mysql, { PoolOptions } from "mysql2/promise";
 import authRouter from "./routes/authRouter.js";
@@ -12,17 +16,19 @@ const dbConfig: PoolOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 }
-// Create connection pool / initializes database connection.
+
+// Create a MySQL connection pool
 export const db = mysql.createPool(dbConfig);
 
 
-// Server
+// Server, Set up Express application
 const SERVER_PORT = process.env.SERVER_PORT || 5002;
 export const app = express();
 
+// Middleware to parse JSON requests
 app.use(express.json());
 
-
+// Session middleware setup
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your_secret_key',
   resave: false,
@@ -31,7 +37,6 @@ app.use(session({
 }));
 
 // Routers
-
 app.use(authRouter);
 app.use(ticketRouter);
 
@@ -42,5 +47,8 @@ app.use(ticketRouter);
    res.json({ success: result[0]})
  })
 
+ // Start the server
 app.listen(SERVER_PORT); 
+
+
 

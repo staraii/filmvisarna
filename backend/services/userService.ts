@@ -1,4 +1,9 @@
-import { db } from '../index.js'; // Import the db pool from your index.ts
+//Data service for user-related operations.
+// Bridge between logic and the database
+// Handle inserting users into the database and retreving user information when needed. 
+
+
+import { db } from '../index.js'; 
 import { RegisterUser } from '../types/userTypes.js';
 
 // Create a new user and insert into the database

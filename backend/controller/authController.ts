@@ -1,3 +1,5 @@
+// Control functions for user authentication, including registration,login,checking the logged-in user, and logout. 
+
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { createUser, findUserByEmail, findUserById } from '../services/userService.js';
@@ -9,13 +11,13 @@ export const register = async (req: Request, res: Response) => {
 
   try {
     const normalizedEmail = email.toLowerCase();
-    const existingUser = await findUserByEmail(normalizedEmail);
+    const existingUser = await findUserByEmail(normalizedEmail); // check if user already exists
     
     if (existingUser) {
       return res.status(400).json({ message: 'Email already in use' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash password
     await createUser({ 
       firstname, 
       lastname, 
@@ -23,7 +25,7 @@ export const register = async (req: Request, res: Response) => {
       password: hashedPassword, 
       phone, 
       role 
-    });
+    }); // Create a new user
 
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
@@ -37,12 +39,12 @@ export const login = async (req: Request, res: Response) => {
   const { email, password }: LoginUser = req.body;
 
   try {
-    const user = await findUserByEmail(email.toLowerCase());
+    const user = await findUserByEmail(email.toLowerCase()); // Look up user by email
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);// Check if provided password matches hashed password
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
