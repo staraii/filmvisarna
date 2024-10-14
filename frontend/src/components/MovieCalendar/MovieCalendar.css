@@ -1,5 +1,5 @@
 .Days {
-  width: 100%;
+  width: 90%;
   margin: 0 auto;
   margin-top: 20px;
 }
@@ -147,4 +147,8 @@
 .Movie-Time p {
   font-size: 1.5rem;
   margin: 1rem 0rem 0rem 0rem;
+}
+
+.Movie-Text {
+  margin-top: 1rem;
 }
