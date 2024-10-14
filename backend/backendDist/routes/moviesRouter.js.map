@@ -1,1 +1,0 @@
-{"version":3,"file":"moviesRouter.js","sourceRoot":"","sources":["../../routes/moviesRouter.ts"],"names":[],"mappings":"AAAA,OAAO,OAAO,MAAM,SAAS,CAAC;AAC9B,OAAO,gBAAgB,MAAM,mCAAmC,CAAC;AAEjE,MAAM,MAAM,GAAG,OAAO,CAAC,MAAM,EAAE,CAAC;AAEhC,MAAM,CAAC,GAAG,CAAC,SAAS,EAAE,gBAAgB,CAAC,SAAS,CAAC,CAAC;AAGlD,eAAe,MAAM,CAAC"}
