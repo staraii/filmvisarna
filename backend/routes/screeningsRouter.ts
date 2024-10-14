@@ -26,10 +26,19 @@ router.post("/screenings", async (req, res) => {
   res.json({ success: result[0] });
 });
 
-router.put("/screenings/:id", async (_req, res) => {
-  let result = await screeningsController.getScreenings();
+router.put("/screenings/:id", async (req, res) => {
+  const reqBody = {
+    movieId: req.body.movieId,
+    theatreId: req.body.theatreId,
+    dateTime: req.body.dateTime,
+  };
+  let result = await screeningsController.updateScreening(
+    reqBody,
+    Number(req.params.id)
+  );
   res.json({ success: result[0] });
 });
+
 router.delete("/screenings/:id", async (_req, res) => {
   let result = await screeningsController.getScreenings();
   res.json({ success: result[0] });

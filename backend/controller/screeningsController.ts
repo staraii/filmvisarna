@@ -20,4 +20,11 @@ export default class ScreeningsController {
     let result = await db.query(query, values);
     return result;
   }
+  public async updateScreening(data: any, id: number): Promise<any> {
+    const query = `UPDATE screenings SET movieId=?, theatreId=?, dateTime=? WHERE id=?`;
+    const values = [data.movieId, data.theatreId, data.dateTime, id];
+
+    const result = await db.query(query, values);
+    return result;
+  }
 }
