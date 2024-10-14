@@ -1,14 +1,10 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import express from "express";
 import mysql from "mysql2/promise";
+//import screeningsRouter from "./routes/screeningsRouter.js"
+//import bookingsRouter from "./routes/bookingsRouter.js";
+//import moviesRouter from "./routes/moviesRouter.js";
+//import authRouter from "./routes/authRouter.js";
+import moviesDetailsRouter from "./routes/moviesDetailsRouter.js";
 // DB Config, loads values from .env
 const dbConfig = {
     host: process.env.DB_HOST,
@@ -18,14 +14,21 @@ const dbConfig = {
     database: process.env.DB_NAME,
 };
 // Create connection pool / initializes database connection.
-const db = mysql.createPool(dbConfig);
+export const db = mysql.createPool(dbConfig);
 // Server
 const SERVER_PORT = process.env.SERVER_PORT || 5001;
 export const app = express();
+app.use(express.json());
+// Routers
+// app.use(screeningsRouter);
+// app.use(bookingsRouter);
+// app.use(moviesRouter);
+// app.use(authRouter);
+app.use(moviesDetailsRouter);
 // Test route to see if server and db connection works as expected
-app.get("/api/names", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield db.query("SELECT * FROM movies WHERE moviesCategories = 'Action';");
-    res.json({ success: result[0] });
-}));
+// app.get("/api/names", async (_req, res) => {
+//   const result = await db.query("SELECT * FROM movies WHERE moviesCategories = 'Action';");
+//   res.json({ success: result[0]})
+// })
 app.listen(SERVER_PORT);
 //# sourceMappingURL=index.js.map

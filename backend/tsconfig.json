@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     /* Linting */
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "nodenext",
     "target": "es6",
-    "module": "nodenext",
+    "module": "NodeNext",
     "lib": ["esnext"],
     "sourceMap": true,
     "declaration": true,
