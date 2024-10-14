@@ -6,8 +6,15 @@ const moviesDetailsController = {
   async getMovieDetails(req:Request, res: Response): Promise<void> {
     const { movieId } = req.params;
     try {
-      const [result] = await db.query("SELECT * FROM fullMovies WHERE id = ?", [movieId]);
-      res.json({ success: result });
+      const [movieResult] = await db.query("SELECT * FROM fullMovies WHERE id = ?", [movieId]);
+      const [screeningsResult] = await db.query("SELECT * FROM screenings WHERE movieid = ?", [movieId]);
+
+      res.json({
+        success: true,
+        movie: movieResult,
+        screenings: screeningsResult,
+      });
+
     } catch (error) {
       if (error instanceof Error) {
         res.status(500).json({ success: false, error: error.message });

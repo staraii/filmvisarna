@@ -13,8 +13,13 @@ const moviesDetailsController = {
         return __awaiter(this, void 0, void 0, function* () {
             const { movieId } = req.params;
             try {
-                const [result] = yield db.query("SELECT * FROM fullMovies WHERE id = ?", [movieId]);
-                res.json({ success: result });
+                const [movieResult] = yield db.query("SELECT * FROM fullMovies WHERE id = ?", [movieId]);
+                const [screeningsResult] = yield db.query("SELECT * FROM screenings WHERE movieid = ?", [movieId]);
+                res.json({
+                    success: true,
+                    movie: movieResult,
+                    screenings: screeningsResult,
+                });
             }
             catch (error) {
                 if (error instanceof Error) {
