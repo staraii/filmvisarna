@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 serverDist/
-
+backendDist
 *.local
 .env
 
@@ -25,3 +25,5 @@ serverDist/
 *.njsproj
 *.sln
 *.sw?
+backend/backendDist/index.js
+backend/backendDist/index.js.map
