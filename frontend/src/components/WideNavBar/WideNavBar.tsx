@@ -4,7 +4,6 @@ import Nav from "react-bootstrap/Nav";
 import { Link, useNavigate } from "react-router-dom";
 import { WideNavBarProps } from "../../utils/Types"; // Make sure to import the type
 
-
 import "./wide-navbar.css";
 
 const WideNavBar = ({
@@ -35,9 +34,19 @@ const WideNavBar = ({
         >
           Bio kalender
         </Nav.Link>
-        <Nav.Link className="fw-medium" onClick={() => navigate("/avboka")}>
-          Avboka biljetter
-        </Nav.Link>
+
+        {isLoggedIn ? (
+          <Nav.Link
+            className="fw-medium"
+            onClick={() => navigate("/avboka-loggedin")}
+          >
+            Hantera biljetter
+          </Nav.Link>
+        ) : (
+          <Nav.Link className="fw-medium" onClick={() => navigate("/avboka")}>
+            Avboka biljetter
+          </Nav.Link>
+        )}
 
         {/* Show login or logout based on isLoggedIn */}
         {isLoggedIn ? (
