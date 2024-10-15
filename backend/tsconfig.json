@@ -20,7 +20,7 @@
     "outDir": "./backendDist",
     "typeRoots": [
       "node_modules/@types",  // Include the default types
-      "./@types"              // Include custom types directory
+      "./backend/@types"              // Include custom types directory
     ]
   },
   "include": [

@@ -17,7 +17,7 @@ export const register = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Email already in use' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); // Hash password
+    const hashedPassword = await bcrypt.hash(password, 12); // Hash password
     await createUser({ 
       firstname, 
       lastname, 
