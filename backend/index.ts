@@ -1,9 +1,6 @@
 import express from "express";
 import mysql, { PoolOptions } from "mysql2/promise";
-//import screeningsRouter from "./routes/screeningsRouter.js"
-//import bookingsRouter from "./routes/bookingsRouter.js";
-//import moviesRouter from "./routes/moviesRouter.js";
-//import authRouter from "./routes/authRouter.js";
+
 
 import moviesDetailsRouter from "./routes/moviesDetailsRouter.js";
 
@@ -26,20 +23,12 @@ export const app = express();
 app.use(express.json());
 
 
-// Routers
-// app.use(screeningsRouter);
-// app.use(bookingsRouter);
-// app.use(moviesRouter);
-// app.use(authRouter);
+
 
 app.use(moviesDetailsRouter);
 
 
 
-// Test route to see if server and db connection works as expected
-// app.get("/api/names", async (_req, res) => {
-//   const result = await db.query("SELECT * FROM movies WHERE moviesCategories = 'Action';");
-//   res.json({ success: result[0]})
-// })
+
 
 app.listen(SERVER_PORT); 
