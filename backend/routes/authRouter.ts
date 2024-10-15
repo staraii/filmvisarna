@@ -1,6 +1,4 @@
 // Route file for authentications
-
-
 import { Router } from 'express';
 import { login, logout, getLoggedInUser,register } from '../controller/authController.js';
 

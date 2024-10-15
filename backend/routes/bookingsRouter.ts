@@ -1,9 +1,9 @@
 import express from "express";
-import bookingsController from "../controller/bookingsController.js";
+//import bookingsController from "../controller/booking";
 
 const router = express.Router();
 
-router.get("/bookings", bookingsController.getBookings);
+//router.get("/bookings", bookingsController.getBookings);
 
 
 export default router;
