@@ -43,6 +43,14 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    if (!user.password) {
+      return res.status(500).json({ message: 'User has no password set' });
+    }
+
+    if (req.session.userId) {
+      return res.status(400).json({ message: 'User is already logged in' });
+    }
+
     const isPasswordValid = await bcrypt.compare(password, user.password);// Check if provided password matches hashed password
     if (!isPasswordValid) {
       return res.status(401).json({ message: 'Invalid credentials' });
@@ -52,7 +60,7 @@ export const login = async (req: Request, res: Response) => {
     req.session.userId = user.id;
     req.session.userRole = user.role;
     
-    
+
     res.json({ message: 'Login successful', user: { id: user.id, email: user.email, role: user.role } });
   } catch (error) {
     console.error('Error during login:', error);
