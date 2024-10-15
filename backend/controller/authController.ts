@@ -1,5 +1,3 @@
-// Control functions and logic for user authentication, including registration,login,checking the logged-in user, and logout. 
-
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import { createUser, findUserByEmail, findUserById } from '../services/userService.js';
@@ -35,6 +33,7 @@ export const register = async (req: Request, res: Response) => {
 };
 
 // POST /api/login: Login Function
+
 export const login = async (req: Request, res: Response) => {
   const { email, password }: LoginUser = req.body;
 
@@ -51,6 +50,9 @@ export const login = async (req: Request, res: Response) => {
 
     // Save the user's ID in session
     req.session.userId = user.id;
+    req.session.userRole = user.role;
+    
+    
     res.json({ message: 'Login successful', user: { id: user.id, email: user.email, role: user.role } });
   } catch (error) {
     console.error('Error during login:', error);
