@@ -1,9 +1,12 @@
 import express from "express";
-import bookingsController from "../controller/bookingsController.js";
+import BookingsController from "../controller/bookingsController.js";
 
 const router = express.Router();
+const bookingsController = new BookingsController();
 
-router.get("/bookings", bookingsController.getBookings);
-
+router.post("/bookings/:id", async (req, res) => {
+  let result = await bookingsController.handleMail(Number(req.params.id));
+  res.json({ success: result });
+});
 
 export default router;
