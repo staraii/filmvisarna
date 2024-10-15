@@ -1,19 +1,29 @@
 import express from "express";
 import ScreeningsController from "../controller/screeningsController.js";
+import { checkAcl } from "../middleware/checkAcl.js";
 
 const router = express.Router();
 const screeningsController = new ScreeningsController();
 
-router.get("/screenings", async (_req, res) => {
+router.get("/screenings",checkAcl, async (_req, res) => {
   const result = await screeningsController.getScreenings();
   res.json({ success: result[0] });
 });
 
-router.get("/screenings/:id", async (req, res) => {
-  const result = await screeningsController.getScreeningById(
-    Number(req.params.id)
-  );
-  res.json({ success: result[0] });
+router.get("/screenings/:id", checkAcl, async (req, res) => {
+  try {
+    const result = await screeningsController.getScreeningById(
+      Number(req.params.id)
+    );
+    if (result && result.length > 0) {
+      res.json({ success: result[0] });
+    } else {
+      res.status(404).json({ message: "Screening not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching screening:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
 router.post("/screenings", async (req, res) => {

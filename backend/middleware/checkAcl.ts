@@ -53,7 +53,7 @@ export const checkAcl = async (req: Request, res: Response, next: NextFunction) 
     const method = req.method; // Get the HTTP method (GET, POST, etc.)
 
     // Get ACL rule for the user's role, current route, and method
-    const aclRule = await getAclRule(userRole, route, method);
+   const aclRule = await getAclRule(userRole.toLowerCase(), route, method);
 
     if (!aclRule) {
       return res.status(403).json({ message: 'Access denied: No matching ACL rule' });
