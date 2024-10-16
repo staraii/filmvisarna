@@ -1,4 +1,7 @@
 import nodemailer from "nodemailer";
+import ScreeningsController from "../controller/screeningsController.js";
+
+const screeningsController = new ScreeningsController();
 
 export default class MailService {
   public transporter = nodemailer.createTransport({
@@ -11,16 +14,18 @@ export default class MailService {
     },
   });
 
-  public async sendMail(data: any) {
-    // send mail with defined transport object
+  public async sendMail(bookingNumber: string) {
+    const data = await screeningsController.getBookingsByBookingNumber(
+      bookingNumber
+    );
+    const bookingData = data[0][0];
     const info = await this.transporter.sendMail({
-      from: '"Filmvisarna" <Filmvisarna@hotmail.com>', // sender address
+      from: '"Filmvisarna" <Filmvisarna@hotmail.com>', // sender addresss
       to: "dejuan.watsica63@ethereal.email", // list of receivers
       subject: "Filmvisarna bokning", // Subject line
-      text: `Bokningsid:${data[0].bookingNumber} `, // plain text body
-      html: `<b><h2>Tack för din bokning!</h2> <p>Bokningsnummer: ${data[0].bookingNumber}</p><p>Film: ${data[0].movieTitle}</p><p>Datum: ${data[0].screeningTime}</p> </b>`, // html body
+      text: `Bokningsid:${bookingNumber} `, // plain text body
+      html: `<b><h2>Tack för din bokning!</h2> <p>Bokningsnummer: ${bookingNumber}</p><p>Film: ${bookingData.movieTitle}</p><p>Datum: ${bookingData.screeningTime}</p><p>Seats: ${bookingData.seats}</p> </b>`, // html body
     });
-    //console.log("Message sent:%s", info.messageId);
     return "Message sent:%s" + info.messageId;
   }
 }
