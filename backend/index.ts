@@ -3,13 +3,16 @@
 
 import express from "express";
 import mysql, { PoolOptions } from "mysql2/promise";
+
+import screeningsRouter from "./routes/screeningsRouter.js";
 import bookingsRouter from "./routes/bookingsRouter.js";
-//import moviesRouter from "./routes/moviesRouter.js";
+import moviesRouter from "./routes/moviesRouter.js";
+import authRouter from "./routes/authRouter.js";
+import liveChairRouter from "./routes/liveChairRouter.js";
 import moviesDetailsRouter from "./routes/moviesDetailsRouter.js";
 import authRouter from "./routes/authRouter.js";
 import session from "express-session";
 import MySQLStore from "express-mysql-session"; // Import MySQL session store
-import screeningRouter from "./routes/screeningsRouter.js";
 
 
 // DB Config, loads values from .env
@@ -41,7 +44,6 @@ export const app = express();
 
 // Middleware to parse JSON requests
 app.use(express.json());
-
 
 // Routers
 app.use(screeningsRouter);
@@ -95,3 +97,4 @@ app.get("/api/names", async (_req, res) => {
 app.listen(SERVER_PORT, () => {
   console.log(`Server is running on port ${SERVER_PORT}`); // Log server start
 });
+

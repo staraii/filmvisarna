@@ -8,11 +8,13 @@ export default class MailService {
     host: "smtp.ethereal.email",
     port: 587,
     secure: false, // true for port 465, false for other ports
+    //https://ethereal.email/ för att få user och pass,
     auth: {
       user: "dejuan.watsica63@ethereal.email",
       pass: "yyswt43ywu57ScYYHy",
     },
   });
+
 
   public async sendMail(bookingNumber: string) {
     const data = await screeningsController.getBookingsByBookingNumber(
