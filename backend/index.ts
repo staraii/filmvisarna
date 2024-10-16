@@ -7,7 +7,6 @@ import mysql, { PoolOptions } from "mysql2/promise";
 import screeningsRouter from "./routes/screeningsRouter.js";
 import bookingsRouter from "./routes/bookingsRouter.js";
 import moviesRouter from "./routes/moviesRouter.js";
-import authRouter from "./routes/authRouter.js";
 import liveChairRouter from "./routes/liveChairRouter.js";
 import moviesDetailsRouter from "./routes/moviesDetailsRouter.js";
 import authRouter from "./routes/authRouter.js";
@@ -24,8 +23,6 @@ const dbConfig: PoolOptions = {
   database: process.env.DB_NAME,
 };
 
-// Create connection pool / initializes database connection.
-export const db = mysql.createPool(dbConfig);
 
 // Server
 const SERVER_PORT = process.env.SERVER_PORT || 5001;
@@ -37,8 +34,6 @@ export const db = mysql.createPool(dbConfig);
 const MySQLSessionStore = MySQLStore(session as any); // Link the MySQLStore with express-session
 const sessionStore = new MySQLSessionStore(dbConfig); // Initialize session store with DB config
 
-// Server, Set up Express application
-const SERVER_PORT = process.env.SERVER_PORT || 5001;
 
 export const app = express();
 
@@ -50,6 +45,7 @@ app.use(screeningsRouter);
 app.use("/api/bookings", bookingsRouter);
 app.use(moviesRouter);
 app.use(authRouter);
+app.use(liveChairRouter);
 
 app.use(moviesDetailsRouter);
 
@@ -78,7 +74,7 @@ app.use(
 
 // Routers
 app.use(authRouter); // Authentication routes
-app.use("/api", screeningRouter);
+app.use("/api", screeningsRouter);
 app.use("/api/bookings", bookingsRouter);
 // app.use(moviesRouter);
 
