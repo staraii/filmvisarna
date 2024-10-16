@@ -8,13 +8,18 @@ import { RegisterUser } from '../types/userTypes.js';
 
 // Create a new user and insert into the database
 export const createUser = async (userData: RegisterUser) => {
-  const { firstname, lastname, email, password, phone, role } = userData;
+  const { firstname, lastname, email, password, phone } = userData;
 
   try {
+
+      // Set a default role for users
+    const defaultRole = "user"; // Or whatever role you want as default
+
+    
     // Insert user data into the 'users' table
     const [result] = await db.query(
       'INSERT INTO users (firstName, lastName, email, password, phone, role) VALUES (?, ?, ?, ?, ?, ?)',
-      [firstname, lastname, email, password, phone, role]
+      [firstname, lastname, email, password, phone, defaultRole]
     );
     
     // Return the insertion result (could include the inserted ID)

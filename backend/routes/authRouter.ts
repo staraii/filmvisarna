@@ -16,7 +16,7 @@ router.post('/api/login', login); // Accessible to all users (visitors, users, a
 router.get('/api/login', checkAcl, getLoggedInUser); // Use checkAcl if you want to restrict to logged-in users
 
 // DELETE: Logout
-router.delete('/api/login', checkAcl, logout); // Use checkAcl to restrict logout to logged-in users
+router.delete('/api/login', logout); // Use checkAcl to restrict logout to logged-in users
 
 export default router;
 

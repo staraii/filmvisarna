@@ -16,7 +16,7 @@ export interface RegisterUser {
   email: string;
   password: string;
   phone: string;
-  role: string;
+  role?: string;
 }
 
 export interface LoginUser {

@@ -4,26 +4,35 @@ import { createUser, findUserByEmail, findUserById } from '../services/userServi
 import { RegisterUser, LoginUser } from '../types/userTypes.js';
 
 // Registration function
+
 export const register = async (req: Request, res: Response) => {
+  // Destructure only the required fields from the request body
   const { firstname, lastname, email, password, phone, role }: RegisterUser = req.body;
+
+   // Validate if the role is provided
+  if (role) {
+    return res.status(400).json({ message: 'Role should not be specified during registration' });
+  }
 
   try {
     const normalizedEmail = email.toLowerCase();
-    const existingUser = await findUserByEmail(normalizedEmail); // check if user already exists
-    
+    const existingUser = await findUserByEmail(normalizedEmail); // Check if user already exists
+
     if (existingUser) {
       return res.status(400).json({ message: 'Email already in use' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12); // Hash password
-    await createUser({ 
-      firstname, 
-      lastname, 
+
+    // Create a new user, omitting role from the request
+    await createUser({
+      firstname,
+      lastname,
       email: normalizedEmail,
-      password: hashedPassword, 
-      phone, 
-      role 
-    }); // Create a new user
+      password: hashedPassword,
+      phone,
+      // No role is passed here
+    });
 
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
@@ -92,11 +101,16 @@ export const getLoggedInUser = async (req: Request, res: Response) => {
 
 // DELETE /api/login: Logout Function
 export const logout = (req: Request, res: Response) => {
+  // Check if there is a session
+  if (!req.session || !req.session.userId) {
+    return res.status(200).json({ message: 'No user is logged in.' }); // Custom message
+  }
+
+  // Destroy the session to log the user out
   req.session.destroy((err) => {
     if (err) {
-      console.error('Logout error:', err);
-      return res.status(500).json({ message: 'Could not log out' });
+      return res.status(500).json({ message: 'An error occurred while logging out.' });
     }
-    res.json({ message: 'Logout successful' });
+    res.status(200).json({ message: 'Successfully logged out.' });
   });
 };
