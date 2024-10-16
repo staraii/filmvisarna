@@ -3,10 +3,14 @@
 
 import express from "express";
 import mysql, { PoolOptions } from "mysql2/promise";
+import bookingsRouter from "./routes/bookingsRouter.js";
+//import moviesRouter from "./routes/moviesRouter.js";
+import moviesDetailsRouter from "./routes/moviesDetailsRouter.js";
 import authRouter from "./routes/authRouter.js";
 import session from "express-session";
 import MySQLStore from "express-mysql-session"; // Import MySQL session store
 import screeningRouter from "./routes/screeningsRouter.js";
+
 
 // DB Config, loads values from .env
 const dbConfig: PoolOptions = {
@@ -32,6 +36,10 @@ export const app = express();
 app.use(express.json());
 
 
+
+app.use(moviesDetailsRouter);
+
+
 // Session middleware with MySQL store
 app.use(
   session({
@@ -47,9 +55,12 @@ app.use(
   })
 );
 
+
 // Routers
 app.use(authRouter); // Authentication routes
 app.use("/api", screeningRouter);
+app.use("/api/bookings", bookingsRouter);
+// app.use(moviesRouter);
 
 // Test route to verify server and DB connection
 app.get("/api/names", async (_req, res) => {

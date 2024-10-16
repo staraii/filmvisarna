@@ -74,4 +74,9 @@ router.get("/screenings/search/:title", async (req, res) => {
   );
   res.json({ success: result[0] });
 });
+
+
+
+
+
 export default router;

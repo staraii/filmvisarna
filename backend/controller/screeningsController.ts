@@ -30,13 +30,11 @@ export default class ScreeningsController {
     return result;
   }
 
-  public async getScreeningById(id: number, userId: number): Promise<any> {
-    const query = `SELECT * FROM fullScreenings WHERE screeningId = ? AND userId = ?`;
-    const values = [id, userId];
+  public async getScreeningById(id: number): Promise<any> {
+    const query = `SELECT * FROM fullScreenings where screeningId=?`;
+    const value = id;
+    let result = await db.query(query, value);
 
-    const result = await db.query(query, values);
-    return result;
-  }
 
  public async getScreeningsByUserId(userId: number): Promise<any> {
     const query = `SELECT * FROM fullScreenings WHERE userId = ?`; 
