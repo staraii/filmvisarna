@@ -2,7 +2,6 @@ import { db } from "../index.js";
 
 export default class ScreeningsController {
   public async getScreenings(): Promise<any> {
-
     const result = await db.execute("SELECT * FROM fullScreenings;");
     return result;
   }
@@ -40,28 +39,27 @@ export default class ScreeningsController {
 
     let result = await db.query(query, value);
     return result;
-}
+  }
 
- public async getScreeningsByUserId(userId: number): Promise<any> {
-    const query = `SELECT * FROM fullScreenings WHERE userId = ?`; 
-    const values = [userId]; 
+  public async getScreeningsByUserId(userId: number): Promise<any> {
+    const query = `SELECT * FROM fullScreenings WHERE userId = ?`;
+    const values = [userId];
     const result = await db.query(query, values);
     return result;
-}
+  }
 
   public async getScreeningsByTitle(title: string): Promise<any> {
     const query = `SELECT * FROM fullScreenings WHERE movieTitle LIKE ?`;
     const value = `%${title}%`;
 
-    let result = await db.execute(query, value);
+    const result = await db.execute(query, value);
     return result;
   }
+
   public async getBookingsByBookingNumber(bookingNumber: string): Promise<any> {
     const query = `SELECT * FROM fullBookings WHERE bookingNumber = ?`;
     const result = await db.execute(query, [bookingNumber]);
 
-    let result = await db.query(query, [value]); // Use array for parameter
     return result;
   }
 }
-
