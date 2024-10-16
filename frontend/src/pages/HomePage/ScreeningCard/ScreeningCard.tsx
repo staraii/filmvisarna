@@ -98,10 +98,10 @@ export default function ScreeningCard({ img, slide, lang, sub, age, date, time, 
                 }`}
               >
                 {status === "Low"
-                  ? "Få biljetter kvar"
+                  ? "Nästan slutsålt"
                   : status === "Medium"
-                  ? "Färre biljetter kvar"
-                  : "Lediga platser"}
+                  ? "Färre platser kvar"
+                  : "Många platser kvar"}
               </Card.Text>
             </Col>
           </Row>
