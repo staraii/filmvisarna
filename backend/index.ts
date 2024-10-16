@@ -49,7 +49,7 @@ app.use(
 
 // Routers
 app.use(authRouter); // Authentication routes
-app.use(screeningRouter);
+app.use("/api", screeningRouter);
 
 // Test route to verify server and DB connection
 app.get("/api/names", async (_req, res) => {

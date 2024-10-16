@@ -55,28 +55,21 @@ export const checkAcl = async (req: Request, res: Response, next: NextFunction) 
 
     // Get ACL rule for the user's role, current route, and method
     console.log('Checking ACL for:', userRole, route, method);
-   const aclRule = await getAclRule(userRole.toLowerCase(), route, method);
+    const aclRule = await getAclRule(userRole.toLowerCase(), route, method);
 
     if (!aclRule) {
       return res.status(403).json({ message: 'Access denied: No matching ACL rule' });
     }
 
-    // Optional: Check if the rule requires field matching for user ID (for specific routes)
-   // if (aclRule.fieldMatchingUserId && req.params.id && userRole === 'user') {
-      //const requestedScreeningId = req.params.id;
-
-      // Assuming a method to get screening by ID from the screeningsController
-      //const screening = await ScreeningsController.getScreeningById(Number(requestedScreeningId));
-
-      //if (!screening) {
-     //   return res.status(404).json({ message: 'Screening not found' });
-     // }
-
-      // Check if the screening belongs to the logged-in user
-     // if (screening.userId !== userId) {
-      //  return res.status(403).json({ message: 'Access denied: Screening does not belong to the user' });
-   //   }
-   // }
+    // Check if the rule requires field matching for user ID
+    if (aclRule.fieldMatchingUserId) {
+      // Here, instead of comparing to requestedScreeningId, we might want to skip this check
+      // because we want users to see their own screenings without specifying IDs in the route
+      const requestedScreeningId = req.params.id; // ID from the URL
+      if (requestedScreeningId && requestedScreeningId !== userId.toString()) {
+        return res.status(403).json({ message: 'Access denied: User ID does not match' });
+      }
+    }
 
     next(); // If the rule allows access, proceed to the next middleware/controller
   } catch (error) {
