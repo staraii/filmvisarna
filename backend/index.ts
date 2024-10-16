@@ -1,7 +1,7 @@
 import express from "express";
 import mysql, { PoolOptions } from "mysql2/promise";
 //import screeningsRouter from "./routes/screeningsRouter.js"
-//import bookingsRouter from "./routes/bookingsRouter.js";
+import bookingsRouter from "./routes/bookingsRouter.js";
 //import moviesRouter from "./routes/moviesRouter.js";
 //import authRouter from "./routes/authRouter.js";
 
@@ -28,7 +28,7 @@ app.use(express.json());
 
 // Routers
 // app.use(screeningsRouter);
-// app.use(bookingsRouter);
+app.use("/api/bookings", bookingsRouter);
 // app.use(moviesRouter);
 // app.use(authRouter);
 
