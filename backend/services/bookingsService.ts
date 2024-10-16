@@ -31,6 +31,7 @@ const createNewBooking = async (userId: number | null, email: string, screeningI
   } finally {
     connection.release();
   }
+  // ADD EMAIL FUNCTION HERE
   return bookingNumber
 }
 
