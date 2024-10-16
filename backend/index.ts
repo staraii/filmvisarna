@@ -21,6 +21,12 @@ const dbConfig: PoolOptions = {
   database: process.env.DB_NAME,
 };
 
+// Create connection pool / initializes database connection.
+export const db = mysql.createPool(dbConfig);
+
+// Server
+const SERVER_PORT = process.env.SERVER_PORT || 5001;
+
 // Create a MySQL connection pool
 export const db = mysql.createPool(dbConfig);
 
@@ -29,11 +35,23 @@ const MySQLSessionStore = MySQLStore(session as any); // Link the MySQLStore wit
 const sessionStore = new MySQLSessionStore(dbConfig); // Initialize session store with DB config
 
 // Server, Set up Express application
-const SERVER_PORT = process.env.SERVER_PORT || 5002;
+const SERVER_PORT = process.env.SERVER_PORT || 5001;
+
 export const app = express();
 
 // Middleware to parse JSON requests
 app.use(express.json());
+
+
+// Routers
+app.use(screeningsRouter);
+app.use("/api/bookings", bookingsRouter);
+app.use(moviesRouter);
+app.use(authRouter);
+
+app.use(moviesDetailsRouter);
+
+app.listen(SERVER_PORT);
 
 
 
