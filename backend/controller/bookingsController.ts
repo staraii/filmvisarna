@@ -133,7 +133,7 @@ const updateActiveStatus = async (req: Request, res: Response) => {
   if (!result) {
     return res.status(500).json({ error: "An error occured while updating record" });
   }
-  return res.status(200).json({ message: "Record updated successfully" });
+  return res.status(200).json({ message: "Booking active status successfully updated" });
 }
 
 // DELETE /api/bookings/:bookingNumber/:email
@@ -146,7 +146,7 @@ const deleteBooking = async (req: Request, res: Response) => {
   if (!result) {
     return res.status(500).json({ error: "Error deleting resource" });
   }
-  return res.status(205).json({message: `Booking deleted, bookingNumber: ${bookingNumber}`})
+  return res.status(200).json({message: `Booking: ${bookingNumber} deleted`})
 } 
 
 export default { handleGetBookings, createNewBooking, deleteBooking, updatePaymentStatus, updateActiveStatus };

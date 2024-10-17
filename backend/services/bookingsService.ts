@@ -13,12 +13,7 @@ type Seat = {
   ticketTypeId: number;
 };
 
-const createNewBooking = async (
-  userId: number | null,
-  email: string,
-  screeningId: number,
-  seats: Seat[]
-) => {
+const createNewBooking = async (userId: number | null, email: string, screeningId: number, seats: Seat[]) => {
   const bookingNumber = await getValidBookingNumber();
   const connection = await db.getConnection();
   try {
@@ -45,7 +40,7 @@ const createNewBooking = async (
     connection.release();
   }
    //Send email
-   await mailService.sendMail(bookingNumber);
+  await mailService.sendMail(bookingNumber);
   return bookingNumber;
 
 };
@@ -104,6 +99,7 @@ const deleteBooking = async (bookingNumber: string, email: string) => {
       bookingId,
     ]);
     await connection.commit();
+    return true;
   } catch (error) {
     await connection.rollback();
     console.log(error);
@@ -111,7 +107,7 @@ const deleteBooking = async (bookingNumber: string, email: string) => {
   } finally {
     connection.release();
   }
-  return true;
+  
 };
 
 export default {
