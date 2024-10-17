@@ -3,6 +3,8 @@
 
 import express from "express";
 import mysql, { PoolOptions } from "mysql2/promise";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import screeningsRouter from "./routes/screeningsRouter.js";
 import bookingsRouter from "./routes/bookingsRouter.js";
@@ -13,6 +15,16 @@ import authRouter from "./routes/authRouter.js";
 import session from "express-session";
 import MySQLStore from "express-mysql-session"; // Import MySQL session store
 
+// Getting directory path
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+
+// Getting path to images directory
+const IMAGES_FOLDER = path.join(__dirname, "assets/images/");
+// Serving static files from /images
+const imageServer = express();
+imageServer.use(express.static(IMAGES_FOLDER));
+
 
 // DB Config, loads values from .env
 const dbConfig: PoolOptions = {
@@ -22,7 +34,7 @@ const dbConfig: PoolOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 };
-
+ 
 
 // Server
 const SERVER_PORT = process.env.SERVER_PORT || 5001;
@@ -40,20 +52,18 @@ export const app = express();
 // Middleware to parse JSON requests
 app.use(express.json());
 
+app.use("/images", imageServer);
+
 // Routers
 app.use(screeningsRouter);
 app.use("/api/bookings", bookingsRouter);
 app.use(moviesRouter);
 app.use(authRouter);
 app.use(liveChairRouter);
-
 app.use(moviesDetailsRouter);
 
-app.listen(SERVER_PORT);
 
 
-
-app.use(moviesDetailsRouter);
 
 
 // Session middleware with MySQL store
@@ -72,25 +82,20 @@ app.use(
 );
 
 
-// Routers
-app.use(authRouter); // Authentication routes
-app.use("/api", screeningsRouter);
-app.use("/api/bookings", bookingsRouter);
-// app.use(moviesRouter);
-
-// Test route to verify server and DB connection
-app.get("/api/names", async (_req, res) => {
-  try {
-    const [results] = await db.query("SELECT * FROM bookings WHERE userid = 1;"); // Query to fetch bookings for user ID 1
-    res.json({ success: results }); // Return the results in JSON format
-  } catch (error) {
-    console.error('Error fetching names:', error); // Log the error
-    res.status(500).json({ error: 'Internal Server Error' }); // Return error response
-  }
-});
 
 // Start the server
 app.listen(SERVER_PORT, () => {
   console.log(`Server is running on port ${SERVER_PORT}`); // Log server start
 });
+
+// Frontend directory prefix
+//const FRONTEND_PREFIX = process.env.FRONTEND_PREFIX || "../frontend/dist";
+// Getting path to frontend dist folder
+//const FRONTEND_DIST = path.join(__dirname, FRONTEND_PREFIX);
+// Serving static files from frontend dist folder
+//app.use(express.static(FRONTEND_DIST));
+// If no route path matches serve frontend entry file
+//app.get("*", (_req, res) => {
+//  res.sendFile(path.join(FRONTEND_DIST, "index.html"));
+//})
 
