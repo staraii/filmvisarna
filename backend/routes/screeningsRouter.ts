@@ -5,7 +5,7 @@ const router = express.Router();
 const screeningsController = new ScreeningsController();
 
 // Route for users to get their own screenings
-router.get("/screenings", async (req, res) => {
+router.get("/screenings", async (_req, res) => {
   try {
     const result = await screeningsController.getScreenings();
     res.json({ success: result });
