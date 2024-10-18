@@ -1,0 +1,57 @@
+.cancel-ticket-container {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-text,
+.tickets-text {
+  margin-bottom: 20px;
+}
+
+.ticket-wrapper {
+  margin-bottom: 20px;
+}
+
+.ticket {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.ticket-img img {
+  width: 200px;
+  height: auto;
+  object-fit: cover;
+}
+
+.ticket-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ticket-info h5 {
+  margin: 0;
+}
+
+.ticket-info p {
+  margin: 5px 0 0;
+}
+
+.cancel-ticket-button {
+  color: #ac9ed9;
+  background-color: #0b0815;
+  border: 1.5px solid #ac9ed9;
+  flex-shrink: 0;
+  margin: 0;
+  margin-top: 1rem;
+}
+
+.cancel-ticket-button:hover {
+  border: 1.5px solid #ac9ed9;
+  color: #0b0815;
+  background-color: #ac9ed9;
+}

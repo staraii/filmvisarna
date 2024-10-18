@@ -12,10 +12,10 @@ import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
 import Movies from "./pages/Movies/Movies";
 import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
 import LoginPage from "./components/Login-pop-up/LoginMobile";
+import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin";
 
 import "./App.css";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
-
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // State for logged in status
@@ -44,7 +44,10 @@ export default function App() {
         <div className="content-container">
           <Routes>
             <Route path="/" element={<HomePage />} />
-             <Route path="/register" element={<Register onLogin={onLoginClick} />} />
+            <Route
+              path="/register"
+              element={<Register onLogin={onLoginClick} />}
+            />
             <Route path="/film" element={<MoveDetailsPage />} />
             <Route path="/filmer" element={<Movies />} />
             <Route path="/boka" element={<BookingPage />} />
@@ -55,10 +58,9 @@ export default function App() {
             />
             <Route path="/bio-kalender" element={<MovieCalendar />} />
             <Route path="/avboka" element={<CancelTickets />} />
+            <Route path="/avboka-loggedin" element={<CancelTicketsLogin />} />
             <Route path="/loggain" element={<LoginPage />} />
-             <Route path="/forgot-password" element={<PasswordReset />} />
-            
-
+            <Route path="/forgot-password" element={<PasswordReset />} />
           </Routes>
         </div>
         <MobileNavBar />
