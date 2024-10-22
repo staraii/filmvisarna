@@ -37,11 +37,11 @@ h1{
   width: 22.5rem;
   cursor: pointer;
 }
-.carouselMoveDetail .carousel-control-prev{
+.carouselMovieDetail .carousel-control-prev{
   left: -9%;
 }
 
-.carouselMoveDetail .carousel-control-next {
+.carouselMovieDetail .carousel-control-next {
   right: -9%;
 }
 
@@ -63,7 +63,7 @@ h1{
   text-decoration: underline;
 }
 
-.carouselMoveDetail{
+.carouselMovieDetail{
   width: 20rem;
     margin: 0 auto;
     display: flex;
@@ -72,11 +72,11 @@ h1{
     flex-direction: column;
 }
 
-.move-trailer-size{
+.movie-trailer-size{
   width: 100%;
   aspect-ratio: 16 / 9;
 }
-.move-trailer-container{
+.movie-trailer-container{
   max-width: 700px;
 }
 

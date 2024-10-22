@@ -1,13 +1,13 @@
 import { useState } from 'react';
 //import fightClubTrailer from '../assets/fightClubTrailer.webp'
-import './MoveDetailsPage.css'
+import './MovieDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
 import  FightClubPoster from '../assets/FightClubPoster.jpg'
 import { useNavigate } from "react-router-dom";
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
-function MoveDetailsPage() {
+function MovieDetailsPage() {
 const navigate = useNavigate();
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); 
@@ -63,10 +63,10 @@ const navigate = useNavigate();
       <Container>
         <Container className="d-flex flex-column align-items-center">
           <Row className="d-flex flex-column flex-md-row ">
-            <Col xs={12} md={12} lg={6} xl={6} xxl={6} className='move-trailer-container'>
-              <div className="move-trailer-container embed-responsive embed-responsive-16by9">
+            <Col xs={12} md={12} lg={6} xl={6} xxl={6} className='movie-trailer-container'>
+              <div className="movie-trailer-container embed-responsive embed-responsive-16by9">
                 <iframe
-                  className="move-trailer-size embed-responsive-item"
+                  className="movie-trailer-size embed-responsive-item"
                   src="https://www.youtube.com/embed/BdJKm16Co6M"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
@@ -98,7 +98,7 @@ const navigate = useNavigate();
         <Container>
           <Row className="d-flex flex-column flex-md-row mt-5">
             <Col xs={{span:12}} lg={{span:6, order: 'last'}}>
-              <Carousel className='carouselMoveDetail'>
+              <Carousel className='carouselMovieDetail'>
                 <Carousel.Item>
                   <img className='d-block w-100'
                     src={FightClubPoster}
@@ -440,4 +440,4 @@ const navigate = useNavigate();
   )
 }
 
-export default MoveDetailsPage
+export default MovieDetailsPage
