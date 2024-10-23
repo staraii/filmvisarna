@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./CancelTicketsLogin.css";
 import Sleepers from "../../../public/sleepers_poster.jpg";
 import Heat from "../../../public/heat_poster.jpg";
@@ -7,23 +7,27 @@ import Modal from "react-bootstrap/Modal";
 
 const CancelTicketsLogin = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
 
-  // Hantera modalens synlighet
   const handleShowModal = (ticketId) => {
-    setSelectedTicket(ticketId); // Spara vilken biljett som är vald
+    setSelectedTicket(ticketId);
     setShowModal(true);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setSelectedTicket(null); // Återställ vald biljett när modalen stängs
+    setSelectedTicket(null);
   };
 
   const handleCancelTicket = () => {
-    // Logik för att avboka biljetten (exempelvis ett API-anrop)
     console.log("Biljett avbokad:", selectedTicket);
-    handleCloseModal(); // Stäng modalen efter avbokning
+    setShowModal(false);
+    setShowConfirmationModal(true);
+  };
+
+  const handleCloseConfirmationModal = () => {
+    setShowConfirmationModal(false);
   };
 
   return (
@@ -57,7 +61,7 @@ const CancelTicketsLogin = () => {
               <Button
                 className="cancel-ticket-button"
                 variant="outline-primary"
-                onClick={() => handleShowModal("FVSS18092024")} // Klick för att visa modal
+                onClick={() => handleShowModal("FVSS18092024")}
               >
                 Avboka
               </Button>
@@ -88,7 +92,7 @@ const CancelTicketsLogin = () => {
               <Button
                 className="cancel-ticket-button"
                 variant="outline-primary"
-                onClick={() => handleShowModal("FVSK19192024")} // Klick för att visa modal
+                onClick={() => handleShowModal("FVSK19192024")}
               >
                 Avboka
               </Button>
@@ -97,7 +101,6 @@ const CancelTicketsLogin = () => {
         </div>
       </div>
 
-      {/* Modal */}
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Bekräfta avbokning</Modal.Title>
@@ -111,7 +114,19 @@ const CancelTicketsLogin = () => {
             Avbryt
           </Button>
           <Button variant="primary" onClick={handleCancelTicket}>
-            Bekräfta avbokning
+            Ja, Avboka
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showConfirmationModal} onHide={handleCloseConfirmationModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Biljett Avbokad</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Din biljett är avbokad.</Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseConfirmationModal}>
+            Stäng
           </Button>
         </Modal.Footer>
       </Modal>
