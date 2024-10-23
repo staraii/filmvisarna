@@ -1,14 +1,65 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 //import fightClubTrailer from '../assets/fightClubTrailer.webp'
 import './MovieDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
 import  FightClubPoster from '../assets/FightClubPoster.jpg'
 import { useNavigate } from "react-router-dom";
 
+import axios from 'axios';
+
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
+interface MovieDetails {
+  credits: object;
+  duration: number;
+  mediaURLs: {
+    trailerURL: string;
+  };
+  subtitles: string;
+  description: string;
+}
+
+interface Movie {
+  id: number;
+  title: string;
+  ageRating: string;
+  categories: string;
+  reviews: string;
+  details: MovieDetails;
+}
+
+interface ApiResponse {
+  success: boolean;
+  movie: Movie[]; // array Movie-objekt
+  screenings: object[];
+}
+
+
 function MovieDetailsPage() {
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
+
+  const [movie, setMovieData] = useState<ApiResponse | null>(null);
+
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      try {
+        const response = await fetch('/api/moviesDetails/1');
+        
+        if (!response.ok) {
+          throw new Error('Något gick fel vid hämtning av filmdata.');
+        }
+        
+        const data = await response.json(); // JSON
+        setMovieData(data);
+        console.log(data);
+      } catch (error) {
+        console.error('Fel vid hämtning av filmdata:', error);
+      }
+    };
+
+    fetchMovieDetails();
+  }, []);
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); 
   const toggleDescriptionText = () => {
@@ -58,6 +109,11 @@ const navigate = useNavigate();
     setCurrentReviewIndex((prevIndex) => (prevIndex + 1) % reviews.length);
   };
 
+  //
+  if (!movie) { 
+    return <div>Laddar...</div>;
+  }
+
   return (
     <>
       <Container>
@@ -67,10 +123,10 @@ const navigate = useNavigate();
               <div className="movie-trailer-container embed-responsive embed-responsive-16by9">
                 <iframe
                   className="movie-trailer-size embed-responsive-item"
-                  src="https://www.youtube.com/embed/BdJKm16Co6M"
+                  src={`https://www.youtube.com/embed/${movie.movie[0].details.mediaURLs.trailerURL}`}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title="Fight Club Trailer"
+                  title="YouTube video player"
                   width="100%"
                 />
               </div>
@@ -79,7 +135,7 @@ const navigate = useNavigate();
               <Card.Body className="">
                 <Container>
                   <Card.Title>
-                    <h3>Fight Club</h3>
+                    <h3>{movie.movie[0].title}</h3>
                   </Card.Title>
                   <Button onClick={() => navigate("/boka")} >Boka platser</Button>
                   <Card.Title className="mt-4" >OM Filmen</Card.Title>

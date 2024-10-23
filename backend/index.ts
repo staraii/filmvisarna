@@ -60,7 +60,7 @@ app.use("/api/bookings", bookingsRouter);
 app.use(moviesRouter);
 app.use(authRouter);
 app.use(liveChairRouter);
-app.use(moviesDetailsRouter);
+app.use("/api/moviesDetails", moviesDetailsRouter);
 
 
 
