@@ -1,39 +1,39 @@
+import  { useState } from 'react';
 import { Modal, Button, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-import { useState } from "react"; // Import useState for managing state
-import { login } from "../../services/authService"; // Adjust the import path as needed
-import "./LoginModal.css"; // Ensure the path is correct
+import { useNavigate } from "react-router-dom"; 
+import { login } from "../../services/authService"; // Import your existing login function
+import { useAuth } from "../../utils/authContext"; // Import AuthContext to manage auth state
 
 interface LoginModalProps {
   show: boolean;
   handleClose: () => void;
-  onLogin: () => void; // Ensure this prop is passed in
 }
 
-const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
-  const navigate = useNavigate(); // Initialize the useNavigate hook
+const LoginModal = ({ show, handleClose }: LoginModalProps) => {
+  const navigate = useNavigate(); 
+  const { login: authLogin } = useAuth(); // Get the login function from AuthContext
+  const [email, setEmail] = useState<string>(""); 
+  const [password, setPassword] = useState<string>(""); 
+  const [error, setError] = useState<string>(""); 
 
-  // State to manage email, password and error message
-  const [email, setEmail] = useState<string>(""); // State for email
-  const [password, setPassword] = useState<string>(""); // State for password
-  const [error, setError] = useState<string>(""); // State for error message
-
- const handleLogin = async () => {
+  const handleLogin = async () => {
     setError(""); // Clear previous errors
 
     try {
-      const data = await login(email, password); // Call the login function
+      // Call your authService's login function
+      const data = await login(email, password); // Use your existing login function
 
-      // You can use the returned data for some purpose
-      console.log("Login data:", data); // For example, log the data to the console
-      alert("Du är inloggad"); // Show success alert
-      onLogin(); // Call the login function passed from App
+      // If login is successful, call the context's login function to update the state
+      authLogin(); // This will trigger a state change and should update the navbar
+
+      console.log("Login successful:", data); 
+      alert("Du är inloggad"); // Alert user of successful login
       handleClose(); // Close the modal
     } catch (err: any) {
       console.error("Error during login:", err);
       setError(err.message || "Inloggningen misslyckades"); // Set error message
     }
-};
+  };
 
   const handleRegister = () => {
     navigate("/register"); // Navigate to the register page
@@ -51,15 +51,15 @@ const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
         <Modal.Title>Logga in</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {error && <div className="alert alert-danger">{error}</div>} {/* Display error message */}
+        {error && <div className="alert alert-danger">{error}</div>} 
         <Form>
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>E-postadress</Form.Label>
             <Form.Control 
               type="email" 
               placeholder="Ange din e-postadress" 
-              value={email} // Set email state
-              onChange={(e) => setEmail(e.target.value)} // Update email state on change
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
             />
           </Form.Group>
 
@@ -68,8 +68,8 @@ const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
             <Form.Control 
               type="password" 
               placeholder="Ange ditt lösenord" 
-              value={password} // Set password state
-              onChange={(e) => setPassword(e.target.value)} // Update password state on change
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
             />
           </Form.Group>
 
@@ -85,8 +85,7 @@ const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
           <p>
             <span className="register-link" onClick={passwordReset}>
               Glömt ditt lösenord?
-            </span>{" "}
-            |{" "}
+            </span>{" "}|{" "}
             <span className="register-link" onClick={handleRegister}>
               Bli medlem
             </span>
@@ -98,6 +97,8 @@ const LoginModal = ({ show, handleClose, onLogin }: LoginModalProps) => {
 };
 
 export default LoginModal;
+
+
 
 
 

@@ -15,11 +15,7 @@ interface FormData {
   confirmPassword: string;
 }
 
-interface RegisterProps {
-  onLogin: () => void; // Add this prop to trigger login state
-}
-
-const Register = ({ onLogin }: RegisterProps) => {
+const Register = () => {
   const navigate = useNavigate(); // For navigation
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -42,7 +38,7 @@ const Register = ({ onLogin }: RegisterProps) => {
     });
   };
 
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -58,7 +54,6 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
       await register(formData); // Directly pass the entire formData object
 
       alert('Du har blivit medlem, välkommen till Filmvisarna');
-      onLogin(); // Trigger login state
       navigate('/'); // Redirect to the home page
     } catch (error) {
       alert('Registrering misslyckades: ' + (error as Error).message);
@@ -118,7 +113,7 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
               />
             </Form.Group>
 
-          {/* New Row for Password and Confirm Password */}
+            {/* New Row for Password and Confirm Password */}
             <Row className="mb-3">
               <Col xs={6} className="position-relative">
                 <Form.Group controlId="formPassword">
@@ -210,3 +205,4 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 };
 
 export default Register;
+
