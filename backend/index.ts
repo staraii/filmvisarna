@@ -2,7 +2,6 @@
 // Sets up the server and connects to the MySQL database.
 
 import express from "express";
-import cors from "cors";
 import mysql, { PoolOptions } from "mysql2/promise";
 import bookingsRouter from "./routes/bookingsRouter.js";
 //import moviesRouter from "./routes/moviesRouter.js";
@@ -36,11 +35,6 @@ export const app = express();
 // Middleware to parse JSON requests
 app.use(express.json());
 
-// Enable CORS with options
-app.use(cors({
-  origin: 'http://localhost:5173', // Your frontend URL
-  credentials: true // Allow credentials (cookies, authorization headers, etc.)
-}));
 
 
 app.use(moviesDetailsRouter);

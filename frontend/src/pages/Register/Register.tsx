@@ -2,6 +2,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
+import { register } from '../../services/authService';
 import './Register.css'; // Optional: Create a CSS file for custom styles
 
 interface FormData {
@@ -41,22 +42,27 @@ const Register = ({ onLogin }: RegisterProps) => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Perform form validation, if necessary
 
     if (formData.password !== formData.confirmPassword) {
       alert('Lösenord och bekräfta lösenord matchar inte.');
       return;
     }
 
-    // Mock registration success
-    alert('Du har blivit medlem, välkommen till Filmvisarna');
-    onLogin(); // Trigger the logged-in state change
+    // Log the data being sent
+    console.log('Submitting registration data:', formData);
 
-    // Optionally, navigate to a different page after successful registration
-    navigate('/'); // Redirect to some dashboard or homepage after registration
+    try {
+      // Call the API to register the user
+      await register(formData); // Directly pass the entire formData object
+
+      alert('Du har blivit medlem, välkommen till Filmvisarna');
+      onLogin(); // Trigger login state
+      navigate('/'); // Redirect to the home page
+    } catch (error) {
+      alert('Registrering misslyckades: ' + (error as Error).message);
+    }
   };
 
   return (

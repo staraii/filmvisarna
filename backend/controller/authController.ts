@@ -7,11 +7,11 @@ import { RegisterUser, LoginUser } from '../types/userTypes.js';
 
 export const register = async (req: Request, res: Response) => {
   // Destructure only the required fields from the request body
-  const { firstname, lastname, email, password, phone, role }: RegisterUser = req.body;
+  const { firstName, lastName, email, password, phone }: RegisterUser = req.body;
 
-   // Validate if the role is provided
-  if (role) {
-    return res.status(400).json({ message: 'Role should not be specified during registration' });
+  // Validate required fields
+  if (!firstName || !lastName || !email || !password || !phone) {
+    return res.status(400).json({ message: 'All fields must be filled out.' });
   }
 
   try {
@@ -24,10 +24,10 @@ export const register = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 12); // Hash password
 
-    // Create a new user, omitting role from the request
+    // Create a new user
     await createUser({
-      firstname,
-      lastname,
+      firstName: firstName, // Ensure this matches your database field
+      lastName: lastName,   // Ensure this matches your database field
       email: normalizedEmail,
       password: hashedPassword,
       phone,
