@@ -3,6 +3,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; 
 import { login } from "../../services/authService"; // Import your existing login function
 import { useAuth } from "../../utils/authContext"; // Import AuthContext to manage auth state
+import './LoginModal.css';
 
 interface LoginModalProps {
   show: boolean;
