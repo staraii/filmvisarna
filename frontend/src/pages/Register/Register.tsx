@@ -2,6 +2,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
+import { register } from '../../services/authService';
 import './Register.css'; // Optional: Create a CSS file for custom styles
 
 interface FormData {
@@ -14,11 +15,7 @@ interface FormData {
   confirmPassword: string;
 }
 
-interface RegisterProps {
-  onLogin: () => void; // Add this prop to trigger login state
-}
-
-const Register = ({ onLogin }: RegisterProps) => {
+const Register = () => {
   const navigate = useNavigate(); // For navigation
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -41,22 +38,26 @@ const Register = ({ onLogin }: RegisterProps) => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Perform form validation, if necessary
 
     if (formData.password !== formData.confirmPassword) {
       alert('Lösenord och bekräfta lösenord matchar inte.');
       return;
     }
 
-    // Mock registration success
-    alert('Du har blivit medlem, välkommen till Filmvisarna');
-    onLogin(); // Trigger the logged-in state change
+    // Log the data being sent
+    console.log('Submitting registration data:', formData);
 
-    // Optionally, navigate to a different page after successful registration
-    navigate('/'); // Redirect to some dashboard or homepage after registration
+    try {
+      // Call the API to register the user
+      await register(formData); // Directly pass the entire formData object
+
+      alert('Du har blivit medlem, välkommen till Filmvisarna');
+      navigate('/'); // Redirect to the home page
+    } catch (error) {
+      alert('Registrering misslyckades: ' + (error as Error).message);
+    }
   };
 
   return (
@@ -112,7 +113,7 @@ const Register = ({ onLogin }: RegisterProps) => {
               />
             </Form.Group>
 
-          {/* New Row for Password and Confirm Password */}
+            {/* New Row for Password and Confirm Password */}
             <Row className="mb-3">
               <Col xs={6} className="position-relative">
                 <Form.Group controlId="formPassword">
@@ -204,3 +205,4 @@ const Register = ({ onLogin }: RegisterProps) => {
 };
 
 export default Register;
+
