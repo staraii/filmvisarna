@@ -34,7 +34,7 @@ const dbConfig: PoolOptions = {
 };
 
 // Server
-const SERVER_PORT = process.env.SERVER_PORT || 5001;
+const SERVER_PORT = process.env.SERVER_PORT || 5002;
 
 // Create a MySQL connection pool
 export const db = mysql.createPool(dbConfig);
@@ -45,18 +45,6 @@ const sessionStore = new MySQLSessionStore(dbConfig); // Initialize session stor
 
 export const app = express();
 
-// Middleware to parse JSON requests
-app.use(express.json());
-
-app.use("/images", imageServer);
-
-// Routers
-app.use("/api/screenings", screeningsRouter);
-app.use("/api/bookings", bookingsRouter);
-app.use(moviesRouter);
-app.use(authRouter);
-app.use("/api/moviesDetails", moviesDetailsRouter);
-app.use("/api/events", liveChairRouter);
 
 
 
@@ -74,6 +62,24 @@ app.use(
     },
   })
 );
+
+
+// Middleware to parse JSON requests
+app.use(express.json());
+
+app.use("/images", imageServer);
+
+// Routers
+app.use("/api/screenings", screeningsRouter);
+app.use("/api/bookings", bookingsRouter);
+app.use(moviesRouter);
+app.use(authRouter);
+app.use("/api/moviesDetails", moviesDetailsRouter);
+app.use("/api/events", liveChairRouter);
+
+
+
+
 
 // Start the server
 app.listen(SERVER_PORT, () => {

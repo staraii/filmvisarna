@@ -34,7 +34,7 @@ export default function App() {
       <Router>
         <WideNavBar
         
-          onLoginSnow={handleLoginShow} // Show modal instead of direct login
+          onLoginShow={handleLoginShow} // Show modal instead of direct login
           
         />
         <div className="content-container">
