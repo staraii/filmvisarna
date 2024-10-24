@@ -5,18 +5,24 @@ import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, 
 import  FightClubPoster from '../assets/FightClubPoster.jpg'
 import { useNavigate } from "react-router-dom";
 
-import axios from 'axios';
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
 interface MovieDetails {
-  credits: object;
+  credits: {
+    cast: string[];
+    directedBy: string[];
+  };
   duration: number;
   mediaURLs: {
     trailerURL: string;
+    posterURL: string;
+    slideURL: string;
   };
   subtitles: string;
   description: string;
+  releaseYear: number;
+  spokenLanguage: string;
 }
 
 interface Movie {
@@ -30,7 +36,7 @@ interface Movie {
 
 interface ApiResponse {
   success: boolean;
-  movie: Movie[]; // array Movie-objekt
+  movie: Movie[];
   screenings: object[];
 }
 
@@ -84,10 +90,6 @@ function MovieDetailsPage() {
   setSelectedTime(eventKey);
   };  
 
-
-  const shortText = "Brad Pitt och Edward Norton gör två knockoutbra roller i denna häpnadsväckande och originella thriller...";
-  const fullText = "Brad Pitt och Edward Norton gör två knockoutbra roller i denna häpnadsväckande och originella thriller med ironisk underton av David Fincher, regissören till Seven. Norton spelar Jack, en kroniskt sömnlös man som desperat försöker fly sitt olidligt tråkiga liv. Men så möter han Tyler Durden (Pitt) en karismatisk tvålförsäljare med en snedvriden filosofi. Tyler menar att självförbättring är för de svaga - det är självdestruktion som verkligen gör livet värt att leva. Inom kort är Jack och Tyler i full gång med att mörbulta varandra på en parkeringsplats. Ett renande slagsmål med en endorfinkick utan dess like. För att introducera andra män i denna enkla lycka av fysiskt våld bildar Jack och Tyler en hemlig 'Fight Club' som snabbt blir omåttligt populär. Men en hemsk överraskning väntar Jack, en sanning som kommer att förändra allt";
-
   const reviews = [
     {
       source: "Sydsvenskan",
@@ -113,6 +115,8 @@ function MovieDetailsPage() {
   if (!movie) { 
     return <div>Laddar...</div>;
   }
+  const fullText = movie.movie[0].details.description;
+  const shortText = fullText.length > 100 ? fullText.substring(0, 100) + '...' : fullText;
 
   return (
     <>
@@ -159,9 +163,6 @@ function MovieDetailsPage() {
                   <img className='d-block w-100'
                     src={FightClubPoster}
                     alt="FightClubPoster"/>
-                  <Carousel.Caption>
-                    <h3>Fight Club</h3>
-                  </Carousel.Caption>
                 </Carousel.Item>
 
                 <Carousel.Item>
@@ -182,23 +183,23 @@ function MovieDetailsPage() {
                 <Card.Body>
                   <Card.Title>Film Detaljer</Card.Title>
                   <Card.Text className="mb-0 see-more-container" >
-                    <strong>Regissör:</strong> David Fincher
+                    <strong>Regissör:</strong> {movie.movie[0].details.credits.directedBy.join(', ')}
                     <br />
-                    <strong>Åldersgräns:</strong> 12 år
+                    <strong>Åldersgräns:</strong> {movie.movie[0].ageRating}
                     <br />
-                    <strong>Språk:</strong> Engelska
+                    <strong>Språk:</strong> {movie.movie[0].details.spokenLanguage}
                     <br />
-                    <strong>Textning:</strong> Svenska
+                    <strong>Textning:</strong> {movie.movie[0].details.subtitles}
                     <br />
-                    <strong>Genre:</strong> Drama
+                    <strong>Genre:</strong> {movie.movie[0].categories}
                     <br />
                     {isDetailsExpanded && (
                       <>
-                        <strong>Utgivningsår:</strong> 1999
+                        <strong>Utgivningsår:</strong> {movie.movie[0].details.releaseYear}
                         <br />
-                        <strong>Längd:</strong> 139 minuter
+                        <strong>Längd:</strong> {movie.movie[0].details.duration} minuter
                         <br />
-                        <strong>Skådespelare:</strong> Brad Pitt, Edward Norton
+                        <strong>Skådespelare:</strong> {movie.movie[0].details.credits.cast.join(', ')}
                       </>
                     )}
                   </Card.Text>
