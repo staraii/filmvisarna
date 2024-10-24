@@ -13,18 +13,23 @@
 
 .ticket-wrapper {
   margin-bottom: 20px;
+  background-color: #17102c;
+  border-radius: 10px;
 }
 
 .ticket {
   display: flex;
   align-items: center;
   gap: 20px;
+  padding: 1rem;
+
 }
 
 .ticket-img img {
-  width: 200px;
+  width: 11rem;
   height: auto;
   object-fit: cover;
+
 }
 
 .ticket-details {

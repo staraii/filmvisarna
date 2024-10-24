@@ -18,13 +18,11 @@ import MySQLStore from "express-mysql-session"; // Import MySQL session store
 // Getting directory path
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-
 // Getting path to images directory
 const IMAGES_FOLDER = path.join(__dirname, "assets/images/");
 // Serving static files from /images
 const imageServer = express();
 imageServer.use(express.static(IMAGES_FOLDER));
-
 
 // DB Config, loads values from .env
 const dbConfig: PoolOptions = {
@@ -34,7 +32,6 @@ const dbConfig: PoolOptions = {
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 };
- 
 
 // Server
 const SERVER_PORT = process.env.SERVER_PORT || 5001;
@@ -46,7 +43,6 @@ export const db = mysql.createPool(dbConfig);
 const MySQLSessionStore = MySQLStore(session as any); // Link the MySQLStore with express-session
 const sessionStore = new MySQLSessionStore(dbConfig); // Initialize session store with DB config
 
-
 export const app = express();
 
 // Middleware to parse JSON requests
@@ -55,14 +51,12 @@ app.use(express.json());
 app.use("/images", imageServer);
 
 // Routers
-app.use(screeningsRouter);
+app.use("/api/screenings", screeningsRouter);
 app.use("/api/bookings", bookingsRouter);
 app.use(moviesRouter);
 app.use(authRouter);
-app.use(liveChairRouter);
 app.use("/api/moviesDetails", moviesDetailsRouter);
-
-
+app.use("/api/events", liveChairRouter);
 
 
 
@@ -81,8 +75,6 @@ app.use(
   })
 );
 
-
-
 // Start the server
 app.listen(SERVER_PORT, () => {
   console.log(`Server is running on port ${SERVER_PORT}`); // Log server start
@@ -98,4 +90,3 @@ app.listen(SERVER_PORT, () => {
 //app.get("*", (_req, res) => {
 //  res.sendFile(path.join(FRONTEND_DIST, "index.html"));
 //})
-
