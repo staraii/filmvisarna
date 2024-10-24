@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import Register from "./pages/Register/Register";
-import MoveDetailsPage from "./pages/MoveDetailsPage";
+import MovieDetailsPage from "./pages/MovieDetailsPage";
 import BookingPage from "./pages/BookingPage";
 import MobileNavBar from "./components/MobileNavBar/MobileNavBar";
 import WideNavBar from "./components/WideNavBar/WideNavBar";
@@ -48,7 +48,7 @@ export default function App() {
               path="/register"
               element={<Register onLogin={onLoginClick} />}
             />
-            <Route path="/film" element={<MoveDetailsPage />} />
+            <Route path="/film" element={<MovieDetailsPage />} />
             <Route path="/filmer" element={<Movies />} />
             <Route path="/boka" element={<BookingPage />} />
 

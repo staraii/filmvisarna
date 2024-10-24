@@ -1,14 +1,71 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 //import fightClubTrailer from '../assets/fightClubTrailer.webp'
-import './MoveDetailsPage.css'
+import './MovieDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
 import  FightClubPoster from '../assets/FightClubPoster.jpg'
 import { useNavigate } from "react-router-dom";
 
+
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
-function MoveDetailsPage() {
-const navigate = useNavigate();
+interface MovieDetails {
+  credits: {
+    cast: string[];
+    directedBy: string[];
+  };
+  duration: number;
+  mediaURLs: {
+    trailerURL: string;
+    posterURL: string;
+    slideURL: string;
+  };
+  subtitles: string;
+  description: string;
+  releaseYear: number;
+  spokenLanguage: string;
+}
+
+interface Movie {
+  id: number;
+  title: string;
+  ageRating: string;
+  categories: string;
+  reviews: string;
+  details: MovieDetails;
+}
+
+interface ApiResponse {
+  success: boolean;
+  movie: Movie[];
+  screenings: object[];
+}
+
+
+function MovieDetailsPage() {
+  const navigate = useNavigate();
+
+
+  const [movie, setMovieData] = useState<ApiResponse | null>(null);
+
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      try {
+        const response = await fetch('/api/moviesDetails/1');
+        
+        if (!response.ok) {
+          throw new Error('Något gick fel vid hämtning av filmdata.');
+        }
+        
+        const data = await response.json(); // JSON
+        setMovieData(data);
+        console.log(data);
+      } catch (error) {
+        console.error('Fel vid hämtning av filmdata:', error);
+      }
+    };
+
+    fetchMovieDetails();
+  }, []);
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); 
   const toggleDescriptionText = () => {
@@ -33,10 +90,6 @@ const navigate = useNavigate();
   setSelectedTime(eventKey);
   };  
 
-
-  const shortText = "Brad Pitt och Edward Norton gör två knockoutbra roller i denna häpnadsväckande och originella thriller...";
-  const fullText = "Brad Pitt och Edward Norton gör två knockoutbra roller i denna häpnadsväckande och originella thriller med ironisk underton av David Fincher, regissören till Seven. Norton spelar Jack, en kroniskt sömnlös man som desperat försöker fly sitt olidligt tråkiga liv. Men så möter han Tyler Durden (Pitt) en karismatisk tvålförsäljare med en snedvriden filosofi. Tyler menar att självförbättring är för de svaga - det är självdestruktion som verkligen gör livet värt att leva. Inom kort är Jack och Tyler i full gång med att mörbulta varandra på en parkeringsplats. Ett renande slagsmål med en endorfinkick utan dess like. För att introducera andra män i denna enkla lycka av fysiskt våld bildar Jack och Tyler en hemlig 'Fight Club' som snabbt blir omåttligt populär. Men en hemsk överraskning väntar Jack, en sanning som kommer att förändra allt";
-
   const reviews = [
     {
       source: "Sydsvenskan",
@@ -58,19 +111,26 @@ const navigate = useNavigate();
     setCurrentReviewIndex((prevIndex) => (prevIndex + 1) % reviews.length);
   };
 
+  //
+  if (!movie) { 
+    return <div>Laddar...</div>;
+  }
+  const fullText = movie.movie[0].details.description;
+  const shortText = fullText.length > 100 ? fullText.substring(0, 100) + '...' : fullText;
+
   return (
     <>
       <Container>
         <Container className="d-flex flex-column align-items-center">
           <Row className="d-flex flex-column flex-md-row ">
-            <Col xs={12} md={12} lg={6} xl={6} xxl={6} className='move-trailer-container'>
-              <div className="move-trailer-container embed-responsive embed-responsive-16by9">
+            <Col xs={12} md={12} lg={6} xl={6} xxl={6} className='movie-trailer-container'>
+              <div className="movie-trailer-container embed-responsive embed-responsive-16by9">
                 <iframe
-                  className="move-trailer-size embed-responsive-item"
-                  src="https://www.youtube.com/embed/BdJKm16Co6M"
+                  className="movie-trailer-size embed-responsive-item"
+                  src={`https://www.youtube.com/embed/${movie.movie[0].details.mediaURLs.trailerURL}`}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  title="Fight Club Trailer"
+                  title="YouTube video player"
                   width="100%"
                 />
               </div>
@@ -79,7 +139,7 @@ const navigate = useNavigate();
               <Card.Body className="">
                 <Container>
                   <Card.Title>
-                    <h3>Fight Club</h3>
+                    <h3>{movie.movie[0].title}</h3>
                   </Card.Title>
                   <Button onClick={() => navigate("/boka")} >Boka platser</Button>
                   <Card.Title className="mt-4" >OM Filmen</Card.Title>
@@ -98,14 +158,11 @@ const navigate = useNavigate();
         <Container>
           <Row className="d-flex flex-column flex-md-row mt-5">
             <Col xs={{span:12}} lg={{span:6, order: 'last'}}>
-              <Carousel className='carouselMoveDetail'>
+              <Carousel className='carouselMovieDetail'>
                 <Carousel.Item>
                   <img className='d-block w-100'
                     src={FightClubPoster}
                     alt="FightClubPoster"/>
-                  <Carousel.Caption>
-                    <h3>Fight Club</h3>
-                  </Carousel.Caption>
                 </Carousel.Item>
 
                 <Carousel.Item>
@@ -126,23 +183,23 @@ const navigate = useNavigate();
                 <Card.Body>
                   <Card.Title>Film Detaljer</Card.Title>
                   <Card.Text className="mb-0 see-more-container" >
-                    <strong>Regissör:</strong> David Fincher
+                    <strong>Regissör:</strong> {movie.movie[0].details.credits.directedBy.join(', ')}
                     <br />
-                    <strong>Åldersgräns:</strong> 12 år
+                    <strong>Åldersgräns:</strong> {movie.movie[0].ageRating}
                     <br />
-                    <strong>Språk:</strong> Engelska
+                    <strong>Språk:</strong> {movie.movie[0].details.spokenLanguage}
                     <br />
-                    <strong>Textning:</strong> Svenska
+                    <strong>Textning:</strong> {movie.movie[0].details.subtitles}
                     <br />
-                    <strong>Genre:</strong> Drama
+                    <strong>Genre:</strong> {movie.movie[0].categories}
                     <br />
                     {isDetailsExpanded && (
                       <>
-                        <strong>Utgivningsår:</strong> 1999
+                        <strong>Utgivningsår:</strong> {movie.movie[0].details.releaseYear}
                         <br />
-                        <strong>Längd:</strong> 139 minuter
+                        <strong>Längd:</strong> {movie.movie[0].details.duration} minuter
                         <br />
-                        <strong>Skådespelare:</strong> Brad Pitt, Edward Norton
+                        <strong>Skådespelare:</strong> {movie.movie[0].details.credits.cast.join(', ')}
                       </>
                     )}
                   </Card.Text>
@@ -440,4 +497,4 @@ const navigate = useNavigate();
   )
 }
 
-export default MoveDetailsPage
+export default MovieDetailsPage

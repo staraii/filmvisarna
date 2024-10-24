@@ -55,8 +55,10 @@ app.use("/api/screenings", screeningsRouter);
 app.use("/api/bookings", bookingsRouter);
 app.use(moviesRouter);
 app.use(authRouter);
+app.use("/api/moviesDetails", moviesDetailsRouter);
 app.use("/api/events", liveChairRouter);
-app.use(moviesDetailsRouter);
+
+
 
 // Session middleware with MySQL store
 app.use(
