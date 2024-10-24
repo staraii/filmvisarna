@@ -2,7 +2,6 @@ import { db } from "../index.js";
 import getValidBookingNumber from "../utils/getValidBookingNumber.js";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 
-
 interface IsBookingId extends RowDataPacket {
   id: number;
 }
@@ -13,82 +12,101 @@ type Seat = {
 
 const createNewBooking = async (userId: number | null, email: string, screeningId: number, seats: Seat[]) => {
   const bookingNumber = await getValidBookingNumber();
+  let bookingId:number;
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
-    const [bookingResult] = await connection.execute<ResultSetHeader>("INSERT INTO `bookings` (`userId`, `screeningId`, `email`, `bookingNumber`) VALUES (?, ?, ?, ?)",
+    const [bookingResult] = await connection.execute<ResultSetHeader>(
+      "INSERT INTO `bookings` (`userId`, `screeningId`, `email`, `bookingNumber`) VALUES (?, ?, ?, ?)",
       [userId, screeningId, email, bookingNumber]
     );
-    const bookingId = bookingResult.insertId;
+    bookingId = bookingResult.insertId;
+    console.log("bookingId1: " + bookingId)
     const seatsToBook = seats.map((seat) =>
-        connection.execute("INSERT INTO `bookedSeats` (`bookingId`, `seatId`, `screeningId`, `ticketTypeId`) VALUES (?, ?, ?, ?)", [bookingId, seat.seatId, screeningId, seat.ticketTypeId]));
+      connection.execute(
+        "INSERT INTO `bookedSeats` (`bookingId`, `seatId`, `screeningId`, `ticketTypeId`) VALUES (?, ?, ?, ?)",
+        [bookingId, seat.seatId, screeningId, seat.ticketTypeId]
+      )
+    );
     await Promise.all(seatsToBook);
     await connection.commit();
   } catch (error) {
     console.error(error);
     await connection.rollback();
-    return false
+    return false;
   } finally {
     connection.release();
   }
-  // ADD EMAIL FUNCTION HERE
-  return bookingNumber
-}
-
-const updatePaymentStatus = async (bookingNumber: string, isPayed: number) => {
-  try {
-    const sql = "UPDATE `bookings` SET `isPayed` = ? WHERE `bookingNumber` = ? LIMIT 1";
-    const values = [isPayed, bookingNumber];
-    const [result] = await db.execute<ResultSetHeader>({ sql, values });
-    const updated = result.affectedRows;
-    if (updated != 1) {
-      return false
-    }
-  return true;
-  } catch (error) {
-    console.log(error)
+  return {bookingId, bookingNumber}
+};
+const getBookingValidation = async (bookingId: number) => {
+  const [booking] = await db.execute<RowDataPacket[]>("SELECT * FROM `fullBookings` WHERE `bookingId` = ?", [bookingId]);
+  if (booking.length === 0) {
     return false
   }
+  return booking;
 }
 
-const updateActiveStatus = async (bookingNumber: string, status: number) => {
+
+const updateBookingStatus = async (bookingNumber: string, isPayed: string, isActive: string) => {
+  const key = isPayed ? "`isPayed`" : "`isActive`";
+  const values = [isPayed ? isPayed : isActive, bookingNumber]
+  const sql = "UPDATE `bookings` SET " + key + " = ? WHERE `bookingNumber` = ? LIMIT 1";
   try {
-    const sql = "UPDATE `bookings` SET `isActive` = ? WHERE `bookingNumber` = ? LIMIT 1";
-    const values = [status, bookingNumber];
     const [result] = await db.execute<ResultSetHeader>({ sql, values });
     if (result.affectedRows === 0) {
       return false;
     }
-    return true
+    return true;
   } catch (error) {
     console.log(error);
-    return false
+    return false;
   }
 }
 
-
 // DELETE /api/bookings/:bookingNumber/:email
-const deleteBooking = async (bookingNumber: string, email: string) => {
+const deleteBooking = async (bookingNumber: string, email: string, userId: string) => {
+  let sql = "SELECT `id` FROM `bookings` WHERE `bookingNumber` = ?";
+  const values = [bookingNumber];
+  if (email) {
+    sql += " AND `email` = ?";
+    values.push(email);
+  }
+  if (userId) {
+    sql += " AND `userId` = ?";
+    values.push(userId);
+  }
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
-    const [booking] = await connection.execute<IsBookingId[]>("SELECT `id` FROM `bookings` WHERE `email` = ? AND `bookingNumber` = ?", [email, bookingNumber]);
-    const bookingId = booking[0].id;
-    if (!bookingId) {
-      return false;
+    const [booking] = await connection.execute<IsBookingId[]>(sql, values);
+    if (!booking[0] || (booking[0] && !booking[0].id)) {
+      throw new Error("No valid resource");
     }
-    await connection.execute("DELETE FROM `bookedSeats` WHERE `bookingId` = ?", [bookingId]);
-    await connection.execute("DELETE FROM `bookings` WHERE `id` = ?", [bookingId]);
+    const bookingId = booking[0].id;
+
+    await connection.execute(
+      "DELETE FROM `bookedSeats` WHERE `bookingId` = ?",
+      [bookingId]
+    );
+    await connection.execute("DELETE FROM `bookings` WHERE `id` = ?", [
+      bookingId,
+    ]);
     await connection.commit();
+    
   } catch (error) {
     await connection.rollback();
-    console.log(error);
-    return false
+    console.error(error);
+    return false;
   } finally {
     connection.release();
   }
   return true;
-}
+};
 
-
-export default { createNewBooking, deleteBooking, updatePaymentStatus, updateActiveStatus };
+export default {
+  createNewBooking,
+  getBookingValidation,
+  deleteBooking,
+  updateBookingStatus
+};
