@@ -1,20 +1,23 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage/HomePage";
-import Register from "./pages/Register/Register";
-import MovieDetailsPage from "./pages/MovieDetailsPage";
-import BookingPage from "./pages/BookingPage";
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+// import HomePage from "./pages/HomePage/HomePage";
+// import Register from "./pages/Register/Register";
+// import MoveDetailsPage from "./pages/MoveDetailsPage";
+// import BookingPage from "./pages/BookingPage";
 import MobileNavBar from "./components/MobileNavBar/MobileNavBar";
 import WideNavBar from "./components/WideNavBar/WideNavBar";
-import BookingConfirmationPage from "./pages/BookingConfirmation";
-import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
-import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
-import Movies from "./pages/Movies/Movies";
+// import BookingConfirmationPage from "./pages/BookingConfirmation";
+// import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
+// import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
+// import Movies from "./pages/Movies/Movies";
 import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
-import LoginPage from "./components/Login-pop-up/LoginMobile";
-import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin";
+// import LoginPage from "./components/Login-pop-up/LoginMobile";
+// import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin";
+
+
 import "./App.css";
-import PasswordReset from "./components/Login-pop-up/passwordReset";
+//import PasswordReset from "./components/Login-pop-up/passwordReset";
 
 
 // Import the AuthProvider
@@ -31,14 +34,14 @@ export default function App() {
 
      <AuthProvider>
     <section className="app-section">
-      <Router>
+      {/* <Router> */}
         <WideNavBar
         
           onLoginShow={handleLoginShow} // Show modal instead of direct login
           
         />
         <div className="content-container">
-          <Routes>
+          {/* <Routes>
             <Route path="/" element={<HomePage />} />
             <Route
               path="/register"
@@ -57,7 +60,8 @@ export default function App() {
             <Route path="/avboka-loggedin" element={<CancelTicketsLogin />} />
             <Route path="/loggain" element={<LoginPage />} />
             <Route path="/forgot-password" element={<PasswordReset />} />
-          </Routes>
+          </Routes> */}
+          <Outlet />
         </div>
         <MobileNavBar />
 
@@ -67,7 +71,7 @@ export default function App() {
           handleClose={handleLoginClose}
           
         />
-      </Router>
+      {/* </Router> */}
     </section>
 </AuthProvider>
 
