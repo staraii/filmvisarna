@@ -14,6 +14,34 @@ export type DualQueryParams = {
   queryParamsOne: QueryParams;
   queryParamsTwo: QueryParams;
 }
+export type HomePageMovies = {
+  id: number;
+  title: string;
+  createdAt: string;
+  categories: string;
+  slideURL: string;
+  posterURL: string;
+  releaseYear: string;
+};
+export type HomePageScreenings = {
+  screeningId: number;
+  movieId: number;
+  movieTitle: string;
+  dateTime: string;
+  dayName: string;
+  day: number;
+  month: number;
+  week: number;
+  time: string;
+  theatreName: string;
+  occupiedPercent: number;
+  ageRating: string;
+  slideURL: string;
+  posterURL: string;
+  subtitles: string;
+  spokenLanguage: string;
+};
+
 
 export async function getQueryData(query: string) {
   try {
@@ -27,7 +55,6 @@ export async function getQueryData(query: string) {
     return [];
   }
 }
-
 
 export const loaderQuery = (queryParams: QueryParams) =>
   queryOptions({
