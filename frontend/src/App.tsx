@@ -18,6 +18,7 @@ import PasswordReset from "./components/Login-pop-up/passwordReset";
 // Import the AuthProvider
 import { AuthProvider } from "./utils/authContext"; // Adjust the path as necessary
 import CancelTicketsContainer from "./utils/CancelTicketsContainer";
+import MinProfil from "./pages/myProfile/myProfile";
 
 
 export default function App() {
@@ -52,7 +53,7 @@ export default function App() {
               element={<BookingConfirmationPage />}
             />
             <Route path="/bio-kalender" element={<MovieCalendar />} />
-            
+            <Route path="/profil" element={<MinProfil />} /> {/* Profile route */}
             <Route path="/avboka" element={<CancelTicketsContainer />} />
             <Route path="/loggain" element={<LoginPage />} />
             <Route path="/forgot-password" element={<PasswordReset />} />

@@ -1,0 +1,130 @@
+/* Container for the profile page */
+.profile-container {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+  background-color: #0b0815;
+  /* Deep dark background */
+  color: #ffffff;
+  /* Light text for contrast */
+}
+
+/* Breadcrumbs styling */
+.breadcrumbs {
+  font-size: 0.9rem;
+  color: #702c53;
+  /* Purple-pink for breadcrumb links */
+  margin-bottom: 20px;
+}
+
+/* Section styling for headers and dividers */
+.profile-section {
+  margin-top: 40px;
+  border-top: 1px solid #3a2a3a;
+  /* Darker border for dividers */
+  padding-top: 20px;
+}
+
+.profile-section h2 {
+  color: #ffd700;
+  /* Gold for prominent section headers */
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+/* Table for profile information */
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.profile-table th,
+.profile-table td {
+  border: 1px solid #702c53;
+  /* Light purple borders */
+  padding: 10px;
+  text-align: left;
+}
+
+.profile-table th {
+  background-color: #702c53;
+  /* Purple background for headers */
+  color: #ffffff;
+  /* Light text */
+}
+
+.profile-table td {
+  background-color: #3a2a3a;
+  /* Dark background for cells */
+  color: #ffffff;
+  /* Light text */
+}
+
+/* Form styling for inputs and select fields */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 400px;
+}
+
+.profile-form input,
+.profile-form select {
+  padding: 10px;
+  background-color: #3a2a3a;
+  /* Dark background for inputs */
+  color: #ffffff;
+  /* Light text */
+  border: 1px solid #702c53;
+  /* Purple border */
+  border-radius: 5px;
+  font-size: 1.1rem;
+}
+
+/* Primary button styling */
+button {
+  background-color: #702c53;
+  /* Purple button */
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #551a3a;
+  /* Darker shade on hover */
+}
+
+/* Delete button styling */
+.delete-button {
+  background-color: #d9534f;
+  /* Red for delete action */
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c9302c;
+  /* Darker red on hover */
+}
+
+/* Styling for action button within table rows */
+.cancel-button {
+  background-color: #702c53;
+  /* Purple for action button */
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #551a3a;
+  /* Slightly darker purple on hover */
+}
