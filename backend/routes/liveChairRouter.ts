@@ -4,7 +4,7 @@ import LiveChairController from "../controller/liveChairController.js";
 const router = express.Router();
 const liveChairController = new LiveChairController();
 
-router.get("/events", (req, res) => {
+router.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");

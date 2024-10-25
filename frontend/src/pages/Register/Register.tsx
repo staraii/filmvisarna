@@ -1,8 +1,9 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
-import './Register.css'; // Optional: Create a CSS file for custom styles
+import { useAuth } from '../../utils/authContext'; // Import useAuth to get access to register
+import './Register.css';
 
 interface FormData {
   firstName: string;
@@ -14,12 +15,10 @@ interface FormData {
   confirmPassword: string;
 }
 
-interface RegisterProps {
-  onLogin: () => void; // Add this prop to trigger login state
-}
-
-const Register = ({ onLogin }: RegisterProps) => {
-  const navigate = useNavigate(); // For navigation
+const Register = () => {
+  const { register } = useAuth(); // Access register from AuthContext
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -41,22 +40,27 @@ const Register = ({ onLogin }: RegisterProps) => {
     });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Perform form validation, if necessary
 
     if (formData.password !== formData.confirmPassword) {
       alert('Lösenord och bekräfta lösenord matchar inte.');
       return;
     }
 
-    // Mock registration success
-    alert('Du har blivit medlem, välkommen till Filmvisarna');
-    onLogin(); // Trigger the logged-in state change
+    // Log the data being sent
+    console.log('Submitting registration data:', formData);
 
-    // Optionally, navigate to a different page after successful registration
-    navigate('/'); // Redirect to some dashboard or homepage after registration
+    try {
+      // Use the register function from AuthContext to handle registration and authentication
+      await register(formData);
+
+      alert('Du har blivit medlem, välkommen till Filmvisarna');
+      navigate('/'); // Redirect to the home page after successful registration
+    } catch (error) {
+      console.error('Registration failed:', error);
+      alert('Registrering misslyckades: ' + (error as Error).message);
+    }
   };
 
   return (
@@ -69,7 +73,7 @@ const Register = ({ onLogin }: RegisterProps) => {
           </p>
 
           <Form onSubmit={handleSubmit}>
-            {/* New Fields Section */}
+            {/* First and Last Name Fields */}
             <Row className="mb-3">
               <Col xs={6}>
                 <Form.Group controlId="formFirstName">
@@ -99,7 +103,7 @@ const Register = ({ onLogin }: RegisterProps) => {
               </Col>
             </Row>
 
-            {/* New Row for Phone Number */}
+            {/* Phone Number Field */}
             <Form.Group controlId="formPhoneNumber" className="mb-3">
               <Form.Label>Telefonnummer</Form.Label>
               <Form.Control
@@ -112,13 +116,13 @@ const Register = ({ onLogin }: RegisterProps) => {
               />
             </Form.Group>
 
-          {/* New Row for Password and Confirm Password */}
+            {/* Password and Confirm Password Fields */}
             <Row className="mb-3">
               <Col xs={6} className="position-relative">
                 <Form.Group controlId="formPassword">
                   <Form.Label>Lösenord</Form.Label>
                   <Form.Control
-                    type={showPassword ? 'text' : 'password'} // Toggle visibility
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Ange ditt lösenord"
                     name="password"
                     value={formData.password}
@@ -138,7 +142,7 @@ const Register = ({ onLogin }: RegisterProps) => {
                 <Form.Group controlId="formConfirmPassword">
                   <Form.Label>Bekräfta lösenord</Form.Label>
                   <Form.Control
-                    type={showConfirmPassword ? 'text' : 'password'} // Toggle visibility
+                    type={showConfirmPassword ? 'text' : 'password'}
                     placeholder="Bekräfta ditt lösenord"
                     name="confirmPassword"
                     value={formData.confirmPassword}
@@ -156,7 +160,7 @@ const Register = ({ onLogin }: RegisterProps) => {
               </Col>
             </Row>
 
-            {/* Existing Fields Section for Email */}
+            {/* Email Field */}
             <Form.Group controlId="formEmail" className="mb-3">
               <Form.Label>E-postadress</Form.Label>
               <Form.Control
@@ -169,7 +173,7 @@ const Register = ({ onLogin }: RegisterProps) => {
               />
             </Form.Group>
 
-            {/* Checkboxes Section in a Column */}
+            {/* Policy Agreement Checkboxes */}
             <Form.Group className="mb-3">
               <Form.Check
                 type="checkbox"
@@ -186,11 +190,11 @@ const Register = ({ onLogin }: RegisterProps) => {
               <Form.Check
                 type="checkbox"
                 label="Jag vill gärna få inbjudningar till premiärer, nyheter och erbjudanden, och kan närsomhelst återkalla mitt samtycke."
-                className="mt-2" // Add margin-top for spacing
+                className="mt-2"
               />
             </Form.Group>
 
-            {/* Button Section */}
+            {/* Submit Button */}
             <div className="d-flex justify-content-center">
               <Button variant="primary" type="submit" className="btn-md register-button">
                 Registrera
@@ -204,3 +208,5 @@ const Register = ({ onLogin }: RegisterProps) => {
 };
 
 export default Register;
+
+

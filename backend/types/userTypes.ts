@@ -11,8 +11,8 @@ export interface User {
 }
 
 export interface RegisterUser {
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   phone: string;

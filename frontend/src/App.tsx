@@ -15,41 +15,39 @@ import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct
 // import LoginPage from "./components/Login-pop-up/LoginMobile";
 // import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin";
 
+
 import "./App.css";
 //import PasswordReset from "./components/Login-pop-up/passwordReset";
 
+
+// Import the AuthProvider
+import { AuthProvider } from "./utils/authContext"; // Adjust the path as necessary
+
+
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // State for logged in status
   const [showLoginModal, setShowLoginModal] = useState(false); // State for showing the login modal
-
-  const onLoginClick = () => {
-    setIsLoggedIn(true); // Update state to logged in
-    setShowLoginModal(false); // Close the modal when logged in
-  };
-
-  const onLogout = () => {
-    setIsLoggedIn(false); // Update state to logged out
-  };
 
   const handleLoginShow = () => setShowLoginModal(true); // Show login modal
   const handleLoginClose = () => setShowLoginModal(false); // Hide login modal
 
   return (
+
+     <AuthProvider>
     <section className="app-section">
       {/* <Router> */}
         <WideNavBar
-          isLoggedIn={isLoggedIn}
-          onLoginClick={handleLoginShow} // Show modal instead of direct login
-          onLogout={onLogout}
+        
+          onLoginShow={handleLoginShow} // Show modal instead of direct login
+          
         />
         <div className="content-container">
           {/* <Routes>
             <Route path="/" element={<HomePage />} />
             <Route
               path="/register"
-              element={<Register onLogin={onLoginClick} />}
+              element={<Register />}
             />
-            <Route path="/film" element={<MoveDetailsPage />} />
+            <Route path="/film" element={<MovieDetailsPage />} />
             <Route path="/filmer" element={<Movies />} />
             <Route path="/boka" element={<BookingPage />} />
 
@@ -71,9 +69,12 @@ export default function App() {
         <LoginModal
           show={showLoginModal}
           handleClose={handleLoginClose}
-          onLogin={onLoginClick}
+          
         />
       {/* </Router> */}
     </section>
+</AuthProvider>
+
   );
 }
+
