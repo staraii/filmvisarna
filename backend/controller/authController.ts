@@ -34,6 +34,8 @@ export const register = async (req: Request, res: Response) => {
       // No role is passed here
     });
 
+    
+
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
     console.error('Error creating user:', error);

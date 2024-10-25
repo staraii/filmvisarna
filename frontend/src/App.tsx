@@ -8,17 +8,16 @@ import MobileNavBar from "./components/MobileNavBar/MobileNavBar";
 import WideNavBar from "./components/WideNavBar/WideNavBar";
 import BookingConfirmationPage from "./pages/BookingConfirmation";
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
-import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
 import Movies from "./pages/Movies/Movies";
 import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
 import LoginPage from "./components/Login-pop-up/LoginMobile";
-import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin";
 import "./App.css";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
 
 
 // Import the AuthProvider
 import { AuthProvider } from "./utils/authContext"; // Adjust the path as necessary
+import CancelTicketsContainer from "./utils/CancelTicketsContainer";
 
 
 export default function App() {
@@ -53,8 +52,8 @@ export default function App() {
               element={<BookingConfirmationPage />}
             />
             <Route path="/bio-kalender" element={<MovieCalendar />} />
-            <Route path="/avboka" element={<CancelTickets />} />
-            <Route path="/avboka-loggedin" element={<CancelTicketsLogin />} />
+            
+            <Route path="/avboka" element={<CancelTicketsContainer />} />
             <Route path="/loggain" element={<LoginPage />} />
             <Route path="/forgot-password" element={<PasswordReset />} />
           </Routes>
