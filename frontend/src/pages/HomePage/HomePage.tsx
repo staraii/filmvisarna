@@ -11,41 +11,48 @@ import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Stack from "react-bootstrap/Stack";
 import Footer from "../../components/Footer/Footer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLoaderData } from "react-router-dom";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { DualQueryParams, loaderQuery } from "../../utils/queryService";
 
 
-const movies = [
-  {
-    title: "Pippi",
-    genre: ["Svensk", "Barn"],
-    year: "1970",
-    slide: "/pippi_slide.jpg",
-  },
-  {
-    title: "Sleepers",
-    genre: ["Drama", "Thriller"],
-    year: "1996",
-    slide: "/sleepers_slide.jpg",
-  },
-  {
-    title: "Titanic",
-    genre: ["Drama", "Romantik"],
-    year: "1997",
-    slide: "/titanic_slide.jpg",
-  },
-  {
-    title: "Fight Club",
-    genre: ["Drama"],
-    year: "1999",
-    slide: "/fight_club_slide.jpg",
-  },
-  {
-    title: "Heat",
-    genre: ["Action", "Drama"],
-    year: "1995",
-    slide: "/heat_slide.jpg",
-  }
-]
+
+
+
+
+
+// const movies = [
+//   {
+//     title: "Pippi",
+//     genre: ["Svensk", "Barn"],
+//     year: "1970",
+//     slide: "/pippi_slide.jpg",
+//   },
+//   {
+//     title: "Sleepers",
+//     genre: ["Drama", "Thriller"],
+//     year: "1996",
+//     slide: "/sleepers_slide.jpg",
+//   },
+//   {
+//     title: "Titanic",
+//     genre: ["Drama", "Romantik"],
+//     year: "1997",
+//     slide: "/titanic_slide.jpg",
+//   },
+//   {
+//     title: "Fight Club",
+//     genre: ["Drama"],
+//     year: "1999",
+//     slide: "/fight_club_slide.jpg",
+//   },
+//   {
+//     title: "Heat",
+//     genre: ["Action", "Drama"],
+//     year: "1995",
+//     slide: "/heat_slide.jpg",
+//   }
+// ]
 
 
 const visningar = [
@@ -190,9 +197,41 @@ const visningar = [
     status: "Low",
   },
 ];
-
+type HomePageMovies = {
+  id: number;
+  title: string;
+  createdAt: string;
+  categories: string;
+  slideURL: string;
+  posterURL: string;
+  releaseYear: string;
+};
+type HomePageScreenings = {
+  screeningId: number;
+  movieId: number;
+  movieTitle: string;
+  dateTime: string;
+  dayName: string;
+  day: number;
+  month: number;
+  week: number;
+  time: string;
+  theatreName: string;
+  occupiedPercent: number;
+  ageRating: string;
+  slideURL: string;
+  posterURL: string;
+  subtitles: string;
+  spokenLanguage: string;
+};
 
 export default function HomePage() {
+  const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
+  const { data: moviesData } = useSuspenseQuery(loaderQuery(queryParamsOne));
+  const { data: screeningsData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
+  const movies: HomePageMovies[] = moviesData;
+  const screenings: HomePageScreenings[] = screeningsData;
+ 
   const navigate = useNavigate();
   const [salong, setSalong] = useState<number[]>([]);
   const handleChangeSalong = (val: number[]) => setSalong(val);
@@ -204,10 +243,10 @@ export default function HomePage() {
         <Carousel interval={5000} className="mb-2">
           {movies.map((movie, index) => (
             <Carousel.Item key={index} onClick={() => navigate("/film")} style={{cursor: "pointer", userSelect: "none"}}>
-              <Image src={movie.slide} alt={movie.title} fluid />
+              <Image src={movie.slideURL} alt={movie.title} fluid />
               <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
                 <h3 className="text-secondary mb-0">{movie.title}</h3>
-                <p className="m-auto">{movie.genre.join(", ")}</p>
+                <p className="m-auto">{movie.categories}</p>
               </Carousel.Caption>
             </Carousel.Item>
           ))}
