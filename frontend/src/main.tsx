@@ -11,7 +11,7 @@ import { loader, doubleLoader } from "./utils/queryService.ts";
 import ErrorPage from './pages/ErrorPage/ErrorPage.tsx';
 import HomePage from "./pages/HomePage/HomePage";
 import Movies from './pages/Movies/Movies.tsx';
-import MoveDetailsPage from './pages/MoveDetailsPage.tsx';
+import MovieDetailsPage from './pages/MovieDetailsPage.tsx';
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 import BookingPage from "./pages/BookingPage";
 import Register from "./pages/Register/Register";
@@ -20,6 +20,7 @@ import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin"
 import LoginPage from "./components/Login-pop-up/LoginMobile";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
 import BookingConfirmationPage from "./pages/BookingConfirmation";
+
 
 
 
@@ -53,7 +54,7 @@ const router = createBrowserRouter([
       },
       {
         path: "filmer/:movieId",
-        element: <MoveDetailsPage />,
+        element: <MovieDetailsPage />,
         loader: loader(queryClient, "/api/moviesDetails/", "movie", "movieId"),
         //loader: doubleLoader(queryClient, ["/api/moviesDetails/", "/api/bookings/homePageScreenings?screeningId="], ["movie", "homePageScreenings"]),
         errorElement: <ErrorPage />,
@@ -119,8 +120,8 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+        <RouterProvider router={router} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   </StrictMode>
 );
