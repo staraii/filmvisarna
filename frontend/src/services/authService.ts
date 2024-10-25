@@ -18,7 +18,6 @@ export const login = async (email: string, password: string) => {
 };
 
 // Signup
-
 interface FormData {
   email: string;
   password: string;
@@ -60,9 +59,11 @@ export const register = async (formData: FormData) => {
     console.error('Error response:', errorData); // Log error for debugging
     throw new Error(errorData.message || 'Registration failed'); // Throw error with message
   }
-
-  return response.json(); // Return the response data if successful
+  // After successful registration, auto-login the user
+  // Reuse the existing login logic with the newly registered email and password
+  return await login(email, password);
 };
+
 
 // Logout
 export const logout = async () => {
@@ -77,6 +78,15 @@ export const logout = async () => {
   }
 
   return response.json();
+};
+
+const handleRegister = async () => {
+  try {
+    await register({ email, password, firstName, lastName, phoneNumber });
+    // This should trigger the useEffect in AuthProvider
+  } catch (error) {
+    console.error("Registration failed:", error);
+  }
 };
 
 // Check if authenticated

@@ -1,5 +1,6 @@
 
 import Navbar from "react-bootstrap/Navbar";
+import { useEffect } from "react";
 import Nav from "react-bootstrap/Nav";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/authContext"; // Importing AuthContext for auth state
@@ -13,6 +14,11 @@ interface WideNavBarProps {
 const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
   const { isAuthenticated, logout } = useAuth(); // Access authentication state and logout function
   const navigate = useNavigate();
+
+   useEffect(() => {
+    console.log("Authentication state changed:", isAuthenticated);
+  }, [isAuthenticated]); // Re-render the navbar when `isAuthenticated` changes
+
 
   const handleLogout = async () => {
     try {
