@@ -3,6 +3,7 @@ import { Modal, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"; 
 import { login } from "../../services/authService"; // Import your existing login function
 import { useAuth } from "../../utils/authContext"; // Import AuthContext to manage auth state
+
 import './LoginModal.css';
 
 interface LoginModalProps {
@@ -29,6 +30,8 @@ const LoginModal = ({ show, handleClose }: LoginModalProps) => {
 
       console.log("Login successful:", data); 
       alert("Du är inloggad"); // Alert user of successful login
+        // Navigate to the profile page after successful login
+      navigate("/profil"); 
       handleClose(); // Close the modal
     } catch (err: any) {
       console.error("Error during login:", err);
