@@ -1,6 +1,6 @@
 /* Container for the profile page */
 .profile-container {
-  width: 80%;
+  width: 100%;
   margin: auto;
   padding: 20px;
   background-color: #0b0815;
@@ -127,4 +127,19 @@ button:hover {
 .cancel-button:hover {
   background-color: #551a3a;
   /* Slightly darker purple on hover */
+}
+
+.pagination button {
+  background-color: #551a3a;
+  /* Adjust to fit theme */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #702c53;
+  /* Active color */
 }
