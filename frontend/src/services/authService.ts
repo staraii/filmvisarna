@@ -80,14 +80,6 @@ export const logout = async () => {
   return response.json();
 };
 
-const handleRegister = async () => {
-  try {
-    await register({ email, password, firstName, lastName, phoneNumber });
-    // This should trigger the useEffect in AuthProvider
-  } catch (error) {
-    console.error("Registration failed:", error);
-  }
-};
 
 // Check if authenticated
 export const getMe = async () => {
