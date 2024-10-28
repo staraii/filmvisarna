@@ -1,23 +1,28 @@
 import "./bookingPage.css";
 import { Row, Col, Container, Stack, Button } from "react-bootstrap";
-
 import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
+import { loaderQuery, QueryParams } from "../utils/queryService";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 export default function BookingPage() {
   const [ticketAdult, setticketAdult] = useState<number>(2);
   const [ticketChild, setTicketChild] = useState<number>(0);
   const [ticketSenior, setTicketSenior] = useState<number>(0);
   const [tickets, setTickets] = useState<number>(2);
-
   const [selectedSeat, setSelectedSeat] = useState<string[]>([]);
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
+  //react easier state add?
 
+  const queryParams = useLoaderData() as QueryParams;
+  const { data } = useSuspenseQuery(loaderQuery(queryParams));
+
+  const screening = data["success"][0]; //måste ta reda på varför detta sker
+
+  console.log(screening);
+
+  //placeholder
   const preBooked = ["5:2", "5:3", "2:4", "2:5", "7:7", "7:8", "7:9"];
-
-  useEffect(() => {
-    setTickets(ticketAdult + ticketSenior + ticketChild);
-  }, [ticketAdult, ticketSenior, ticketChild]);
-
   const seats = {
     1: 8,
     2: 9,
@@ -28,6 +33,12 @@ export default function BookingPage() {
     7: 12,
     8: 12,
   };
+  //placeholder
+
+  useEffect(() => {
+    setTickets(ticketAdult + ticketSenior + ticketChild);
+  }, [ticketAdult, ticketSenior, ticketChild]);
+
   function displaySeats(row: number, index: number, seatCount: number) {
     let hoveredSeatIds: string[] = [];
 
@@ -85,11 +96,13 @@ export default function BookingPage() {
         <Stack className="container booking-header justify-content-center">
           <Row className="pt-4">
             <Col>
-              <h1 className="">Heat</h1>
+              <h1 className="">{screening.movieTitle}</h1>
             </Col>
             <Col className="pt-2">
-              <h5>onsdag 18 sep</h5>
-              <h5 className="">21:00-22:43</h5>
+              <h5>
+                {screening.dayName + " " + screening.dateTime.split("T")[0]}
+              </h5>
+              <h5 className="">{screening.time}</h5>
             </Col>
             <Col className="pt-2">
               <p>(Sv.text) (Eng.tal)</p>
@@ -99,7 +112,7 @@ export default function BookingPage() {
         </Stack>
 
         <Stack className="w-100 h-100 border-end border-start p-3 d-flex flex-column">
-          <h4>Stora salongen</h4>
+          <h4>{screening.theatreName}</h4>
           <Stack className="p-1">
             <Stack direction="horizontal">
               <Button

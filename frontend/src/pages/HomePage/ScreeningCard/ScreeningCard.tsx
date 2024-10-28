@@ -4,7 +4,6 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 
-
 type ScreeningCardProps = {
   img: string;
   slide: string;
@@ -18,10 +17,23 @@ type ScreeningCardProps = {
   theatre: string;
   status: string;
   genre: string[];
-}
+  vIndex: number;
+};
 
-export default function ScreeningCard({ img, slide, lang, sub, age, date, time, status, day }: ScreeningCardProps) {
+export default function ScreeningCard({
+  img,
+  slide,
+  lang,
+  sub,
+  age,
+  date,
+  time,
+  status,
+  day,
+  vIndex,
+}: ScreeningCardProps) {
   const navigate = useNavigate();
+
   return (
     <Col xs={12}>
       <Card border="border-dark rounded" className="screening-card shadow-lg">
@@ -111,7 +123,7 @@ export default function ScreeningCard({ img, slide, lang, sub, age, date, time, 
                 variant="outline-secondary"
                 as="button"
                 className="w-100 book-button-screening-card"
-                onClick={() => navigate("/boka")}
+                onClick={() => navigate(`boka/${vIndex + 1}`)}
               >
                 Boka
               </Button>

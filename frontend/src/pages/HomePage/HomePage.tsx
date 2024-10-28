@@ -15,12 +15,6 @@ import { useNavigate, useLoaderData } from "react-router-dom";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DualQueryParams, loaderQuery } from "../../utils/queryService";
 
-
-
-
-
-
-
 // const movies = [
 //   {
 //     title: "Pippi",
@@ -53,7 +47,6 @@ import { DualQueryParams, loaderQuery } from "../../utils/queryService";
 //     slide: "/heat_slide.jpg",
 //   }
 // ]
-
 
 const visningar = [
   {
@@ -228,10 +221,12 @@ type HomePageScreenings = {
 export default function HomePage() {
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
   const { data: moviesData } = useSuspenseQuery(loaderQuery(queryParamsOne));
-  const { data: screeningsData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
+  const { data: screeningsData } = useSuspenseQuery(
+    loaderQuery(queryParamsTwo)
+  );
   const movies: HomePageMovies[] = moviesData;
   const screenings: HomePageScreenings[] = screeningsData;
- 
+
   const navigate = useNavigate();
   const [salong, setSalong] = useState<number[]>([]);
   const handleChangeSalong = (val: number[]) => setSalong(val);
@@ -242,7 +237,11 @@ export default function HomePage() {
         {/* Carousel Component */}
         <Carousel interval={5000} className="mb-2">
           {movies.map((movie, index) => (
-            <Carousel.Item key={index} onClick={() => navigate("/film")} style={{cursor: "pointer", userSelect: "none"}}>
+            <Carousel.Item
+              key={index}
+              onClick={() => navigate("/film")}
+              style={{ cursor: "pointer", userSelect: "none" }}
+            >
               <Image src={movie.slideURL} alt={movie.title} fluid />
               <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
                 <h3 className="text-secondary mb-0">{movie.title}</h3>
@@ -321,7 +320,8 @@ export default function HomePage() {
             xxl={3}
           >
             {visningar.map((v, vIndex) => (
-              <ScreeningCard key={vIndex} {...v} />
+              <ScreeningCard key={vIndex} vIndex={vIndex} {...v} />
+              //vIndex behöver ersättas med visningens id här
             ))}
           </Row>
         </Container>
