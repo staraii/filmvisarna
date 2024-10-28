@@ -34,7 +34,7 @@ const dbConfig: PoolOptions = {
 };
 
 // Server
-const SERVER_PORT = process.env.SERVER_PORT || 5002;
+const SERVER_PORT = process.env.SERVER_PORT || 5001;
 
 // Create a MySQL connection pool
 export const db = mysql.createPool(dbConfig);
