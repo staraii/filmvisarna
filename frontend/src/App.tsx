@@ -15,10 +15,12 @@ import "./App.css";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
 
 
+
 // Import the AuthProvider
 import { AuthProvider } from "./utils/authContext"; // Adjust the path as necessary
 import CancelTicketsContainer from "./utils/CancelTicketsContainer";
 import MinProfil from "./pages/myProfile/myProfile";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 
 export default function App() {
@@ -52,8 +54,17 @@ export default function App() {
               path="/order-bekraftelse"
               element={<BookingConfirmationPage />}
             />
-            <Route path="/bio-kalender" element={<MovieCalendar />} />
-            <Route path="/profil" element={<MinProfil />} /> {/* Profile route */}
+              <Route path="/bio-kalender" element={<MovieCalendar />} />
+                  {/* Protect the profile route */}
+        <Route
+          path="/profil"
+          element={
+            <ProtectedRoute>
+              <MinProfil />
+            </ProtectedRoute>
+          }
+        />
+              
             <Route path="/avboka" element={<CancelTicketsContainer />} />
             <Route path="/loggain" element={<LoginPage />} />
             <Route path="/forgot-password" element={<PasswordReset />} />

@@ -1,0 +1,7 @@
+/* Example CSS for the warning message */
+.warning-message {
+  color: red;
+  margin: 20px;
+  text-align: center;
+  font-weight: bold;
+}
