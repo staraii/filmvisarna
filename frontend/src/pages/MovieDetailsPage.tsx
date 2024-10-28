@@ -26,12 +26,18 @@ interface MovieDetails {
   spokenLanguage: string;
 }
 
+interface Review {
+  rating: number;
+  review: string;
+  reviewBy: string;
+}
+
 interface Movie {
   id: number;
   title: string;
   ageRating: string;
   categories: string;
-  reviews: string;
+  reviews: Review[];
   details: MovieDetails;
 }
 
@@ -51,13 +57,16 @@ function MovieDetailsPage() {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await fetch('/api/moviesDetails/4');
+        const response = await fetch('/api/moviesDetails/2');
         
         if (!response.ok) {
           throw new Error('Något gick fel vid hämtning av filmdata.');
         }
         
         const data = await response.json(); // JSON
+
+        data.movie[0].reviews = JSON.parse(`[${data.movie[0].reviews}]`);
+
         setMovieData(data);
         console.log(data);
       } catch (error) {
@@ -90,23 +99,6 @@ function MovieDetailsPage() {
   setSelectedTime(eventKey);
   };  
 
-  const reviews = [
-    {
-      source: "Sydsvenskan",
-      quote: "ett drama berättat med stor ömhet",
-      stars: 4,
-    },
-    {
-      source: "Svenska Dagbladet",
-      quote: "en film att förälska sig i",
-      stars: 5,
-    },
-    {
-      source: "DN",
-      quote: "en het romans i åttiotalskostym",
-      stars: 3,
-    }
-  ];
 
   //
   if (!movie) { 
@@ -216,19 +208,19 @@ function MovieDetailsPage() {
               </Card>
               <Card>
                 <Carousel>
-                  {reviews.map((review, index) => (
+                  {movie.movie[0].reviews.map((review, index) => (
                     <Carousel.Item key={index}>
                       <Card.Body>
                         <Card.Title>Recensioner</Card.Title>
                         <Card.Text className="mb-0 see-more-container">
-                          <strong>{review.source}</strong>
+                          <strong>{review.reviewBy}</strong>
                           <br />
-                          "{review.quote}"
+                          "{review.review}"
                           <br />
-                          {Array.from({ length: review.stars }, (_, i) => (
+                          {Array.from({ length: review.rating }, (_, i) => (
                             <span key={i}>&#9733;</span>
                           ))}
-                          {Array.from({ length: 5 - review.stars }, (_, i) => (
+                          {Array.from({ length: 5 - review.rating }, (_, i) => (
                             <span key={i}>&#9734;</span>
                           ))}
                         </Card.Text>
