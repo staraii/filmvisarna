@@ -21,6 +21,10 @@ const MinProfil = () => {
     // ...additional past bookings
   ];
 
+  // Modal and booking state
+  const [showModal, setShowModal] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+
   // Pagination state
   const [currentBookingPage, setCurrentBookingPage] = useState(1);
   const [pastBookingPage, setPastBookingPage] = useState(1);
@@ -52,6 +56,15 @@ const MinProfil = () => {
     }, 500); // Match this duration with CSS transition duration
   };
 
+  // Function to open modal with selected booking details
+  const handleBookingClick = (booking) => {
+    setSelectedBooking(booking);
+    setShowModal(true);
+  };
+
+  // Function to close modal
+  const handleCloseModal = () => setShowModal(false);
+
   return (
     <div className="profile-container">
       {/* Welcome Section */}
@@ -79,20 +92,27 @@ const MinProfil = () => {
             </thead>
             <tbody>
               {currentBookingsToShow.map((booking, index) => (
-                <tr key={index}>
+                <tr key={index} onClick={() => handleBookingClick(booking)}>
                   <td>{booking.movieName}</td>
                   <td>{booking.date}</td>
                   <td>{booking.time}</td>
                   <td>{booking.price}</td>
                   <td>
-                    <button className="cancel-button">Avboka</button>
+                    <button
+                      className="cancel-button"
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent modal from opening
+                        console.log("Booking canceled for", booking.movieName);
+                      }}
+                    >
+                      Avboka
+                    </button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        {/* Show pagination only if there are more than 5 bookings */}
         {totalBookingPages > 1 && (
           <div className="pagination">
             {[...Array(totalBookingPages).keys()].map((num) => (
@@ -124,7 +144,7 @@ const MinProfil = () => {
             </thead>
             <tbody>
               {pastBookingsToShow.map((booking, index) => (
-                <tr key={index}>
+                <tr key={index} onClick={() => handleBookingClick(booking)}>
                   <td>{booking.movieName}</td>
                   <td>{booking.date}</td>
                   <td>{booking.time}</td>
@@ -134,7 +154,6 @@ const MinProfil = () => {
             </tbody>
           </table>
         </div>
-        {/* Show pagination only if there are more than 5 past bookings */}
         {totalPastBookingPages > 1 && (
           <div className="pagination">
             {[...Array(totalPastBookingPages).keys()].map((num) => (
@@ -149,11 +168,31 @@ const MinProfil = () => {
           </div>
         )}
       </div>
+
+      {/* Modal for Booking Details */}
+      {showModal && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Bokningsdetaljer</h2>
+            {selectedBooking && (
+              <div>
+                <p><strong>Film:</strong> {selectedBooking.movieName}</p>
+                <p><strong>Datum:</strong> {selectedBooking.date}</p>
+                <p><strong>Tid:</strong> {selectedBooking.time}</p>
+                <p><strong>Pris:</strong> {selectedBooking.price}</p>
+              </div>
+            )}
+            <button className="close-modal-button" onClick={handleCloseModal}>Stäng</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default MinProfil;
+
+
 
 
 

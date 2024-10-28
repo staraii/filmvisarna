@@ -70,6 +70,63 @@ hr {
   /* Space above and below the line */
 }
 
+
+/* Css for Modals overlay */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  /* Slightly lighter overlay for a softer look */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #0b0815;
+  /* Light background color, similar to a profile page's light sections */
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* Subtle shadow for a soft popup effect */
+}
+
+.modal-content h2 {
+  color: #e7dede;
+  /* Dark text color for headings */
+}
+
+.modal-content p {
+  color: #e7dede;
+  /* Slightly lighter text for details */
+}
+
+.close-modal-button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background: white;
+  /* Primary button color from the profile page */
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.close-modal-button:hover {
+  background: #551a3a;
+  /* Darker shade on hover for interactivity */
+}
+
+
+
 /* Media Queries for Responsive Design */
 @media (max-width: 600px) {
   .profile-container {
