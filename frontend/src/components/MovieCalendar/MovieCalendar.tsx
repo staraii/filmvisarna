@@ -7,10 +7,17 @@ import Card from "react-bootstrap/Card";
 import Pippi from "../../../public/pippi_poster.jpg";
 import Sleepers from "../../../public/sleepers_poster.jpg";
 import Titanic from "../../../public/titanic_poster.jpg";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { loaderQuery } from "../../utils/queryService";
+import { useLoaderData } from "react-router-dom";
+import { QueryParams } from "../../utils/queryService";
 
 function MovieCalendar() {
+  const QueryParams = useLoaderData() as QueryParams;
+  const { data: screenings } = useSuspenseQuery(loaderQuery(QueryParams));
   const [activeWeekIndex, setActiveWeekIndex] = useState(0); // State för att hålla koll på aktiv vecka
 
+  /*
   const weeks = [
     { title: "Vecka 40", startDate: "2024-10-01" },
     { title: "Vecka 41", startDate: "2024-10-08" },
@@ -369,6 +376,8 @@ function MovieCalendar() {
       },
     ],
   ];
+
+  */
 
   return (
     <section className="Movie-Calendar">
