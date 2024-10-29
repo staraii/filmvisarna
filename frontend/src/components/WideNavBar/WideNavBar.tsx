@@ -7,11 +7,7 @@ import { logout as authLogout } from "../../services/authService"; // Import you
 import { Modal, Button } from "react-bootstrap"; // Import Modal and Button for confirmation
 import "./wide-navbar.css";
 
-interface WideNavBarProps {
-  onLoginShow: () => void; // Props to trigger login modal
-}
-
-const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
+const WideNavBar = () => {
   const { isAuthenticated, logout } = useAuth(); // Access authentication state and logout function
   const navigate = useNavigate();
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); // State for logout confirmation modal
@@ -24,7 +20,7 @@ const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
     setShowLogoutConfirmation(true); // Show the logout confirmation modal
   };
 
- const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       await authLogout(); // Call the logout function from your auth service
       logout(); // Call the context's logout function to update the state
@@ -79,7 +75,7 @@ const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
           </>
         ) : (
           <>
-            <Nav.Link className="fw-medium" onClick={onLoginShow}>
+            <Nav.Link as={Link} to="/loggain" className="fw-medium"> {/* Direct link to login page */}
               Logga in
             </Nav.Link>
             <Nav.Link as={Link} to="/register" className="fw-medium">
@@ -109,6 +105,7 @@ const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
 };
 
 export default WideNavBar;
+
 
 
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import Register from "./pages/Register/Register";
@@ -9,8 +9,8 @@ import WideNavBar from "./components/WideNavBar/WideNavBar";
 import BookingConfirmationPage from "./pages/BookingConfirmation";
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 import Movies from "./pages/Movies/Movies";
-import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
-import LoginPage from "./components/Login-pop-up/LoginMobile";
+//import LoginModal from "./components/Login-pop-up/LoginModal"; // Ensure correct import
+import LoginPage from "./components/Login-pop-up/LoginPage";
 import "./App.css";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
 
@@ -24,10 +24,10 @@ import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 
 export default function App() {
-  const [showLoginModal, setShowLoginModal] = useState(false); // State for showing the login modal
 
-  const handleLoginShow = () => setShowLoginModal(true); // Show login modal
-  const handleLoginClose = () => setShowLoginModal(false); // Hide login modal
+
+
+
 
   return (
 
@@ -35,8 +35,7 @@ export default function App() {
     <section className="app-section">
       <Router>
         <WideNavBar
-        
-          onLoginShow={handleLoginShow} // Show modal instead of direct login
+   
           
         />
         <div className="content-container">
@@ -72,12 +71,7 @@ export default function App() {
         </div>
         <MobileNavBar />
 
-        {/* Render LoginModal outside of the Routes to ensure a single instance */}
-        <LoginModal
-          show={showLoginModal}
-          handleClose={handleLoginClose}
-          
-        />
+
       </Router>
     </section>
 </AuthProvider>
