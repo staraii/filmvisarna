@@ -1,9 +1,9 @@
 import { useState, FormEvent, ChangeEvent } from "react";
-import { Form, Button, Container, Row, Col, InputGroup } from "react-bootstrap";
+import { Form, Button, Container, Row, Col, InputGroup, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/authService";
 import { useAuth } from "../../utils/authContext";
-import { Eye, EyeSlash } from "react-bootstrap-icons"; // Import Eye icons
+import { Eye, EyeSlash } from "react-bootstrap-icons"; 
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -12,6 +12,7 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // State for success modal
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
@@ -30,11 +31,16 @@ const LoginPage = () => {
     try {
       await login(email, password);
       authLogin();
-      navigate("/profil");
+      setShowSuccessModal(true); // Show modal after successful login
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
       setError(errorMessage);
     }
+  };
+
+  const handleModalClose = () => {
+    setShowSuccessModal(false); // Close modal
+    navigate("/profil"); // Redirect to profile after closing modal
   };
 
   return (
@@ -113,11 +119,27 @@ const LoginPage = () => {
           </Form>
         </Col>
       </Row>
+
+      {/* Success Modal */}
+      <Modal show={showSuccessModal} onHide={handleModalClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Inloggning lyckades</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Du är nu inloggad!</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleModalClose}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
 
 export default LoginPage;
+
 
 
 
