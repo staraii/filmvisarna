@@ -18,7 +18,7 @@ export const login = async (email: string, password: string) => {
 };
 
 // Signup
-interface FormData {
+export interface FormData {
   email: string;
   password: string;
   firstName: string;
@@ -80,14 +80,6 @@ export const logout = async () => {
   return response.json();
 };
 
-const handleRegister = async () => {
-  try {
-    await register({ email, password, firstName, lastName, phoneNumber });
-    // This should trigger the useEffect in AuthProvider
-  } catch (error) {
-    console.error("Registration failed:", error);
-  }
-};
 
 // Check if authenticated
 export const getMe = async () => {
@@ -104,3 +96,7 @@ export const getMe = async () => {
 };
 
 
+function MoveDetailsPage() {
+  const queryParams = useLoaderData() as QueryParams;
+  const { data: movies } = useSuspenseQuery(loaderQuery(queryParams));
+}
