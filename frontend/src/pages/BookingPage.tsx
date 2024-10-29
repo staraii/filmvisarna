@@ -13,26 +13,60 @@ export default function BookingPage() {
   const [selectedSeat, setSelectedSeat] = useState<string[]>([]);
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
   //react easier state add?
+  const [seats, setSeats] = useState<object>({});
 
   const queryParams = useLoaderData() as QueryParams;
   const { data } = useSuspenseQuery(loaderQuery(queryParams));
+  const screeningData = data["success"][0]; //behöver nog omsluta denna kod i en useEffect. just nu så fetchar den data om jag hoverar över varenda knapp
 
-  const screening = data["success"][0]; //måste ta reda på varför detta sker
+  // useEffect(() => {
+  //   console.log(screeningData);
+  // }, []);
 
-  console.log(screening);
+  useEffect(() => {
+    if (screeningData) {
+      setSeats(
+        screeningData.theatreName === "Stora salongen"
+          ? {
+              1: 8,
+              2: 9,
+              3: 10,
+              4: 10,
+              5: 10,
+              6: 10,
+              7: 12,
+              8: 12,
+            }
+          : {
+              1: 6,
+              2: 8,
+              3: 9,
+              4: 10,
+              5: 10,
+              6: 12,
+            }
+      );
+    }
+  }, [screeningData]);
+  useEffect(() => {
+    window.scrollTo({
+      top: 180,
+      left: 0,
+      behavior: "instant",
+    });
+  }, []);
+  //behöver nog skriva om SSE för att passa bättre här
+  // const [seatData, setData] = useState<{ num: number } | null>();
+  // useEffect(() => {
+  //   const evtSource = new EventSource("http://localhost:5173/api/events");
+  //   evtSource.onmessage = (event) => {
+  //     if (event.data) {
+  //       setData(JSON.parse(event.data));
+  //     }
+  //   };
+  // }, []);
+  //console.log(seatData);
 
-  //placeholder
-  const preBooked = ["5:2", "5:3", "2:4", "2:5", "7:7", "7:8", "7:9"];
-  const seats = {
-    1: 8,
-    2: 9,
-    3: 10,
-    4: 10,
-    5: 10,
-    6: 10,
-    7: 12,
-    8: 12,
-  };
   //placeholder
 
   useEffect(() => {
@@ -45,7 +79,10 @@ export default function BookingPage() {
     for (let i = 0; i < tickets; i++) {
       const currentSeatIndex = index + i + 1;
       const seatId = `${row}:${currentSeatIndex}`;
-      if (currentSeatIndex > seatCount || preBooked.includes(seatId)) {
+      if (
+        currentSeatIndex > seatCount ||
+        screeningData.occupiedSeats.includes(seatId)
+      ) {
         return;
       }
       hoveredSeatIds.push(seatId);
@@ -53,13 +90,15 @@ export default function BookingPage() {
     setHoveredSeats(hoveredSeatIds);
   }
 
+  let cumulativeIndex = 0;
   const seatGrid = Object.entries(seats).map(([row, seatCount]) => (
     <div key={row} className="d-flex flex-row-reverse">
       <div className="">
         {Array.from({ length: seatCount })
           .map((_, index) => {
-            const seatId = `${row}:${index + 1}`;
-            const isPreBooked = preBooked.includes(seatId);
+            cumulativeIndex++;
+            const seatId = `${cumulativeIndex}`;
+            const isPreBooked = screeningData.occupiedSeats.includes(seatId);
             return (
               <Button
                 onClick={() => handleSeatSelect()}
@@ -67,9 +106,7 @@ export default function BookingPage() {
                 key={seatId}
                 className={`seat ${isPreBooked ? "booked-seat" : ""} ${
                   hoveredSeats.includes(seatId) ? "hovered-seat" : ""
-                }
-                  ${selectedSeat.includes(seatId) ? "seat-selected" : ""} }
-                `}
+                } ${selectedSeat.includes(seatId) ? "seat-selected" : ""}`}
                 variant=""
               ></Button>
             );
@@ -96,13 +133,15 @@ export default function BookingPage() {
         <Stack className="container booking-header justify-content-center">
           <Row className="pt-4">
             <Col>
-              <h1 className="">{screening.movieTitle}</h1>
+              <h1 className="">{screeningData.movieTitle}</h1>
             </Col>
             <Col className="pt-2">
               <h5>
-                {screening.dayName + " " + screening.dateTime.split("T")[0]}
+                {screeningData.dayName +
+                  " " +
+                  screeningData.dateTime.split("T")[0]}
               </h5>
-              <h5 className="">{screening.time}</h5>
+              <h5 className="">{screeningData.time}</h5>
             </Col>
             <Col className="pt-2">
               <p>(Sv.text) (Eng.tal)</p>
@@ -112,7 +151,7 @@ export default function BookingPage() {
         </Stack>
 
         <Stack className="w-100 h-100 border-end border-start p-3 d-flex flex-column">
-          <h4>{screening.theatreName}</h4>
+          <h4>{screeningData.theatreName}</h4>
           <Stack className="p-1">
             <Stack direction="horizontal">
               <Button
