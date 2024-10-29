@@ -9,6 +9,8 @@ import { format } from 'date-fns';
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
+
+
 interface MovieDetails {
   credits: {
     cast: string[];
@@ -233,35 +235,56 @@ function MovieDetailsPage() {
               <DropdownButton
                 id="Datum"
                 title={selectedDate || "Datum"}
-                className="text-secondary mx-auto"
+                className="custom-dropdown-button text-secondary mx-auto"
                 variant="outline-secondary"
-                onSelect={handleSelectDate}>
+                onSelect={handleSelectDate}
+                flip={false} 
+                rootCloseEvent="click" 
+              >
                 <Dropdown.Item eventKey="Datum" as="button">Datum</Dropdown.Item>
-                <Dropdown.Item eventKey="Fredag 20/9" as="button">Fredag 20/9</Dropdown.Item>
-                <Dropdown.Item eventKey="Lördag 21/9" as="button">Lördag 21/9</Dropdown.Item>
-                <Dropdown.Item eventKey="Söndag 21/9" as="button">Söndag 22/9</Dropdown.Item>
+                  {Object.keys(groupedScreenings).map((date) => (
+                    <Dropdown.Item 
+                      key={date} 
+                      eventKey={date} 
+                      as="button"
+                    >
+                      {format(new Date(date), 'EEEE dd/MM')}
+                    </Dropdown.Item>
+                  ))}
+                
               </DropdownButton>
             </Col>
             <Col xs="auto" >
               <DropdownButton
                 id="time-DropDown"
                 title={selectedTime || "Tid"}
-                className="text-secondary mx-auto"
+                className=" custom-dropdown-button text-secondary mx-auto"
                 variant="outline-secondary"
-                onSelect={handleSelectTime}>
+                onSelect={handleSelectTime}
+                flip={false} 
+                rootCloseEvent="click" 
+              >
                 <Dropdown.Item eventKey="Tid" as="button">Tid</Dropdown.Item>
-                <Dropdown.Item eventKey="10:00" as="button">10:00</Dropdown.Item>
-                <Dropdown.Item eventKey="16:00" as="button">16:00</Dropdown.Item>
-                <Dropdown.Item eventKey="22:00" as="button">22:00</Dropdown.Item>
+                {Object.entries(groupedScreenings).flatMap(([, screenings]: [string, any]) => 
+                  screenings.map((screening: any) => (
+                    <Dropdown.Item 
+                      key={screening.id} 
+                      eventKey={format(new Date(screening.dateTime), 'HH:mm')} 
+                      as="button"
+                    >
+                      {format(new Date(screening.dateTime), 'HH:mm')}
+                    </Dropdown.Item>
+                  ))
+                )}
               </DropdownButton>
             </Col>
           </Row>
         </Container>
-
+{/* // JOBBA HÄR----------------------------------------------------- */}
         <Row className="d-flex justify-content-center mt-3 mb-3">
           <Col xs="auto">
-            <Col className='seats-left' >33 Platser kvar</Col>
-            <Col className='seats-left mt-2' >Salong 1</Col>
+            <Col className='seats-left' >{selectedTime ? `${selectedTime} Platser kvar` : 'Platser kvar'}</Col>
+            <Col className='seats-left mt-2' >Salong {groupedScreenings.theatreId}</Col> 
             <Button onClick={() => navigate("/boka")} className=' mt-3'>Boka platser</Button>
           </Col>
         </Row>

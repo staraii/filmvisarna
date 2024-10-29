@@ -30,13 +30,11 @@ h1{
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
 }
-
-.trailerPost {
-  display: block;
-  margin: 0 auto;
-  width: 22.5rem;
-  cursor: pointer;
+.poster-image{
+  border: 1px solid white;
 }
+
+
 .carouselMovieDetail .carousel-control-prev{
   left: -9%;
 }
@@ -100,6 +98,20 @@ h1{
     }
 }
 
+.custom-dropdown-button .dropdown-menu {
+  max-height: 30rem;
+  overflow-y: auto;
+  position: relative;
+  transform: none !important;
+}
+
+.custom-dropdown-menu {
+  max-height: 29rem;
+  width: 15rem;
+  overflow-y: auto;
+  position: relative !important;
+  transform: none !important;
+}
 
 .calendar-container{
   margin-bottom: 190px;
@@ -180,7 +192,7 @@ h1{
     display: block;
   }
 }
-@media (min-width: 1400px) {
+/* @media (min-width: 1400px) {
   .calendar-item7 {
     display: block;
   }
@@ -188,4 +200,4 @@ h1{
   .calendar-carousel .carousel-control-next {
   display: none !important;
   }
-}
+} */
