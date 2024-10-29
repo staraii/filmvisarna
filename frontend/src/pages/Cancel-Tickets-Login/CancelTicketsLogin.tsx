@@ -8,9 +8,9 @@ import Modal from "react-bootstrap/Modal";
 const CancelTicketsLogin = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState(null);
+  const [selectedTicket, setSelectedTicket] = useState<string | null>(null);
 
-  const handleShowModal = (ticketId) => {
+  const handleShowModal = (ticketId: string) => {
     setSelectedTicket(ticketId);
     setShowModal(true);
   };

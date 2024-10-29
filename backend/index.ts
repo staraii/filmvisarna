@@ -19,7 +19,7 @@ import MySQLStore from "express-mysql-session"; // Import MySQL session store
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Getting path to images directory
-const IMAGES_FOLDER = path.join(__dirname, "assets/images/");
+const IMAGES_FOLDER = path.join(__dirname, "../assets/images/");
 // Serving static files from /images
 const imageServer = express();
 imageServer.use(express.static(IMAGES_FOLDER));
@@ -34,7 +34,7 @@ const dbConfig: PoolOptions = {
 };
 
 // Server
-const SERVER_PORT = process.env.SERVER_PORT || 5002;
+const SERVER_PORT = process.env.SERVER_PORT || 5001;
 
 // Create a MySQL connection pool
 export const db = mysql.createPool(dbConfig);
@@ -44,9 +44,6 @@ const MySQLSessionStore = MySQLStore(session as any); // Link the MySQLStore wit
 const sessionStore = new MySQLSessionStore(dbConfig); // Initialize session store with DB config
 
 export const app = express();
-
-
-
 
 // Session middleware with MySQL store
 app.use(
@@ -63,7 +60,6 @@ app.use(
   })
 );
 
-
 // Middleware to parse JSON requests
 app.use(express.json());
 
@@ -76,10 +72,6 @@ app.use(moviesRouter);
 app.use(authRouter);
 app.use("/api/moviesDetails", moviesDetailsRouter);
 app.use("/api/events", liveChairRouter);
-
-
-
-
 
 // Start the server
 app.listen(SERVER_PORT, () => {
