@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 //import fightClubTrailer from '../assets/fightClubTrailer.webp'
 import './MovieDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
-import  FightClubPoster from '../assets/FightClubPoster.jpg'
+//import  FightClubPoster from '../assets/FightClubPoster.jpg'
 import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
 
@@ -17,7 +17,7 @@ interface MovieDetails {
   duration: number;
   mediaURLs: {
     trailerURL: string;
-    posterURL: string;
+    posterURL: string[];
     slideURL: string;
   };
   subtitles: string;
@@ -54,6 +54,7 @@ function MovieDetailsPage() {
 
   const [movie, setMovieData] = useState<ApiResponse | null>(null);
 
+  //Get data from database
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
@@ -76,6 +77,7 @@ function MovieDetailsPage() {
 
     fetchMovieDetails();
   }, []);
+  //-------------------------------------------------------
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); 
   const toggleDescriptionText = () => {
@@ -150,28 +152,20 @@ function MovieDetailsPage() {
             </Col>
           </Row>
         </Container>
-
+{/*src={`/images/${movie.movie[0].details.mediaURLs.posterURL[3]}?url`} */}
         <Container>
           <Row className="d-flex flex-column flex-md-row mt-5">
             <Col xs={{ span: 12 }} lg={{ span: 6, order: 'last' }}>
-              <Carousel className='carouselMovieDetail'>
-                <Carousel.Item>
-                  <img className='d-block w-100'
-                    src={FightClubPoster}
-                    alt="FightClubPoster" />
-                </Carousel.Item>
-
-                <Carousel.Item>
-                  <img className='d-block w-100'
-                    src={FightClubPoster}
-                    alt="FightClubPoster" />
-                </Carousel.Item>
-
-                <Carousel.Item>
-                  <img className='d-block w-100'
-                    src={FightClubPoster}
-                    alt="FightClubPoster" />
-                </Carousel.Item>
+              <Carousel className='carouselMovieDetail' interval={null} indicators={false}>
+                {movie.movie[0].details.mediaURLs.posterURL.map((poster, index) => (
+                  <Carousel.Item key={index}>
+                    <img 
+                      className='d-block w-100 poster-image'
+                      src={poster}
+                      alt={`Poster ${index + 1}`}
+                    />
+                  </Carousel.Item>
+                ))}
               </Carousel>
             </Col>
             <Col className='d-flex flex-column film-details-rec'>
@@ -207,7 +201,7 @@ function MovieDetailsPage() {
                 </Card.Body>
               </Card>
               <Card>
-                <Carousel>
+                <Carousel interval={null}>
                   {movie.movie[0].reviews.map((review, index) => (
                     <Carousel.Item key={index}>
                       <Card.Body>
@@ -304,223 +298,6 @@ function MovieDetailsPage() {
 
 
 {/* karusell ------------------------------------------------------------------- */}
-
-        <Container className="calendar-container mt-5">
-          <Carousel interval={null} indicators={false} controls={true} className="calendar-carousel">
-            <CarouselItem className="calendar-item calendar-item1">
-              <Card className="calendar-card">
-                <Card.Header>
-                  <h4>Måndag 24/9</h4>
-                </Card.Header>
-                <Card.Body>
-
-                  <Card onClick={() => navigate("/boka")} className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card onClick={() => navigate("/boka")} className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card onClick={() => navigate("/boka")} className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                </Card.Body>
-              </Card>
-            </CarouselItem>
-
-            <CarouselItem className="calendar-item calendar-item2">
-              <Card className="calendar-card">
-                <Card.Header>
-                  <h4>tisdag 24/9</h4>
-                </Card.Header>
-                <Card.Body>
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Card.Body>
-              </Card>
-            </CarouselItem>
-
-            <CarouselItem className="calendar-item calendar-item3">
-              <Card className="calendar-card">
-                <Card.Header>
-                  <h4>onsdag 24/9</h4>
-                </Card.Header>
-                <Card.Body>
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Card.Body>
-              </Card>
-            </CarouselItem>
-
-            <CarouselItem className="calendar-item calendar-item4">
-              <Card className="calendar-card">
-                <Card.Header>
-                  <h4>torsdag 24/9</h4>
-                </Card.Header>
-                <Card.Body>
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Card.Body>
-              </Card>
-            </CarouselItem>
-
-            <CarouselItem className="calendar-item calendar-item5">
-              <Card className="calendar-card">
-                <Card.Header>
-                  <h4>fredag 24/9</h4>
-                </Card.Header>
-                <Card.Body>
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Card.Body>
-              </Card>
-            </CarouselItem>
-
-            <CarouselItem className="calendar-item calendar-item6">
-              <Card className="calendar-card">
-                <Card.Header>
-                  <h4>lördag 24/9</h4>
-                </Card.Header>
-                <Card.Body>
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Card.Body>
-              </Card>
-            </CarouselItem>
-
-            <CarouselItem className="calendar-item calendar-item7">
-              <Card className="calendar-card">
-                <Card.Header>
-                  <h4>Söndag 24/9</h4>
-                </Card.Header>
-                <Card.Body>
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-
-                  <Card className="mb-3 square-card">
-                    <Card.Body className="bg-primary">
-                      <Card.Title>22:00</Card.Title>
-                      <Card.Text>Salong 2</Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Card.Body>
-              </Card>
-            </CarouselItem>
-
-          </Carousel>
-        </Container>
       
       </Container>
     </>
