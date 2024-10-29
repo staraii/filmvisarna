@@ -3,19 +3,29 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
-import { HomePageScreenings } from "../../../utils/queryService";
-import getWeekday from "../../../utils/getWeekday";
 
 
-export default function ScreeningCard({ screeningId, movieId, dayName, day, month, time, occupiedPercent, ageRating, slideURL, posterURL, subtitles, spokenLanguage }: HomePageScreenings) {
+type ScreeningCardProps = {
+  img: string;
+  slide: string;
+  title: string;
+  lang: string;
+  sub: string;
+  age: string;
+  day: string;
+  date: string;
+  time: string;
+  theatre: string;
+  status: string;
+  genre: string[];
+}
+
+export default function ScreeningCard({ img, slide, lang, sub, age, date, time, status, day }: ScreeningCardProps) {
   const navigate = useNavigate();
   return (
     <Col xs={12}>
       <Card border="border-dark rounded" className="screening-card shadow-lg">
-        <Card.Img
-          src={`/images/${slideURL}`}
-          className="overlay-image rounded d-block"
-        />
+        <Card.Img src={slide} className="overlay-image rounded d-block" />
         <Card.ImgOverlay className="rounded overlay-content">
           <Row className="d-inline-flex flex-row justify-content-between mb-0">
             <Col
@@ -26,14 +36,14 @@ export default function ScreeningCard({ screeningId, movieId, dayName, day, mont
               <Row>
                 <Col xs={12} className="column-gap-2">
                   <img
-                    src={`/images/${posterURL}`}
+                    src={img}
                     className="w-100 rounded shadow-lg"
                     style={{
                       border: "2px solid #0b0815",
                       aspectRatio: "2 / 3",
                       cursor: "pointer",
                     }}
-                    onClick={() => navigate(`/filmer/${movieId}`)}
+                    onClick={() => navigate("/film")}
                   />
                 </Col>
               </Row>
@@ -46,14 +56,14 @@ export default function ScreeningCard({ screeningId, movieId, dayName, day, mont
               <Row>
                 <Col xs={12} className="pb-0">
                   <Card.Text as="h3" className="text-end date-time-font">
-                    {getWeekday(dayName)}
+                    {day}
                   </Card.Text>
                 </Col>
               </Row>
               <Row>
                 <Col xs={12} className="pb-0">
                   <Card.Text as="h3" className="text-end date-time-font">
-                    {day}/{month}
+                    {date}
                   </Card.Text>
                 </Col>
               </Row>
@@ -67,29 +77,29 @@ export default function ScreeningCard({ screeningId, movieId, dayName, day, mont
             </Col>
           </Row>
           <Row>
-            <Col xs={6}>
+            <Col xs={9}>
               <Card.Text className="fw-lighter text-start lang-sub-font">
-                {spokenLanguage}, {subtitles}
+                {lang}, {sub}
               </Card.Text>
             </Col>
-            <Col xs={6}>
-              <Card.Text className="text-end age-font">{ageRating}</Card.Text>
+            <Col xs={3}>
+              <Card.Text className="text-end age-font">{age}</Card.Text>
             </Col>
           </Row>
           <Row>
             <Col xs={12} className="mt-1 mb-1">
               <Card.Text
                 className={`d-flex flex-row justify-content-end align-items-center gap-2 tickets-status ${
-                  occupiedPercent > 80
+                  status === "Low"
                     ? "red"
-                    : occupiedPercent > 50
+                    : status === "Medium"
                     ? "yellow"
                     : "green"
                 }`}
               >
-                {occupiedPercent > 80
+                {status === "Low"
                   ? "Nästan slutsålt"
-                  : occupiedPercent > 50
+                  : status === "Medium"
                   ? "Färre platser kvar"
                   : "Många platser kvar"}
               </Card.Text>
@@ -101,7 +111,7 @@ export default function ScreeningCard({ screeningId, movieId, dayName, day, mont
                 variant="outline-secondary"
                 as="button"
                 className="w-100 book-button-screening-card"
-                onClick={() => navigate(`/boka/${screeningId}`)}
+                onClick={() => navigate("/boka")}
               >
                 Boka
               </Button>
