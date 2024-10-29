@@ -4,48 +4,38 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 
-// type MovieCardProps = {
-//   title: string;
-//   year: string;
-//   genres: string;
-//   lang: string;
-//   sub: string;
-//   age: string;
-//   poster: string;
-// }
-type HomePageMovie = {
-  id: number;
+type MovieCardProps = {
   title: string;
-  createdAt: string;
-  age: string;
-  categories: string;
-  posterURL: string;
-  releaseYear: string;
+  year: string;
+  genres: string;
   lang: string;
   sub: string;
-};
-export default function MovieCard({id, title, age, categories, posterURL, releaseYear,  lang, sub }: HomePageMovie) {
+  age: string;
+  poster: string;
+}
+
+export default function MovieCard({title, year, genres, lang, sub, age, poster}: MovieCardProps) {
   
   return (
     <Col xs={12} sm={6}>
       <Card>
         <Row>
           <Col xs={12} className="movie-card">
-            <Card.Img src={posterURL} className="shadow-lg w-100 movie-card-img" />
+            <Card.Img src={poster} className="shadow-lg w-100 movie-card-img" />
             <Card.Body className="movie-card-body d-flex flex-column align-items-center w-100">
               <div className="movie-card-content-wrapper py-1">
                 <Card.Title className="movie-card-title">
-                  {title} ({releaseYear})
+                  {title} ({year})
                 </Card.Title>
                 <Card.Text className="d-flex flex-row justify-content-around movie-card-genre">
-                  <small>{categories}</small>
+                  <small>{genres}</small>
                 </Card.Text>
                 <Card.Text className="movie-card-lang-age d-flex flex-row justify-content-center gap-1">
                   <small>({lang})</small>
                   <small>({sub})</small>
                   <small>{age}</small>
                 </Card.Text>
-                <Link to={`/filmer/${id}`}>
+                <Link to="/film">
                   <Button variant="outline-secondary" className="mt-1 mb-1">
                     Mera info
                   </Button>
