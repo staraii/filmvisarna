@@ -22,7 +22,7 @@ export default function MovieCarousel({ movies }: {movies: HomePageMovies[]}) {
           onClick={() => navigate(`/filmer/${movie.id}`)}
           style={{ cursor: "pointer", userSelect: "none" }}
         >
-          <Image src={`/images/${movie.slideURL}`} alt={movie.title} fluid />
+          <Image src={`/images/${movie.slideURL}?url`} alt={movie.title} fluid />
           <Carousel.Caption className="h3_film_strip top-50 start-50 translate-middle py-3">
             <h3 className="text-secondary mb-0">{movie.title}</h3>
             <p className="m-auto">{movie.categories}</p>
