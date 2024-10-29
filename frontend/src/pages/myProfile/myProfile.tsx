@@ -73,7 +73,7 @@ const MinProfil = () => {
     <div className="profile-container">
       {/* Welcome Section */}
       <div className="profile-section">
-        <h2>Välkommen Alex</h2>
+        <h2>Välkommen, Alex</h2>
         <form className="profile-form">
           {/* Inputs removed as requested */}
         </form>
