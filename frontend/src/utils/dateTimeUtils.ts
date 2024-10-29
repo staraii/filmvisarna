@@ -15,6 +15,20 @@ export function getWeekday(engDay: string){
 };
 
 
+// --- Get full swedish weekday name ----
+const FULL_SWEDISH_WEEKDAY_NAMES: { [key: string]: string } = {
+  Monday: "Måndag",
+  Tuesday: "Tisdag",
+  Wednesday: "Onsdag",
+  Thursday: "Torsdag",
+  Friday: "Fredag",
+  Saturday: "Lördag",
+  Sunday: "Söndag",
+}
+export function getFullWeekDay(engDay: string) {
+  return FULL_SWEDISH_WEEKDAY_NAMES[engDay];
+}
+
 
 
 // --- Generate valid dates, for screenings ---
