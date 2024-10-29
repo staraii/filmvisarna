@@ -3,41 +3,32 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
-
-type ScreeningCardProps = {
-  img: string;
-  slide: string;
-  title: string;
-  lang: string;
-  sub: string;
-  age: string;
-  day: string;
-  date: string;
-  time: string;
-  theatre: string;
-  status: string;
-  genre: string[];
-  vIndex: number;
-};
+import { HomePageScreenings } from "../../../utils/queryService";
+import getWeekday from "../../../utils/getWeekday";
 
 export default function ScreeningCard({
-  img,
-  slide,
-  lang,
-  sub,
-  age,
-  date,
-  time,
-  status,
+  screeningId,
+  movieId,
+  dayName,
   day,
-  vIndex,
-}: ScreeningCardProps) {
+  month,
+  time,
+  occupiedPercent,
+  ageRating,
+  slideURL,
+  posterURL,
+  subtitles,
+  spokenLanguage,
+}: HomePageScreenings) {
   const navigate = useNavigate();
 
   return (
     <Col xs={12}>
       <Card border="border-dark rounded" className="screening-card shadow-lg">
-        <Card.Img src={slide} className="overlay-image rounded d-block" />
+        <Card.Img
+          src={`/images/${slideURL}`}
+          className="overlay-image rounded d-block"
+        />
         <Card.ImgOverlay className="rounded overlay-content">
           <Row className="d-inline-flex flex-row justify-content-between mb-0">
             <Col
@@ -48,14 +39,14 @@ export default function ScreeningCard({
               <Row>
                 <Col xs={12} className="column-gap-2">
                   <img
-                    src={img}
+                    src={`/images/${posterURL}`}
                     className="w-100 rounded shadow-lg"
                     style={{
                       border: "2px solid #0b0815",
                       aspectRatio: "2 / 3",
                       cursor: "pointer",
                     }}
-                    onClick={() => navigate("/film")}
+                    onClick={() => navigate(`/filmer/${movieId}`)}
                   />
                 </Col>
               </Row>
@@ -68,14 +59,14 @@ export default function ScreeningCard({
               <Row>
                 <Col xs={12} className="pb-0">
                   <Card.Text as="h3" className="text-end date-time-font">
-                    {day}
+                    {getWeekday(dayName)}
                   </Card.Text>
                 </Col>
               </Row>
               <Row>
                 <Col xs={12} className="pb-0">
                   <Card.Text as="h3" className="text-end date-time-font">
-                    {date}
+                    {day}/{month}
                   </Card.Text>
                 </Col>
               </Row>
@@ -89,29 +80,29 @@ export default function ScreeningCard({
             </Col>
           </Row>
           <Row>
-            <Col xs={9}>
+            <Col xs={6}>
               <Card.Text className="fw-lighter text-start lang-sub-font">
-                {lang}, {sub}
+                {spokenLanguage}, {subtitles}
               </Card.Text>
             </Col>
-            <Col xs={3}>
-              <Card.Text className="text-end age-font">{age}</Card.Text>
+            <Col xs={6}>
+              <Card.Text className="text-end age-font">{ageRating}</Card.Text>
             </Col>
           </Row>
           <Row>
             <Col xs={12} className="mt-1 mb-1">
               <Card.Text
                 className={`d-flex flex-row justify-content-end align-items-center gap-2 tickets-status ${
-                  status === "Low"
+                  occupiedPercent > 80
                     ? "red"
-                    : status === "Medium"
+                    : occupiedPercent > 50
                     ? "yellow"
                     : "green"
                 }`}
               >
-                {status === "Low"
+                {occupiedPercent > 80
                   ? "Nästan slutsålt"
-                  : status === "Medium"
+                  : occupiedPercent > 50
                   ? "Färre platser kvar"
                   : "Många platser kvar"}
               </Card.Text>
@@ -123,7 +114,7 @@ export default function ScreeningCard({
                 variant="outline-secondary"
                 as="button"
                 className="w-100 book-button-screening-card"
-                onClick={() => navigate(`boka/${vIndex + 1}`)}
+                onClick={() => navigate(`/boka/${screeningId}`)}
               >
                 Boka
               </Button>

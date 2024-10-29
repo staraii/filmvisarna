@@ -8,9 +8,9 @@ import Modal from "react-bootstrap/Modal";
 const CancelTicketsLogin = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState(null);
+  const [selectedTicket, setSelectedTicket] = useState<string | null>(null);
 
-  const handleShowModal = (ticketId) => {
+  const handleShowModal = (ticketId: string) => {
     setSelectedTicket(ticketId);
     setShowModal(true);
   };
@@ -39,63 +39,66 @@ const CancelTicketsLogin = () => {
         <h4>Dina biljetter</h4>
       </div>
 
-      <div className="ticket-wrapper">
-        <div className="ticket">
-          <div className="ticket-img">
-            <img src={Sleepers} alt="Sleepers Poster" />
-          </div>
-          <div className="ticket-details">
-            <div className="ticket-info">
-              <h5>Datum</h5>
-              <p>22 Oktober: 18:00</p>
+      {/* New wrapper added for the ticket cards */}
+      <div className="ticket-container">
+        <div className="ticket-wrapper">
+          <div className="ticket">
+            <div className="ticket-img">
+              <img src={Sleepers} alt="Sleepers Poster" />
             </div>
-            <div className="ticket-info">
-              <h5>Bokningsid</h5>
-              <p>FVSS18092024</p>
-            </div>
-            <div className="ticket-info">
-              <h5>Platser</h5>
-              <p>Rad: 5, Plats: 8,9,10</p>
-            </div>
-            <div className="ticket-info">
-              <Button
-                className="cancel-ticket-button"
-                variant="outline-primary"
-                onClick={() => handleShowModal("FVSS18092024")}
-              >
-                Avboka
-              </Button>
+            <div className="ticket-details">
+              <div className="ticket-info">
+                <h5>Datum</h5>
+                <p>22 Oktober: 18:00</p>
+              </div>
+              <div className="ticket-info">
+                <h5>Bokningsid</h5>
+                <p>FVSS18092024</p>
+              </div>
+              <div className="ticket-info">
+                <h5>Platser</h5>
+                <p>Rad: 5, Plats: 8,9,10</p>
+              </div>
+              <div className="ticket-info">
+                <Button
+                  className="cancel-ticket-button"
+                  variant="outline-primary"
+                  onClick={() => handleShowModal("FVSS18092024")}
+                >
+                  Avboka
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="ticket-wrapper">
-        <div className="ticket">
-          <div className="ticket-img">
-            <img src={Heat} alt="Heat Poster" />
-          </div>
-          <div className="ticket-details">
-            <div className="ticket-info">
-              <h5>Datum</h5>
-              <p>29 Oktober: 19:30</p>
+        <div className="ticket-wrapper">
+          <div className="ticket">
+            <div className="ticket-img">
+              <img src={Heat} alt="Heat Poster" />
             </div>
-            <div className="ticket-info">
-              <h5>Bokningsid</h5>
-              <p>FVSK19192024</p>
-            </div>
-            <div className="ticket-info">
-              <h5>Platser</h5>
-              <p>Rad: 8, Plats: 3,4</p>
-            </div>
-            <div className="ticket-info">
-              <Button
-                className="cancel-ticket-button"
-                variant="outline-primary"
-                onClick={() => handleShowModal("FVSK19192024")}
-              >
-                Avboka
-              </Button>
+            <div className="ticket-details">
+              <div className="ticket-info">
+                <h5>Datum</h5>
+                <p>29 Oktober: 19:30</p>
+              </div>
+              <div className="ticket-info">
+                <h5>Bokningsid</h5>
+                <p>FVSK19192024</p>
+              </div>
+              <div className="ticket-info">
+                <h5>Platser</h5>
+                <p>Rad: 8, Plats: 3,4</p>
+              </div>
+              <div className="ticket-info">
+                <Button
+                  className="cancel-ticket-button"
+                  variant="outline-primary"
+                  onClick={() => handleShowModal("FVSK19192024")}
+                >
+                  Avboka
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -135,3 +138,4 @@ const CancelTicketsLogin = () => {
 };
 
 export default CancelTicketsLogin;
+

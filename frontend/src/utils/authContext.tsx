@@ -7,8 +7,6 @@ interface AuthContextType {
   login: () => void;
   logout: () => void;
   register: (formData: AuthService.FormData) => Promise<void>;
-  
-  
 }
 
 // Create the AuthContext with default undefined values
@@ -17,7 +15,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 // AuthProvider component to wrap around your app
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    // Initialize state with sessionStorage value if it exists
     const storedAuthState = sessionStorage.getItem('isAuthenticated');
     return storedAuthState === 'true'; // Convert string to boolean
   });
@@ -25,36 +22,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Handle login and logout logic
   const login = () => {
     setIsAuthenticated(true);
-    sessionStorage.setItem('isAuthenticated', 'true'); // Store in sessionStorage
+    sessionStorage.setItem('isAuthenticated', 'true');
     console.log("User logged in:", true); // Log login action
-};
+  };
 
   const logout = () => {
     setIsAuthenticated(false);
     sessionStorage.removeItem('isAuthenticated'); // Clear from sessionStorage
-    // Optionally, clear any session tokens or data here
   };
 
+  const register = async (formData: AuthService.FormData) => {
+    try {
+      console.log('Attempting to register with data:', formData);
+      await AuthService.register(formData);
 
- const register = async (formData: AuthService.FormData) => {
-  try {
-    // Call register from AuthService, which also handles auto-login
-    console.log('Attempting to register with data:', formData);
-    await AuthService.register(formData);
-    
-    console.log("Registration successful, attempting to log in...");
-    
-    // Auto-login was successful, update the auth state
-    setIsAuthenticated(true);
-    sessionStorage.setItem('isAuthenticated', 'true');
+      // If registration was successful, automatically log in
+      login();
+      console.log("Registration successful, user is logged in.");
 
-    // Log the authentication state after it should have changed
-    console.log("Authentication state after registration:", isAuthenticated); // This may not show the updated state immediately
-  } catch (error) {
-    console.error('Registration failed:', error);
-    throw error;
-  }
-};
+    } catch (error) {
+      console.error('Registration failed:', error);
+      throw error;
+    }
+  };
 
   // Side effect to store the updated auth state in sessionStorage when it changes
   useEffect(() => {
@@ -63,8 +53,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, login, logout, register }}>
-    {children}
-  </AuthContext.Provider>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
@@ -76,4 +66,5 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
+
 

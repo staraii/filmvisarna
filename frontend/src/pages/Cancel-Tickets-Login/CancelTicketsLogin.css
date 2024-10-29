@@ -11,25 +11,35 @@
   margin-bottom: 20px;
 }
 
+/* New styles for ticket display */
 .ticket-wrapper {
   margin-bottom: 20px;
   background-color: #17102c;
   border-radius: 10px;
 }
 
+/* Flex container for ticket cards */
+.ticket-container {
+  display: flex; /* Use flex to arrange ticket cards */
+  flex-wrap: wrap; /* Allow wrapping of items */
+  justify-content: center; /* Center items horizontally */
+  gap: 20px; /* Space between cards */
+}
+
+/* Individual ticket card styles */
 .ticket {
   display: flex;
   align-items: center;
   gap: 20px;
   padding: 1rem;
-
+  flex: 1 1 300px; /* Allow flex growth and shrinkage, with a base width of 300px */
+  max-width: 400px; /* Maximum width for each card */
 }
 
 .ticket-img img {
   width: 11rem;
   height: auto;
   object-fit: cover;
-
 }
 
 .ticket-details {
@@ -59,4 +69,12 @@
   border: 1.5px solid #ac9ed9;
   color: #0b0815;
   background-color: #ac9ed9;
+}
+
+/* Media query for mobile displays */
+@media (max-width: 768px) {
+  .ticket-container {
+    flex-direction: column; /* Stack cards vertically on mobile */
+    align-items: center; /* Center items on mobile */
+  }
 }

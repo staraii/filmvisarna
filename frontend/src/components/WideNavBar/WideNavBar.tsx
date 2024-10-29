@@ -49,14 +49,19 @@ const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
         <Nav.Link as={Link} to="/bio-kalender" className="fw-medium">
           Bio kalender
         </Nav.Link>
-         <Nav.Link className="fw-medium" onClick={() => navigate("/avboka")}>
-          Avboka biljetter
-        </Nav.Link>
+
+
+          {/* Conditionally show the "Avboka biljetter" link if not authenticated */}
+        {!isAuthenticated && (
+          <Nav.Link className="fw-medium" onClick={() => navigate("/avboka")}>
+            Avboka biljetter
+          </Nav.Link>
+        )}
 
         {/* Conditionally show login/logout and member/profile links based on auth status */}
         {isAuthenticated ? (
           <>
-            <Nav.Link as={Link} to="/profile" className="fw-medium">
+            <Nav.Link as={Link} to="/profil" className="fw-medium">
               Min profil
             </Nav.Link>
             <Nav.Link className="fw-medium" onClick={handleLogout}>
