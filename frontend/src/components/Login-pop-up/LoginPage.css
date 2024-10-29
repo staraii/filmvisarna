@@ -1,6 +1,6 @@
 /* Container padding for desktop screens */
 .login-page-container {
-  padding: 40px;
+  padding: 10px;
   /* Increased padding for desktop */
   max-width: 800px;
   /* Increased maximum width for better readability */
