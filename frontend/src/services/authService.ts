@@ -18,7 +18,7 @@ export const login = async (email: string, password: string) => {
 };
 
 // Signup
-interface FormData {
+export interface FormData {
   email: string;
   password: string;
   firstName: string;
@@ -96,3 +96,7 @@ export const getMe = async () => {
 };
 
 
+function MoveDetailsPage() {
+  const queryParams = useLoaderData() as QueryParams;
+  const { data: movies } = useSuspenseQuery(loaderQuery(queryParams));
+}
