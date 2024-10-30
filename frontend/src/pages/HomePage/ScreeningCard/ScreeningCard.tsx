@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import { HomePageScreenings } from "../../../utils/queryService";
 import { getWeekday } from "../../../utils/dateTimeUtils";
-import ageRatingUtil from "../../../utils/ageRatingUtil";
+import { ageRatingUtil } from "../../../utils/ageRatingUtil";
 
 
 export default function ScreeningCard({ screeningId, movieId, dayName, day, month, time, occupiedPercent, ageRating, slideURL, posterURL, subtitles, spokenLanguage }: HomePageScreenings) {
