@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
 import { sv } from 'date-fns/locale';
 
+import { useLoaderData } from "react-router-dom";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { QueryParams, loaderQuery,} from "../utils/queryService";
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -53,34 +56,38 @@ interface ApiResponse {
 
 function MovieDetailsPage() {
   const navigate = useNavigate();
+  const  queryParams  = useLoaderData() as QueryParams;
+  const { data } = useSuspenseQuery(loaderQuery(queryParams)); 
+  
 
-
-  const [movie, setMovieData] = useState<ApiResponse | null>(null);
+  const movie = data as ApiResponse;
+  console.log(data);
+  //const [movie, setMovieData] = useState<ApiResponse | null>(null);
 
   //Get data from database
-  useEffect(() => {
-    const fetchMovieDetails = async () => {
-      try {
-        const response = await fetch('/api/moviesDetails/2');
-        
-        if (!response.ok) {
-          throw new Error('Något gick fel vid hämtning av filmdata.');
-        }
-        
-        const data = await response.json(); // JSON
-
-        data.movie[0].reviews = JSON.parse(`[${data.movie[0].reviews}]`);
-
-        setMovieData(data);
-        console.log(data);
-      } catch (error) {
-        console.error('Fel vid hämtning av filmdata:', error);
-      }
-    };
-
-    fetchMovieDetails();
-  }, []);
-  //-------------------------------------------------------
+//  useEffect(() => {
+//    const fetchMovieDetails = async () => {
+//      try {
+//        const response = await fetch('/api/moviesDetails/2');
+//        
+//        if (!response.ok) {
+//          throw new Error('Något gick fel vid hämtning av filmdata.');
+//        }
+//        
+//        const data = await response.json(); // JSON
+//
+//        data.movie[0].reviews = JSON.parse(`[${data.movie[0].reviews}]`);
+//
+//        setMovieData(data);
+//        console.log(data);
+//      } catch (error) {
+//        console.error('Fel vid hämtning av filmdata:', error);
+//      }
+//    };
+//
+//    fetchMovieDetails();
+//  }, []);
+//  //-------------------------------------------------------
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); 
   const toggleDescriptionText = () => {
@@ -210,7 +217,7 @@ function MovieDetailsPage() {
                 </Card.Body>
               </Card>
               <Card>
-                <Carousel interval={null} className="custom-review-carousel">
+                {/* <Carousel interval={null} className="custom-review-carousel">
                   {movie.movie[0].reviews.map((review, index) => (
                     <Carousel.Item key={index}>
                       <Card.Body>
@@ -230,7 +237,7 @@ function MovieDetailsPage() {
                       </Card.Body>
                     </Carousel.Item>
                   ))}
-                </Carousel>
+                </Carousel> */}
               </Card>
             </Col>
           </Row>
