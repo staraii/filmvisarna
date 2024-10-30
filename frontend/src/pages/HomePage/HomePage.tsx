@@ -4,69 +4,121 @@ import ScreeningCard from "./ScreeningCard/ScreeningCard";
 import MovieCarousel from "./MovieCarousel/MovieCarousel";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
 import Footer from "../../components/Footer/Footer";
 import { useLoaderData } from "react-router-dom";
-import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
-import { DualQueryParams, loaderQuery, HomePageMovies, HomePageScreenings, getQueryData } from "../../utils/queryService";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { DualQueryParams, loaderQuery, HomePageMovies, HomePageScreenings } from "../../utils/queryService";
 import ScreeningFilters from "./ScreeningFilters/ScreeningFilters";
+import useGetInfinite from "../../services/useGetInfinite";
+import { Fragment } from "react";
+
+
+export type ScreeningFiltersState = {
+  date: string;
+  dateString: string | null;
+  age: string;
+  theatre: number[];
+  urlPrefix: string;
+  filteredQuery: string;
+  limit: string;
+}
 
 
 export default function HomePage() {
   // Get query parameters from route loader
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
-  
+
   // State for handling query filters and parsing query url
-  const [filters, setFilters] = useState({ date: "ALL", age: "ALL", theatre: [], urlPrefix: queryParamsTwo.query, filteredQuery: queryParamsTwo.query });
-  
+  const [filters, setFilters] = useState<ScreeningFiltersState>({
+    date: "ALL",
+    dateString: null,
+    age: "ALL",
+    theatre: [],
+    urlPrefix: queryParamsTwo.query,
+    filteredQuery: queryParamsTwo.query,
+    limit: "12",
+  });
+
   // moviesData prefetched before route is rendered
   const { data: moviesData } = useSuspenseQuery(loaderQuery(queryParamsOne));
-
-  // screeningsData fetched after component is rendered, depending on filteredQuery string
-  const { data: screeningsData, refetch, isPending, error } = useQuery({ queryKey: [queryParamsTwo.queryName, filters.filteredQuery], queryFn: () => getQueryData(filters.filteredQuery), enabled: !!filters.filteredQuery });
-
-  // Arrays of data to use
+  // Typed array of data to use
   const movies: HomePageMovies[] = moviesData;
-  const screenings: HomePageScreenings[] = screeningsData;
+
+  // useGetInfinite - infinite query hook
+  const {
+    status,
+    data: screenings,
+    error,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useGetInfinite({
+    queryKey: ["homePageScreenings", filters.filteredQuery],
+    urlPrefix: filters.filteredQuery,
+    pageSize: 12,
+    queryFilters: filters.urlPrefix === filters.filteredQuery ? false : true,
+  });
+
 
   // Setting filter options, reparsing query url and refetching data
-  const handleFilterChange = (type: string, value: string | number[]) => {
-    let newFilters = { ...filters, [`${type}`]: value };
-
+  const handleFilterChange = (
+    type: string,
+    value: string | number[],
+    dateString: string | null
+  ) => {
+    let newFilters = { ...filters, [`${type}`]: value, dateString };
     const getParsedFilterQuery = () => {
       const filtersList = [];
       let filterQuery = filters.urlPrefix;
-      if (newFilters.date === "ALL" && newFilters.age === "ALL" && newFilters.theatre.length === 0) {
+      if (
+        newFilters.date === "ALL" &&
+        newFilters.age === "ALL" &&
+        newFilters.theatre.length === 0
+      ) {
         return filterQuery;
       }
       if (newFilters.date !== "ALL") {
-        filtersList.push(`date=${newFilters.date}`)
+        filtersList.push(`date=${newFilters.date}`);
       }
       if (newFilters.age !== "ALL") {
         filtersList.push(`ageRating<=${newFilters.age}`);
       }
       if (newFilters.theatre.length === 1) {
-        filtersList.push(`theatreName=${newFilters.theatre[0] === 1 ? "Stora+Salongen" : "Lilla+Salongen"}`);
+        filtersList.push(
+          `theatreName=${
+            newFilters.theatre[0] === 1 ? "Stora+Salongen" : "Lilla+Salongen"
+          }`
+        );
       }
       if (filtersList.length > 0) {
-        filterQuery += "?" + `${filtersList.length > 1 ? filtersList.join("&") : filtersList[0]}`;
+        filterQuery +=
+          "?" +
+          `${filtersList.length > 1 ? filtersList.join("&") : filtersList[0]}`;
       }
-      return filterQuery
-    }
+      return filterQuery;
+    };
     const newFilterQuery = getParsedFilterQuery();
-    newFilters = {...newFilters, filteredQuery: newFilterQuery}
+    newFilters = { ...newFilters, filteredQuery: newFilterQuery };
     setFilters(newFilters);
-    refetch();
-  }
+    //refetch();
+  };
   return (
     <section className="home-section pb-xs-5">
       <main className="home_main">
         <MovieCarousel movies={movies} />
         <Container fluid className="position-relative mt-5 pt-3 pb-5">
           {/* Filters Section */}
-          <ScreeningFilters filters={filters} handleFilterChange={handleFilterChange} />
+          <ScreeningFilters
+            filters={filters}
+            handleFilterChange={handleFilterChange}
+          />
           {/* Upcoming Screenings Section */}
           <Row className="mb-5">
-            <h3>Kommande visningar</h3>
+            <h3>
+              {filters.dateString ? filters.dateString : "Kommande visningar"}
+            </h3>
           </Row>
           <Row
             className="d-flex flex-row flex-wrap mb-5 row-gap-4"
@@ -77,11 +129,41 @@ export default function HomePage() {
             xl={3}
             xxl={3}
           >
-            {isPending && (<p>Hämtar visningar...</p>)}
-            {error && !screenings && (<p>Kunde inte hitta några visningar</p>)}
-            {screenings && screenings.map((screening) => (
-              <ScreeningCard key={screening.screeningId} {...screening} />
-            ))}
+            {error && !screenings && (
+              <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
+                <p className="w-100 text-center">Kunde inte hitta några visningar</p>
+              </Col>
+            )}
+            {status === "pending" && <p>Hämtar...</p>}
+            {screenings &&
+              screenings.pages &&
+              screenings.pages.map((page, pageIndex) => (
+                <Fragment key={pageIndex}>
+                  {page.map((screening: HomePageScreenings) => (
+                    <ScreeningCard key={screening.screeningId} {...screening} />
+                  ))}
+                </Fragment>
+              ))}
+          </Row>
+          <Row>
+            <Col sm={12}>
+              {screenings &&
+                !(
+                  screenings.pages[screenings.pages.length - 1].length < 12
+                ) && (
+                  <Button
+                    variant="outline-secondary"
+                    onClick={() => fetchNextPage()}
+                    disabled={!hasNextPage || isFetchingNextPage}
+                  >
+                    {isFetchingNextPage
+                      ? "Hämtar fler..."
+                      : hasNextPage
+                      ? "Hämta fler visningar"
+                      : "Inget mer att hämta"}
+                  </Button>
+                )}
+            </Col>
           </Row>
         </Container>
       </main>
