@@ -28,7 +28,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
           <p>Du måste vara inloggad för att komma åt denna sida.</p>
         </div>
       )}
-      <Navigate to="/login" />
+      <Navigate to="/loggain" />
     </>
   );
 };

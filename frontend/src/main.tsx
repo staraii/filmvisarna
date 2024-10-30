@@ -17,9 +17,11 @@ import BookingPage from "./pages/BookingPage";
 import Register from "./pages/Register/Register";
 import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
 import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin";
-import LoginPage from "./components/Login-pop-up/LoginMobile";
+import LoginPage from "./components/Login-pop-up/LoginPage.tsx";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
 import BookingConfirmationPage from "./pages/BookingConfirmation";
+import MinProfil from './pages/myProfile/myProfile.tsx';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.tsx';
 
 
 
@@ -112,6 +114,15 @@ const router = createBrowserRouter([
         element: <BookingConfirmationPage />,
         errorElement: <ErrorPage />,
       },
+       {
+        path: "profil",
+        element: (
+          <ProtectedRoute> {/* Wrap the profile route with ProtectedRoute */}
+            <MinProfil />
+          </ProtectedRoute>
+        ),
+        errorElement: <ErrorPage />,
+     },
     ],
   },
 ]);
