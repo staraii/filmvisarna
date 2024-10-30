@@ -104,9 +104,9 @@ function MovieDetailsPage() {
       setSelectedTheatreId(theatreId);
 
       // Logga screening.id
-      console.log('Selected screening ID:', screeningId);
-      console.log('Selected theatre ID:', theatreId);
-      console.log(time);
+      console.log('screening', screeningId);
+      console.log('theatre', theatreId);
+      console.log('time',time);
     }
   };  
 
