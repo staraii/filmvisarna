@@ -4,16 +4,18 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import { HomePageScreenings } from "../../../utils/queryService";
-import getWeekday from "../../../utils/getWeekday";
+import { getWeekday } from "../../../utils/dateTimeUtils";
+import { ageRatingUtil } from "../../../utils/ageRatingUtil";
 
 
 export default function ScreeningCard({ screeningId, movieId, dayName, day, month, time, occupiedPercent, ageRating, slideURL, posterURL, subtitles, spokenLanguage }: HomePageScreenings) {
   const navigate = useNavigate();
+  const age = ageRatingUtil(ageRating.toString());
   return (
     <Col xs={12}>
       <Card border="border-dark rounded" className="screening-card shadow-lg">
         <Card.Img
-          src={`/images/${slideURL}`}
+          src={`/images/${slideURL}?url`}
           className="overlay-image rounded d-block"
         />
         <Card.ImgOverlay className="rounded overlay-content">
@@ -26,7 +28,7 @@ export default function ScreeningCard({ screeningId, movieId, dayName, day, mont
               <Row>
                 <Col xs={12} className="column-gap-2">
                   <img
-                    src={`/images/${posterURL}`}
+                    src={`/images/${posterURL}?url`}
                     className="w-100 rounded shadow-lg"
                     style={{
                       border: "2px solid #0b0815",
@@ -73,7 +75,7 @@ export default function ScreeningCard({ screeningId, movieId, dayName, day, mont
               </Card.Text>
             </Col>
             <Col xs={6}>
-              <Card.Text className="text-end age-font">{ageRating}</Card.Text>
+              <Card.Text className="text-end age-font">{age}</Card.Text>
             </Col>
           </Row>
           <Row>

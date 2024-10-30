@@ -2,7 +2,7 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import reqUtil from "./reqUtil";
 import {
   QueryClient,
-  queryOptions,
+  queryOptions
 } from "@tanstack/react-query";
 
 export type QueryParams = {
@@ -15,8 +15,8 @@ export type DualQueryParams = {
   queryParamsTwo: QueryParams;
 }
 export type HomePageMovies = {
-  id: number;
-  title: string;
+  movieId: number;
+  movieTitle: string;
   createdAt: string;
   categories: string;
   slideURL: string;
@@ -37,7 +37,7 @@ export type HomePageScreenings = {
   occupiedPercent: number;
   ageRating: string;
   slideURL: string;
-  posterURL: string;
+  posterURL: string[];
   subtitles: string;
   spokenLanguage: string;
 };
@@ -45,8 +45,11 @@ export type HomePageScreenings = {
 
 export async function getQueryData(query: string) {
   try {
+    console.log("query: " + query)
     const { data, status } = await reqUtil("GET", query);
-    if (status === 200 && data) {
+    console.log("status: " + status)
+    console.log("data: " + data)
+    if ((status < 300) && data) {
       return data;
     }
     return [];
