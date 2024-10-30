@@ -44,7 +44,7 @@ const handleGetBookings = async (req: Request, res: Response) => {
     const { table } = req.params;
     const queryParams = req.query;
     const whereArgs: string[] = [];
-    const queryParamsArr: (string | number)[] = [];
+    const queryParamsArr: (string)[] = [];
     let sql = `SELECT * FROM \`${table}\``;
     for (const [key, value] of Object.entries(queryParams)) {
       if (typeof key === "string" && value instanceof Array) {
@@ -89,11 +89,11 @@ const handleGetBookings = async (req: Request, res: Response) => {
     }
     if (queryParams.limit) {
       sql += ` LIMIT ?`;
-      queryParamsArr.push(Number(queryParams.limit));
+      queryParamsArr.push(queryParams.limit.toString());
     }
     if (queryParams.offset) {
       sql += ` OFFSET ?`;
-      queryParamsArr.push(Number(queryParams.offset));
+      queryParamsArr.push(queryParams.offset.toString());
     }
     const [rows] = await db.execute(sql, queryParamsArr);
     if (rows instanceof Array && rows.length === 0) {
