@@ -45,10 +45,7 @@ export type HomePageScreenings = {
 
 export async function getQueryData(query: string) {
   try {
-    console.log("query: " + query)
     const { data, status } = await reqUtil("GET", query);
-    console.log("status: " + status)
-    console.log("data: " + data)
     if ((status < 300) && data) {
       return data;
     }
