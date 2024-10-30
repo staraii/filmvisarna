@@ -5,27 +5,29 @@ import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Stack from "react-bootstrap/Stack";
 import { getScreeningDates } from "../../../utils/dateTimeUtils";
-
+import { ageRatingFilterUtil } from "../../../utils/ageRatingUtil";
+//import { ScreeningFiltersState } from "../HomePage";
 const screeningDates = getScreeningDates(new Date(), 28);
 
-export default function ScreeningFilters({filters, handleFilterChange}: {filters: {date: string, age: string, theatre: number[], urlPrefix: string, filteredQuery: string}, handleFilterChange: (type: string, value: string | number[]) => void}) {
+export default function ScreeningFilters({ filters, handleFilterChange }: { filters: { date: string, age: string, theatre: number[], urlPrefix: string, filteredQuery: string, dateString: string | null }, handleFilterChange: (type: string, value: string | number[], dateString: string | null) => void }) {
+  const selectedAge = ageRatingFilterUtil(filters.age);
   return (
     <Row className="sticky-top bg-body top-outline mb-5">
       <Stack direction="vertical" gap={3} className="py-3">
-
         {/* Date and Age filter */}
         <Stack direction="horizontal" gap={3}>
           {/* Date filter */}
           <Dropdown className="mx-auto">
-            <Dropdown.Toggle variant="outline-secondary" id="Datum">
-              Datum
+            {/* <Dropdown.Toggle variant="outline-secondary" id="Datum"> */}
+            <Dropdown.Toggle variant={filters.date === "ALL" ? "outline-secondary" : "secondary"} id="Datum" className="">
+              {!filters.dateString ? "Datum" : filters.dateString}
             </Dropdown.Toggle>
             <Dropdown.Menu style={{ maxHeight: "300px", overflowY: "auto" }}>
               <Dropdown.Item
                 as="button"
                 eventKey="ALL"
                 active={filters.date === "ALL"}
-                onClick={() => handleFilterChange("date", "ALL")}
+                onClick={() => handleFilterChange("date", "ALL", null)}
               >
                 Alla datum
               </Dropdown.Item>
@@ -35,7 +37,7 @@ export default function ScreeningFilters({filters, handleFilterChange}: {filters
                   eventKey={date.searchDate}
                   key={date.searchDate}
                   active={filters.date === date.searchDate}
-                  onClick={() => handleFilterChange("date", date.searchDate)}
+                  onClick={() => handleFilterChange("date", date.searchDate, date.selectString)}
                 >
                   {date.selectString}
                 </Dropdown.Item>
@@ -46,10 +48,10 @@ export default function ScreeningFilters({filters, handleFilterChange}: {filters
           {/* Age filter */}
           <DropdownButton
             id="Åldergräns"
-            title="Åldergräns"
+            title={filters.age === "ALL" ? "Åldersgräns" : selectedAge}
             className="mx-auto"
-            variant="outline-secondary"
-            onSelect={(e) => handleFilterChange("age", e as string)}
+            variant={filters.age === "ALL" ? "outline-secondary" : "secondary"}
+            onSelect={(e) => handleFilterChange("age", e as string, null)}
           >
             <Dropdown.Item
               as="button"
@@ -93,7 +95,7 @@ export default function ScreeningFilters({filters, handleFilterChange}: {filters
         <ToggleButtonGroup
           type="checkbox"
           value={filters.theatre}
-          onChange={(e) => handleFilterChange("theatre", e as number[])}
+          onChange={(e) => handleFilterChange("theatre", e as number[], null)}
           className="align-center justify-content-between"
         >
           <ToggleButton id="tbg-btn-1" value={1} variant="outline-secondary">
