@@ -15,8 +15,8 @@ export type DualQueryParams = {
   queryParamsTwo: QueryParams;
 }
 export type HomePageMovies = {
-  id: number;
-  title: string;
+  movieId: number;
+  movieTitle: string;
   createdAt: string;
   categories: string;
   slideURL: string;
