@@ -5,6 +5,7 @@ import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, 
 //import  FightClubPoster from '../assets/FightClubPoster.jpg'
 import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
+import { sv } from 'date-fns/locale';
 
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
@@ -279,7 +280,7 @@ function MovieDetailsPage() {
               <CarouselItem key={date} className="calendar-item">
                 <Card className="calendar-card">
                   <Card.Header>
-                    <h4>{format(new Date(date), 'EEEE dd/MM')}</h4>
+                    <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
                   </Card.Header>
                   <Card.Body>
                     {screenings.map((screening: any) => (
