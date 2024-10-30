@@ -92,15 +92,21 @@ function MovieDetailsPage() {
   };
   
 
-  const [selectedDate, setSelectedDate] = useState<string | null>("Datum");  
-  const handleSelectDate = (eventKey: string | null) => {
-    setSelectedDate(eventKey);
-  };
-
-  const [selectedTime, setSelectedTime] = useState<string | null>("Tid");
+  const [selectedTime, setSelectedTime,] = useState<string | null>("välj visning");
+  const [selectedTheatreId, setSelectedTheatreId] = useState<string | null>(null);
 
   const handleSelectTime = (eventKey: string | null) => {
-  setSelectedTime(eventKey);
+    if (eventKey) {
+      // Dela upp eventKey för att få screening.id och tiden
+      const [screeningId,theatreId, time] = eventKey.split('|');
+      setSelectedTime(time);
+      setSelectedTheatreId(theatreId);
+
+      // Logga screening.id
+      console.log('Selected screening ID:', screeningId);
+      console.log('Selected theatre ID:', theatreId);
+      console.log(time);
+    }
   };  
 
 
@@ -233,46 +239,23 @@ function MovieDetailsPage() {
           <Row className="d-flex justify-content-center">
             <Col xs="auto">
               <DropdownButton
-                id="Datum"
-                title={selectedDate || "Datum"}
+                id="dateTime-Dropdown"
+                title={selectedTime || "välj visning"}
                 className="custom-dropdown-button text-secondary mx-auto"
                 variant="outline-secondary"
-                onSelect={handleSelectDate}
-                flip={false} 
-                rootCloseEvent="click" 
-              >
-                <Dropdown.Item eventKey="Datum" as="button">Datum</Dropdown.Item>
-                  {Object.keys(groupedScreenings).map((date) => (
-                    <Dropdown.Item 
-                      key={date} 
-                      eventKey={date} 
-                      as="button"
-                    >
-                      {format(new Date(date), 'EEEE dd/MM')}
-                    </Dropdown.Item>
-                  ))}
-                
-              </DropdownButton>
-            </Col>
-            <Col xs="auto" >
-              <DropdownButton
-                id="time-DropDown"
-                title={selectedTime || "Tid"}
-                className=" custom-dropdown-button text-secondary mx-auto"
-                variant="outline-secondary"
                 onSelect={handleSelectTime}
-                flip={false} 
-                rootCloseEvent="click" 
+                flip={false}
+                rootCloseEvent="click"
               >
-                <Dropdown.Item eventKey="Tid" as="button">Tid</Dropdown.Item>
-                {Object.entries(groupedScreenings).flatMap(([, screenings]: [string, any]) => 
+                <Dropdown.Item eventKey="välj visning" as="button">välj visning</Dropdown.Item>
+                {Object.entries(groupedScreenings).flatMap(([, screenings]: [string, any]) =>
                   screenings.map((screening: any) => (
                     <Dropdown.Item 
                       key={screening.id} 
-                      eventKey={format(new Date(screening.dateTime), 'HH:mm')} 
+                      eventKey={`${screening.id}|${screening.theatreId}|${format(new Date(screening.dateTime), 'MM-dd HH:mm')}`} 
                       as="button"
                     >
-                      {format(new Date(screening.dateTime), 'HH:mm')}
+                      {`${format(new Date(screening.dateTime), 'M/d HH:mm')}`}
                     </Dropdown.Item>
                   ))
                 )}
@@ -283,8 +266,7 @@ function MovieDetailsPage() {
 {/* // JOBBA HÄR----------------------------------------------------- */}
         <Row className="d-flex justify-content-center mt-3 mb-3">
           <Col xs="auto">
-            <Col className='seats-left' >{selectedTime ? `${selectedTime} Platser kvar` : 'Platser kvar'}</Col>
-            <Col className='seats-left mt-2' >Salong {groupedScreenings.theatreId}</Col> 
+            <Col className='seats-left mt-2' >Salong {selectedTheatreId || "(välj visning)"}</Col> 
             <Button onClick={() => navigate("/boka")} className=' mt-3'>Boka platser</Button>
           </Col>
         </Row>
