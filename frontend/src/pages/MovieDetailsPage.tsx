@@ -210,7 +210,7 @@ function MovieDetailsPage() {
                 </Card.Body>
               </Card>
               <Card>
-                <Carousel interval={null}>
+                <Carousel interval={null} className="custom-review-carousel">
                   {movie.movie[0].reviews.map((review, index) => (
                     <Carousel.Item key={index}>
                       <Card.Body>

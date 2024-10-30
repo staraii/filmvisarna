@@ -143,6 +143,17 @@ h1{
   cursor: pointer;
 }
 
+
+.custom-review-carousel .carousel-control-prev {
+  left: -10%;
+  /* Justera positionen för vänster pil */
+}
+
+.custom-review-carousel .carousel-control-next {
+  right: -10%;
+  /* Justera positionen för höger pil */
+}
+
 .square-card .card-body {
   padding: 0;
   padding-top: 10px;
