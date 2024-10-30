@@ -7,9 +7,23 @@ import Stack from "react-bootstrap/Stack";
 import { getScreeningDates } from "../../../utils/dateTimeUtils";
 import { ageRatingFilterUtil } from "../../../utils/ageRatingUtil";
 //import { ScreeningFiltersState } from "../HomePage";
+
+interface ScreeningFilters {
+  filters: {
+    date: string;
+    age: string;
+    theatre: number[];
+    urlPrefix: string;
+    filteredQuery: string;
+    dateString: string | null;
+  },
+  handleFilterChange: (type: string, value: string | number[], dateString: string | null) => void;
+}
+
+
 const screeningDates = getScreeningDates(new Date(), 28);
 
-export default function ScreeningFilters({ filters, handleFilterChange }: { filters: { date: string, age: string, theatre: number[], urlPrefix: string, filteredQuery: string, dateString: string | null }, handleFilterChange: (type: string, value: string | number[], dateString: string | null) => void }) {
+export default function ScreeningFilters({ filters, handleFilterChange }: ScreeningFilters) {
   const selectedAge = ageRatingFilterUtil(filters.age);
   return (
     <Row className="sticky-top bg-body top-outline mb-5">
