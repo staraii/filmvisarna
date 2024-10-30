@@ -13,10 +13,11 @@ import { useLoaderData } from "react-router-dom";
 import { QueryParams } from "../../utils/queryService";
 
 function MovieCalendar() {
-  const QueryParams = useLoaderData() as QueryParams;
-  const { data: screenings } = useSuspenseQuery(loaderQuery(QueryParams));
+  const queryParams = useLoaderData() as QueryParams;
+  const { data } = useSuspenseQuery(loaderQuery(queryParams));
   const [activeWeekIndex, setActiveWeekIndex] = useState(0); // State för att hålla koll på aktiv vecka
 
+  console.log(data);
   /*
   const weeks = [
     { title: "Vecka 40", startDate: "2024-10-01" },

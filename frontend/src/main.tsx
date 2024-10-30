@@ -1,17 +1,17 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 //import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "../sass/main.scss";
-import App from './App.tsx'
+import App from "./App.tsx";
 
 import { loader, doubleLoader } from "./utils/queryService.ts";
 
-import ErrorPage from './pages/ErrorPage/ErrorPage.tsx';
+import ErrorPage from "./pages/ErrorPage/ErrorPage.tsx";
 import HomePage from "./pages/HomePage/HomePage";
-import Movies from './pages/Movies/Movies.tsx';
-import MovieDetailsPage from './pages/MovieDetailsPage.tsx';
+import Movies from "./pages/Movies/Movies.tsx";
+import MovieDetailsPage from "./pages/MovieDetailsPage.tsx";
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 import BookingPage from "./pages/BookingPage";
 import Register from "./pages/Register/Register";
@@ -21,17 +21,13 @@ import LoginPage from "./components/Login-pop-up/LoginMobile";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
 import BookingConfirmationPage from "./pages/BookingConfirmation";
 
-
-
-
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 10,
-    }
-  }
-})
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -43,7 +39,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-        loader: doubleLoader(queryClient, ["/api/bookings/homePageMovies", "/api/bookings/homePageScreenings"], ["homePageMovies", "homePageScreeings"]),
+        loader: doubleLoader(
+          queryClient,
+          ["/api/bookings/homePageMovies", "/api/bookings/homePageScreenings"],
+          ["homePageMovies", "homePageScreeings"]
+        ),
         errorElement: <ErrorPage />,
       },
       {
@@ -62,7 +62,7 @@ const router = createBrowserRouter([
       {
         path: "bio-kalender",
         element: <MovieCalendar />,
-        //loader: screeningsLoader(queryClient),
+        loader: loader(queryClient, "/api/screenings/", "screenings"),
         errorElement: <ErrorPage />,
       },
       {
@@ -116,12 +116,11 @@ const router = createBrowserRouter([
   },
 ]);
 
-
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <RouterProvider router={router} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   </StrictMode>
 );
