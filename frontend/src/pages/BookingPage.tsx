@@ -44,6 +44,10 @@ export default function BookingPage() {
   const navigate = useNavigate();
   if (screeningData.occupiedSeats === null) screeningData.occupiedSeats = "0";
 
+  const occupiedSeatArray = screeningData.occupiedSeats
+    .split(",")
+    .map((seat: string) => seat.trim());
+
   // useEffect(() => {
   //   console.log(screeningData);
   // }, []);
@@ -128,7 +132,7 @@ export default function BookingPage() {
       if (
         currentSeatIndex > rowData.end ||
         currentSeatIndex < rowData.start ||
-        screeningData.occupiedSeats.includes(String(currentSeatIndex))
+        occupiedSeatArray.includes(String(currentSeatIndex))
       ) {
         return;
       }
@@ -137,7 +141,7 @@ export default function BookingPage() {
     setHoveredSeats(hoveredSeatIds);
   }
 
-  let cumulativeIndex = 0;
+  let cumulativeIndex = 1;
 
   function handleSeatSelect() {
     setSelectedSeat(hoveredSeats);
@@ -238,9 +242,10 @@ export default function BookingPage() {
                         cumulativeIndex++;
                         const seatId = `${rowCumulativeIndex + index}`;
 
-                        const isPreBooked =
-                          screeningData.occupiedSeats.includes(seatId) || false;
-                        //something here is bugging out, first row has seats booked? wth
+                        const isPreBooked = occupiedSeatArray.includes(
+                          String(seatId)
+                        );
+
                         return (
                           <Button
                             onClick={() => handleSeatSelect()}
