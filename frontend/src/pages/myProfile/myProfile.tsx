@@ -153,7 +153,7 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, o
           <th>Titel</th>
           <th>Visningsdatum</th>
           <th>Visningstid</th>
-          <th>Booking Number</th>
+          <th>Bokningsnummer</th>
           {onCancelBooking && <th>Avboka</th>}
         </tr>
       </thead>
