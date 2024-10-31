@@ -132,22 +132,41 @@ export const bookingAction = async ({ request }: ActionFunctionArgs) => {
   const email = formData.get("email");
   const seatsString = formData.get("seats") as string;
   const seatsArray = seatsString ? JSON.parse(seatsString) : [];
-  const formattedSeats = seatsArray.map((seatId: number) => ({
+
+  const ticketTypesString = formData.get("ticketTypes") as string;
+  const ticketTypes = ticketTypesString ? JSON.parse(ticketTypesString) : {};
+  const ticketsList: number[] = [];
+
+  if (ticketTypes.ticket1) {
+    ticketsList.push(...Array(ticketTypes.ticket1).fill(1));
+  }
+  if (ticketTypes.ticket2) {
+    ticketsList.push(...Array(ticketTypes.ticket2).fill(2));
+  }
+  if (ticketTypes.ticket3) {
+    ticketsList.push(...Array(ticketTypes.ticket3).fill(3));
+  }
+
+  if (ticketsList.length < seatsArray.length) {
+    throw new Error("Tom bokning");
+  }
+  const formattedSeats = seatsArray.map((seatId: number, index: number) => ({
     seatId,
-    ticketTypeId: 1,
+    ticketTypeId: ticketsList[index],
   }));
+
   //för tillfället är ticket type satt till 1 för alla, to fix
-  const bookingData = {
+  const BookingData = {
     screeningId: Number(screeningId),
     email,
     seats: formattedSeats,
   };
-  //console.log(bookingData);
+  console.log(BookingData);
   try {
     const { data, status } = await reqUtil(
       "POST",
       "/api/bookings",
-      bookingData
+      BookingData
     );
     if (status === 201 && data) {
       return { bookingSuccess: true, bookingNumber: data[0].bookingNumber };

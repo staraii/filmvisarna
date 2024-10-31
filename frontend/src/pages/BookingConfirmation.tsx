@@ -13,6 +13,7 @@ export default function BookingConfirmationPage() {
   const booking = bookingData["success"][0];
   const screening = screeningData["success"][0]; //den hämtar fortfarande alla visningar tror jag.
 
+  console.log(booking.totalPrice);
   // const location = useLocation();
   // const { selectedSeats, price, screeningData } = location.state || {
   //   tickets: 0,

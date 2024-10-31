@@ -300,7 +300,15 @@ export default function BookingPage() {
               name="seats"
               value={JSON.stringify(selectedSeats)}
             />
-            <input type="hidden" name="ticketTypes" value={selectedSeats} />
+            <input
+              type="hidden"
+              name="ticketTypes"
+              value={JSON.stringify({
+                ticket1: ticketAdult,
+                ticket2: ticketSenior,
+                ticket3: ticketChild,
+              })}
+            />
 
             <Button type="submit" className="booking-btn">
               <h5 className="m-1">Boka</h5>
