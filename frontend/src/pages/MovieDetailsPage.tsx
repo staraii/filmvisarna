@@ -62,6 +62,14 @@ function MovieDetailsPage() {
 
   const movie = data as ApiResponse;
   console.log(data);
+
+    if (typeof movie.movie[0].reviews === "string") {
+    try {
+      movie.movie[0].reviews = JSON.parse(`[${movie.movie[0].reviews}]`);
+    } catch (error) {
+      console.error("Kunde inte parsa reviews:", error);
+    }
+  }
   //const [movie, setMovieData] = useState<ApiResponse | null>(null);
 
   //Get data from database
@@ -102,6 +110,7 @@ function MovieDetailsPage() {
 
   const [selectedTime, setSelectedTime,] = useState<string | null>("välj visning");
   const [selectedTheatreId, setSelectedTheatreId] = useState<string | null>(null);
+  const [selectedScreeningId, setSelectedScreeningId] = useState<string | null>(null);
 
   const handleSelectTime = (eventKey: string | null) => {
     if (eventKey) {
@@ -109,6 +118,7 @@ function MovieDetailsPage() {
       const [screeningId,theatreId, time] = eventKey.split('|');
       setSelectedTime(time);
       setSelectedTheatreId(theatreId);
+      setSelectedScreeningId(screeningId);
 
       // Logga screening.id
       console.log('screening', screeningId);
@@ -217,27 +227,29 @@ function MovieDetailsPage() {
                 </Card.Body>
               </Card>
               <Card>
-                {/* <Carousel interval={null} className="custom-review-carousel">
-                  {movie.movie[0].reviews.map((review, index) => (
-                    <Carousel.Item key={index}>
-                      <Card.Body>
-                        <Card.Title>Recensioner</Card.Title>
-                        <Card.Text className="mb-0 see-more-container">
-                          <strong>{review.reviewBy}</strong>
-                          <br />
-                          "{review.review}"
-                          <br />
-                          {Array.from({ length: review.rating }, (_, i) => (
-                            <span key={i}>&#9733;</span>
-                          ))}
-                          {Array.from({ length: 5 - review.rating }, (_, i) => (
-                            <span key={i}>&#9734;</span>
-                          ))}
-                        </Card.Text>
-                      </Card.Body>
-                    </Carousel.Item>
-                  ))}
-                </Carousel> */}
+                {movie.movie[0].reviews && Array.isArray(movie.movie[0].reviews) && (
+                  <Carousel interval={null} className="custom-review-carousel">
+                    {movie.movie[0].reviews.map((review, index) => (
+                      <Carousel.Item key={index}>
+                        <Card.Body>
+                          <Card.Title>Recensioner</Card.Title>
+                          <Card.Text className="mb-0 see-more-container">
+                            <strong>{review.reviewBy}</strong>
+                            <br />
+                            "{review.review}"
+                            <br />
+                            {Array.from({ length: review.rating }, (_, i) => (
+                              <span key={i}>&#9733;</span>
+                            ))}
+                            {Array.from({ length: 5 - review.rating }, (_, i) => (
+                              <span key={i}>&#9734;</span>
+                            ))}
+                          </Card.Text>
+                        </Card.Body>
+                      </Carousel.Item>
+                    ))}
+                  </Carousel>
+                )}
               </Card>
             </Col>
           </Row>
@@ -275,7 +287,7 @@ function MovieDetailsPage() {
         <Row className="d-flex justify-content-center mt-3 mb-3">
           <Col xs="auto">
             <Col className='seats-left mt-2' >Salong {selectedTheatreId || "(välj visning)"}</Col> 
-            <Button onClick={() => navigate("/boka")} className=' mt-3'>Boka platser</Button>
+            <Button onClick={() => navigate(`/boka/${selectedScreeningId}`)} className=' mt-3'>Boka platser</Button>
           </Col>
         </Row>
 
@@ -293,7 +305,7 @@ function MovieDetailsPage() {
                     {screenings.map((screening: any) => (
                       <Card
                         key={screening.id}
-                        onClick={() => navigate("/boka")}
+                        onClick={() => navigate(`/boka/${screening.id}`)}
                         className="mb-3 square-card"
                       >
                         <Card.Body className="bg-primary">
