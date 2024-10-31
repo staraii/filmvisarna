@@ -1,4 +1,4 @@
-import { useState,} from 'react';
+import { useState, useRef,} from 'react';
 //import fightClubTrailer from '../assets/fightClubTrailer.webp'
 import './MovieDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
@@ -135,6 +135,15 @@ function MovieDetailsPage() {
   const fullText = movie.movie[0].details.description;
   const shortText = fullText.length > 100 ? fullText.substring(0, 100) + '...' : fullText;
 
+
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  
+    const handleNavigateAndScroll = () => {
+    setTimeout(() => {
+      dropdownRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 200);
+  };
+
     const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
     const date = format(new Date(screening.dateTime), 'yyyy-MM-dd');
     if (!acc[date]) acc[date] = [];
@@ -165,7 +174,7 @@ function MovieDetailsPage() {
                   <Card.Title>
                     <h3>{movie.movie[0].title}</h3>
                   </Card.Title>
-                  <Button onClick={() => navigate("/boka")} >Boka platser</Button>
+                  <Button onClick={handleNavigateAndScroll} >Välj visning</Button>
                   <Card.Title className="mt-4" >OM Filmen</Card.Title>
                   <Card.Text className='see-more-container'>
                     {isDescriptionExpanded ? fullText : shortText}
@@ -255,7 +264,7 @@ function MovieDetailsPage() {
           </Row>
         </Container>
 
-        <Container className="mt-5">
+        <Container ref={dropdownRef} className="mt-5">
           <Row className="d-flex justify-content-center">
             <Col xs="auto">
               <DropdownButton
@@ -283,7 +292,7 @@ function MovieDetailsPage() {
             </Col>
           </Row>
         </Container>
-{/* // JOBBA HÄR----------------------------------------------------- */}
+
         <Row className="d-flex justify-content-center mt-3 mb-3">
           <Col xs="auto">
             <Col className='seats-left mt-2' >Salong {selectedTheatreId || "(välj visning)"}</Col> 
