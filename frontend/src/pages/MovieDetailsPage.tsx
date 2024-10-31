@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState,} from 'react';
 //import fightClubTrailer from '../assets/fightClubTrailer.webp'
 import './MovieDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
@@ -187,7 +187,7 @@ function MovieDetailsPage() {
                   <Carousel.Item key={index}>
                     <img 
                       className='d-block w-100 poster-image'
-                      src={poster}
+                      src={`/images/${poster}`}
                       alt={`Poster ${index + 1}`}
                     />
                   </Carousel.Item>
