@@ -4,6 +4,7 @@ import * as AuthService from './../services/authService';
 interface AuthContextType {
   isAuthenticated: boolean;
   userEmail: string | null;
+  userName: string | null;
   login: (email: string) => void;
   logout: () => void;
   register: (formData: AuthService.FormData) => Promise<void>;
@@ -20,6 +21,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [userEmail, setUserEmail] = useState<string | null>(() => {
     return sessionStorage.getItem('userEmail');
   });
+  
 
 const login = (email: string) => {
     setIsAuthenticated(true);

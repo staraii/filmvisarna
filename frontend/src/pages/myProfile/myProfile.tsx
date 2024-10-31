@@ -6,22 +6,23 @@ import "./myProfile.css";
 
 // Define a Booking interface according to the fetched data structure
 interface Booking {
-  bookingId: number; // Update to match your fetched data
-  bookingNumber: string;
-  screeningId: number;
-  screeningTime: string; // Assuming this is the date and time
-  movieTitle: string; // The movie name
-  // Add any other relevant fields here as needed
+  bookingId: number; // Unique ID for the booking
+  bookingNumber: string; // Booking reference number
+  screeningId: number; // ID of the screening
+  screeningTime: string; // Screening date and time (ISO 8601 format)
+  movieTitle: string; // Name of the movie
+  seats: string[]; // Array of seat numbers
+  bookingDate: string; // The date when the booking was made
 }
 
 const MinProfil = () => {
   const { userEmail } = useAuth(); // Get user email from context
-  console.log("User Email:", userEmail);
+  console.log("Användarens e-post:", userEmail);
 
   // Fetch user bookings with React Query
   const { data: bookings, isLoading, error, refetch } = useQuery({
     queryKey: ["userBookings", userEmail],
-    queryFn: () => fetchUserBookings(userEmail),
+    queryFn: () => fetchUserBookings(userEmail!),
     enabled: !!userEmail, // Only run the query if userEmail exists
     retry: 1,
   });
@@ -40,20 +41,20 @@ const MinProfil = () => {
   useEffect(() => {
     if (bookings) {
       const now = new Date();
-      const current = bookings.filter((booking) => new Date(booking.screeningTime) >= now);
-      const past = bookings.filter((booking) => new Date(booking.screeningTime) < now);
+      const current = bookings.filter((booking: Booking) => new Date(booking.screeningTime) >= now);
+      const past = bookings.filter((booking: Booking) => new Date(booking.screeningTime) < now);
       setCurrentBookings(current);
       setPastBookings(past);
     }
   }, [bookings]);
 
   // Cancel booking and refetch data
-  const handleCancelBooking = async (bookingId: string) => {
+  const handleCancelBooking = async (bookingId: number) => {
     try {
-      await cancelBooking(bookingId);
+      await cancelBooking(bookingId, userEmail!); // Ensure userEmail is not null or undefined
       refetch(); // Refresh bookings after cancellation
     } catch (error) {
-      console.error("Error cancelling booking:", error);
+      console.error("Fel vid avbokning:", error);
     }
   };
 
@@ -72,21 +73,21 @@ const MinProfil = () => {
   };
 
   // UI conditions for loading, error, and no bookings
-  if (isLoading) return <div>Loading bookings...</div>;
-  if (error) return <div>Error fetching bookings: {(error as Error).message}</div>;
+  if (isLoading) return <div>Laddar bokningar...</div>;
+  if (error) return <div>Fel vid hämtning av bokningar: {(error as Error).message}</div>;
 
   return (
     <div className="profile-container">
       <div className="profile-section">
-        <h2>Welcome, {userEmail}</h2>
+        <h2>Välkommen, {userEmail}</h2>
       </div>
       <hr />
 
       {/* Current Bookings Section */}
       <div className="profile-section">
-        <h2>Current Bookings</h2>
+        <h2>Aktuella Bokningar</h2>
         {currentBookings.length === 0 ? (
-          <p>No current bookings found.</p>
+          <p>Inga aktuella bokningar hittades.</p>
         ) : (
           <>
             <BookingTable
@@ -94,11 +95,14 @@ const MinProfil = () => {
               onBookingClick={handleBookingClick}
               onCancelBooking={handleCancelBooking}
             />
-            <Pagination
-              totalPages={Math.ceil(currentBookings.length / itemsPerPage)}
-              currentPage={currentBookingPage}
-              setPage={setCurrentBookingPage}
-            />
+            {/* Show pagination only if there are more than itemsPerPage bookings */}
+            {currentBookings.length > itemsPerPage && (
+              <Pagination
+                totalPages={Math.ceil(currentBookings.length / itemsPerPage)}
+                currentPage={currentBookingPage}
+                setPage={setCurrentBookingPage}
+              />
+            )}
           </>
         )}
       </div>
@@ -106,20 +110,23 @@ const MinProfil = () => {
 
       {/* Past Bookings Section */}
       <div className="profile-section">
-        <h2>Booking History</h2>
+        <h2>Bokningshistorik</h2>
         {pastBookings.length === 0 ? (
-          <p>No past bookings found.</p>
+          <p>Inga tidigare bokningar hittades.</p>
         ) : (
           <>
             <BookingTable
               bookings={paginate(pastBookings, pastBookingPage)}
               onBookingClick={handleBookingClick}
             />
-            <Pagination
-              totalPages={Math.ceil(pastBookings.length / itemsPerPage)}
-              currentPage={pastBookingPage}
-              setPage={setPastBookingPage}
-            />
+            {/* Show pagination only if there are more than itemsPerPage bookings */}
+            {pastBookings.length > itemsPerPage && (
+              <Pagination
+                totalPages={Math.ceil(pastBookings.length / itemsPerPage)}
+                currentPage={pastBookingPage}
+                setPage={setPastBookingPage}
+              />
+            )}
           </>
         )}
       </div>
@@ -132,34 +139,41 @@ const MinProfil = () => {
   );
 };
 
-// BookingTable component for current/past bookings
-const BookingTable = ({ bookings, onBookingClick, onCancelBooking }) => (
+interface BookingTableProps {
+  bookings: Booking[];
+  onBookingClick: (booking: Booking) => void;
+  onCancelBooking?: (bookingId: number) => void; // Optional prop
+}
+
+const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, onCancelBooking }) => (
   <div className="content">
     <table className="profile-table">
       <thead>
         <tr>
-          <th>Title</th>
-          <th>Screening Time</th>
+          <th>Titel</th>
+          <th>Visningsdatum</th>
+          <th>Visningstid</th>
           <th>Booking Number</th>
-          {onCancelBooking && <th>Action</th>} {/* Show cancel button only for current bookings */}
+          {onCancelBooking && <th>Avboka</th>}
         </tr>
       </thead>
       <tbody>
         {bookings.map((booking) => (
           <tr key={booking.bookingId} onClick={() => onBookingClick(booking)}>
             <td>{booking.movieTitle}</td>
-            <td>{new Date(booking.screeningTime).toLocaleString()}</td> {/* Format date */}
-            <td>{booking.bookingNumber}</td> {/* Display booking number */}
+            <td>{new Date(booking.screeningTime).toLocaleDateString('sv-SE')}</td> {/* Swedish Date Format */}
+            <td>{new Date(booking.screeningTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td> {/* Time Display */}
+            <td>{booking.bookingNumber}</td>
             {onCancelBooking && (
               <td>
                 <button
                   className="cancel-button"
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent row click event
-                    onCancelBooking(booking.bookingId.toString());
+                    e.stopPropagation();
+                    onCancelBooking(booking.bookingId); // No need to convert to string
                   }}
                 >
-                  Cancel
+                  Avboka
                 </button>
               </td>
             )}
@@ -171,7 +185,13 @@ const BookingTable = ({ bookings, onBookingClick, onCancelBooking }) => (
 );
 
 // Pagination component
-const Pagination = ({ totalPages, currentPage, setPage }) => (
+interface PaginationProps {
+  totalPages: number;
+  currentPage: number;
+  setPage: (page: number) => void; // Function to set the page
+}
+
+const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, setPage }) => (
   <div className="pagination">
     {[...Array(totalPages).keys()].map((num) => (
       <button
@@ -185,23 +205,41 @@ const Pagination = ({ totalPages, currentPage, setPage }) => (
   </div>
 );
 
-// BookingModal component
-const BookingModal = ({ booking, onClose }) => (
-  <div className="modal-overlay" onClick={onClose}>
-    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-      <h2>Booking Details</h2>
-      <div>
-        <p><strong>Title:</strong> {booking.movieTitle}</p>
-        <p><strong>Screening Time:</strong> {new Date(booking.screeningTime).toLocaleString()}</p>
-        <p><strong>Booking Number:</strong> {booking.bookingNumber}</p>
-        {/* Add any additional details you want to display here */}
+// Booking Modal component
+interface BookingModalProps {
+  booking: Booking;
+  onClose: () => void;
+}
+
+const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
+  const screeningDate = new Date(booking.screeningTime);
+  const formattedDate = screeningDate.toLocaleDateString('sv-SE'); // Format date in Swedish
+  const formattedTime = screeningDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format time
+  const formattedBookingDate = new Date(booking.bookingDate).toLocaleString('sv-SE'); // Format booking date
+
+  // Check if seats is an array and provide a fallback if not
+  const seatsDisplay = Array.isArray(booking.seats) ? booking.seats.join(', ') : 'Inga platser valda';
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2>Bokningsdetaljer</h2>
+        <div>
+          <p><strong>Film titel:</strong> {booking.movieTitle}</p>
+          <p><strong>Visningarsdatum:</strong> {formattedDate}</p>
+          <p><strong>Visningarstid:</strong> {formattedTime}</p>
+          <p><strong>Platser:</strong> {seatsDisplay}</p>
+          <p><strong>Bokningsnummer:</strong> {booking.bookingNumber}</p>
+          <p><strong>Bokningsdatum:</strong> {formattedBookingDate}</p>
+        </div>
+        <button className="close-modal-button" onClick={onClose}>Stäng</button>
       </div>
-      <button className="close-modal-button" onClick={onClose}>Close</button>
     </div>
-  </div>
-);
+  );
+};
 
 export default MinProfil;
+
 
 
 

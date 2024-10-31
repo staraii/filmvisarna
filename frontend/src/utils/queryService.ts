@@ -135,31 +135,32 @@ export const fetchUserBookings = async (email: string) => {
 };
 
 
-// Function to cancel a booking by ID
-export const cancelBooking = async (bookingId: string) => {
-  if (!bookingId) {
-    throw new Error("Booking ID is required to cancel a booking.");
-  }
-
-  try {
-    const response = await fetch(`/api/bookings/cancelBooking?id=${encodeURIComponent(bookingId)}`, {
-      method: 'DELETE', // Use DELETE method for cancellations
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`Error: ${response.status} ${response.statusText} - ${errorData.message || "No additional error information."}`);
+// Function to cancel a booking by ID and email
+export const cancelBooking = async (bookingId: number, email: string) => {
+    if (bookingId === undefined || !email) {
+        throw new Error("Booking ID and email are required to cancel a booking.");
     }
 
-    const data = await response.json();
-    console.log("Successfully cancelled booking:", data); // Log cancellation success
-    return data; // You may not need to return anything if you're just refreshing data
-  } catch (error) {
-    console.error("Cancel booking error:", error);
-    throw error; // Re-throw to handle in your UI component
-  }
+    try {
+        const response = await fetch(`/api/bookings/cancelBooking?bookingId=${encodeURIComponent(bookingId)}&email=${encodeURIComponent(email)}`, {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Error: ${response.status} ${response.statusText} - ${errorData.message || "No additional error information."}`);
+        }
+
+        const data = await response.json();
+        console.log("Successfully cancelled booking:", data);
+        return data; // Optional: return response data if needed
+    } catch (error) {
+        console.error("Cancel booking error:", error);
+        throw error; // Re-throw to handle in your UI component
+    }
 };
+
