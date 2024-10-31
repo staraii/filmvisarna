@@ -4,13 +4,6 @@ import reqUtil from "./reqUtil";
 import { QueryClient, queryOptions } from "@tanstack/react-query";
 import { ActionFunctionArgs } from "react-router-dom";
 
-import {
-  QueryClient,
-  queryOptions
-} from "@tanstack/react-query";
-
-
-
 export type QueryParams = {
   query: string;
   queryName: string;
@@ -51,7 +44,7 @@ export type HomePageScreenings = {
 export async function getQueryData(query: string) {
   try {
     const { data, status } = await reqUtil("GET", query);
-    if ((status < 300) && data) {
+    if (status < 300 && data) {
       return data;
     }
     return [];
@@ -184,14 +177,7 @@ export const bookingAction = async ({ request }: ActionFunctionArgs) => {
     console.error("Error in bookingAction", error);
     return { bookingSuccess: false, error };
   }
-
 };
-
-  await queryClient.ensureQueryData(loaderQuery(queryParamsOne));
-  await queryClient.ensureQueryData(loaderQuery(queryParamsTwo))
-  return {queryParamsOne, queryParamsTwo}
-}
-
 
 export const fetchUserBookings = async (email: string) => {
   if (!email) {
@@ -199,17 +185,24 @@ export const fetchUserBookings = async (email: string) => {
   }
 
   try {
-    const response = await fetch(`/api/bookings/fullBookings?email=${encodeURIComponent(email)}`, {
-      method: 'GET',
-      credentials: 'include', // This ensures cookies are sent along with the request
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const response = await fetch(
+      `/api/bookings/fullBookings?email=${encodeURIComponent(email)}`,
+      {
+        method: "GET",
+        credentials: "include", // This ensures cookies are sent along with the request
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(`Error: ${response.status} ${response.statusText} - ${errorData.message || "No additional error information."}`);
+      throw new Error(
+        `Error: ${response.status} ${response.statusText} - ${
+          errorData.message || "No additional error information."
+        }`
+      );
     }
 
     const data = await response.json();
@@ -221,35 +214,40 @@ export const fetchUserBookings = async (email: string) => {
   }
 };
 
-
 // Function to cancel a booking by ID and email
 export const cancelBooking = async (bookingId: number, email: string) => {
-    if (bookingId === undefined || !email) {
-        throw new Error("Booking ID and email are required to cancel a booking.");
+  if (bookingId === undefined || !email) {
+    throw new Error("Booking ID and email are required to cancel a booking.");
+  }
+
+  try {
+    const response = await fetch(
+      `/api/bookings/cancelBooking?bookingId=${encodeURIComponent(
+        bookingId
+      )}&email=${encodeURIComponent(email)}`,
+      {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(
+        `Error: ${response.status} ${response.statusText} - ${
+          errorData.message || "No additional error information."
+        }`
+      );
     }
 
-    try {
-        const response = await fetch(`/api/bookings/cancelBooking?bookingId=${encodeURIComponent(bookingId)}&email=${encodeURIComponent(email)}`, {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`Error: ${response.status} ${response.statusText} - ${errorData.message || "No additional error information."}`);
-        }
-
-        const data = await response.json();
-        console.log("Successfully cancelled booking:", data);
-        return data; // Optional: return response data if needed
-    } catch (error) {
-        console.error("Cancel booking error:", error);
-        throw error; // Re-throw to handle in your UI component
-    }
+    const data = await response.json();
+    console.log("Successfully cancelled booking:", data);
+    return data; // Optional: return response data if needed
+  } catch (error) {
+    console.error("Cancel booking error:", error);
+    throw error; // Re-throw to handle in your UI component
+  }
 };
-
-
-

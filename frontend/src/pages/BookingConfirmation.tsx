@@ -1,6 +1,6 @@
 import { Row, Col, Container } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
-import getWeekday from "../utils/getWeekday";
+import { getWeekday } from "../utils/dateTimeUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DualQueryParams, loaderQuery } from "../utils/queryService";
 import ErrorPage from "./ErrorPage/ErrorPage";
