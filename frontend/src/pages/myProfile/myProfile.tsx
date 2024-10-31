@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../utils/authContext";
 import { fetchUserBookings, cancelBooking } from "../../utils/queryService";
+import Pagination from 'react-bootstrap/Pagination'; // Import Bootstrap pagination
+
 import "./myProfile.css";
 
 // Define a Booking interface according to the fetched data structure
@@ -79,7 +81,7 @@ const MinProfil = () => {
   return (
     <div className="profile-container">
       <div className="profile-section">
-        <h2>Välkommen, {userEmail}</h2>
+        <p>Välkommen, {userEmail}</p>
       </div>
       <hr />
 
@@ -97,7 +99,7 @@ const MinProfil = () => {
             />
             {/* Show pagination only if there are more than itemsPerPage bookings */}
             {currentBookings.length > itemsPerPage && (
-              <Pagination
+              <CustomPagination
                 totalPages={Math.ceil(currentBookings.length / itemsPerPage)}
                 currentPage={currentBookingPage}
                 setPage={setCurrentBookingPage}
@@ -121,7 +123,7 @@ const MinProfil = () => {
             />
             {/* Show pagination only if there are more than itemsPerPage bookings */}
             {pastBookings.length > itemsPerPage && (
-              <Pagination
+              <CustomPagination
                 totalPages={Math.ceil(pastBookings.length / itemsPerPage)}
                 currentPage={pastBookingPage}
                 setPage={setPastBookingPage}
@@ -164,19 +166,19 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, o
             <td>{new Date(booking.screeningTime).toLocaleDateString('sv-SE')}</td> {/* Swedish Date Format */}
             <td>{new Date(booking.screeningTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td> {/* Time Display */}
             <td>{booking.bookingNumber}</td>
-            {onCancelBooking && (
-              <td>
-                <button
-                  className="cancel-button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onCancelBooking(booking.bookingId); // No need to convert to string
-                  }}
-                >
-                  Avboka
-                </button>
-              </td>
-            )}
+           {onCancelBooking && (
+  <td>
+    <button
+      className="cancel-button" // Use the new cancel button styles
+      onClick={(e) => {
+        e.stopPropagation();
+        onCancelBooking(booking.bookingId); // No need to convert to string
+      }}
+    >
+      Avboka
+    </button>
+  </td>
+)}
           </tr>
         ))}
       </tbody>
@@ -184,26 +186,41 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, o
   </div>
 );
 
-// Pagination component
-interface PaginationProps {
+// Updated Pagination component using Bootstrap Pagination
+interface CustomPaginationProps {
   totalPages: number;
   currentPage: number;
   setPage: (page: number) => void; // Function to set the page
 }
 
-const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, setPage }) => (
-  <div className="pagination">
-    {[...Array(totalPages).keys()].map((num) => (
-      <button
-        key={num}
-        onClick={() => setPage(num + 1)}
-        className={currentPage === num + 1 ? "active" : ""}
-      >
-        {num + 1}
-      </button>
-    ))}
+const CustomPagination: React.FC<CustomPaginationProps> = ({
+  totalPages,
+  currentPage,
+  setPage,
+}) => (
+  <div className="custom-pagination">
+    <Pagination className="d-flex justify-content-center mt-3">
+      <Pagination.Prev
+        onClick={() => currentPage > 1 && setPage(currentPage - 1)}
+        disabled={currentPage === 1}
+      />
+      {[...Array(totalPages)].map((_, pageNum) => (
+        <Pagination.Item 
+          key={pageNum} 
+          active={currentPage === pageNum + 1}
+          onClick={() => setPage(pageNum + 1)}
+        >
+          {pageNum + 1}
+        </Pagination.Item>
+      ))}
+      <Pagination.Next 
+        onClick={() => currentPage < totalPages && setPage(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      />
+    </Pagination>
   </div>
 );
+
 
 // Booking Modal component
 interface BookingModalProps {
