@@ -7,10 +7,24 @@ import { HomePageScreenings } from "../../../utils/queryService";
 import { getWeekday } from "../../../utils/dateTimeUtils";
 import { ageRatingUtil } from "../../../utils/ageRatingUtil";
 
-
-export default function ScreeningCard({ screeningId, movieId, dayName, day, month, time, occupiedPercent, ageRating, slideURL, posterURL, subtitles, spokenLanguage }: HomePageScreenings) {
+export default function ScreeningCard({
+  screeningId,
+  movieId,
+  dayName,
+  day,
+  month,
+  time,
+  occupiedPercent,
+  ageRating,
+  slideURL,
+  posterURL,
+  subtitles,
+  spokenLanguage,
+}: HomePageScreenings) {
   const navigate = useNavigate();
+
   const age = ageRatingUtil(ageRating.toString());
+
   return (
     <Col xs={12}>
       <Card border="border-dark rounded" className="screening-card shadow-lg">

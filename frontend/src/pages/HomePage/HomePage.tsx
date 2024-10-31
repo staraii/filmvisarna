@@ -43,7 +43,9 @@ export default function HomePage() {
 
   // moviesData prefetched before route is rendered
   const { data: moviesData } = useSuspenseQuery(loaderQuery(queryParamsOne));
+
   // Typed array of data to use
+
   const movies: HomePageMovies[] = moviesData;
 
   // useGetInfinite - infinite query hook

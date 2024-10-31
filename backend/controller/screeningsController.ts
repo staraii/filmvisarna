@@ -73,7 +73,7 @@ const handleGetScreeningById = async (req: Request, res: Response) => {
     if (!result) {
       return res.status(500).json({ error: "Error getting screening" });
     }
-    return res.status(201).json({ success: result });
+    return res.status(200).json({ success: result });
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
@@ -105,7 +105,7 @@ const handleGetBookingsByBookingNumber = async (
     if (!result) {
       return res.status(500).json({ error: "Error getting booking" });
     }
-    return res.status(201).json({ success: result });
+    return res.status(200).json({ success: result });
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
