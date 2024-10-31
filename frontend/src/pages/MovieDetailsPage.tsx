@@ -114,7 +114,7 @@ function MovieDetailsPage() {
 
   const handleSelectTime = (eventKey: string | null) => {
     if (eventKey) {
-      // Dela upp eventKey för att få screening.id och tiden
+      
       const [screeningId,theatreId, time] = eventKey.split('|');
       setSelectedTime(time);
       setSelectedTheatreId(theatreId);
