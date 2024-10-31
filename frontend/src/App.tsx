@@ -30,7 +30,7 @@ import "./App.css";
 
 
 // Import the AuthProvider
-import { AuthProvider } from "./utils/authContext"; // Adjust the path as necessary
+// import { AuthProvider } from "./utils/authContext"; // Adjust the path as necessary
 // import CancelTicketsContainer from "./utils/CancelTicketsContainer";
 // import MinProfil from "./pages/myProfile/myProfile";
 // import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
@@ -41,7 +41,7 @@ export default function App() {
 
   return (
 
-     <AuthProvider>
+    
     <section className="app-section">
       {/* <Router> */}
         <WideNavBar
@@ -88,7 +88,7 @@ export default function App() {
    
       {/* </Router> */}
     </section>
-</AuthProvider>
+
 
   );
 }

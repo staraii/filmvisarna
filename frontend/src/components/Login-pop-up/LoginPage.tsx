@@ -11,8 +11,8 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // State for success modal
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
@@ -24,19 +24,22 @@ const LoginPage = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
     try {
-      await login(email, password);
-      authLogin();
-      setShowSuccessModal(true); // Show modal after successful login
+        // Call the login function and expect to get the email in response
+        const response = await login(email, password);
+        const userEmail = response.email; // Extract email from response
+        console.log("User Email:", userEmail); // Check the email here
+        authLogin(userEmail);
+        setShowSuccessModal(true); // Show modal after successful login
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
-      setError(errorMessage);
+        const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
+        setError(errorMessage);
     }
-  };
+};
 
   const handleModalClose = () => {
     setShowSuccessModal(false); // Close modal

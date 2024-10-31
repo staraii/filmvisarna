@@ -1,64 +1,70 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as AuthService from './../services/authService';
 
-// Define the context type
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: () => void;
+  userEmail: string | null;
+  login: (email: string) => void;
   logout: () => void;
   register: (formData: AuthService.FormData) => Promise<void>;
+  getUserEmail: () => string | null;
 }
 
-// Create the AuthContext with default undefined values
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// AuthProvider component to wrap around your app
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     const storedAuthState = sessionStorage.getItem('isAuthenticated');
-    return storedAuthState === 'true'; // Convert string to boolean
+    return storedAuthState === 'true';
+  });
+  const [userEmail, setUserEmail] = useState<string | null>(() => {
+    return sessionStorage.getItem('userEmail');
   });
 
-  // Handle login and logout logic
-  const login = () => {
+const login = (email: string) => {
     setIsAuthenticated(true);
+    setUserEmail(email);
     sessionStorage.setItem('isAuthenticated', 'true');
-    console.log("User logged in:", true); // Log login action
-  };
+    sessionStorage.setItem('userEmail', email);
+};
 
   const logout = () => {
     setIsAuthenticated(false);
-    sessionStorage.removeItem('isAuthenticated'); // Clear from sessionStorage
+    setUserEmail(null);
+    sessionStorage.removeItem('isAuthenticated');
+    sessionStorage.removeItem('userEmail');
   };
 
   const register = async (formData: AuthService.FormData) => {
     try {
       console.log('Attempting to register with data:', formData);
       await AuthService.register(formData);
-
-      // If registration was successful, automatically log in
-      login();
+      login(formData.email);
       console.log("Registration successful, user is logged in.");
-
     } catch (error) {
       console.error('Registration failed:', error);
       throw error;
     }
   };
 
-  // Side effect to store the updated auth state in sessionStorage when it changes
-  useEffect(() => {
+  const getUserEmail = () => userEmail;
+
+ useEffect(() => {
     sessionStorage.setItem('isAuthenticated', isAuthenticated.toString());
-  }, [isAuthenticated]);
+    if (userEmail) {
+        sessionStorage.setItem('userEmail', userEmail);
+    } else {
+        sessionStorage.removeItem('userEmail');
+    }
+}, [isAuthenticated, userEmail]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, register }}>
+    <AuthContext.Provider value={{ isAuthenticated, userEmail, login, logout, register, getUserEmail }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook to use the AuthContext
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -66,5 +72,3 @@ export const useAuth = (): AuthContextType => {
   }
   return context;
 };
-
-

@@ -1,199 +1,211 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../../utils/authContext";
+import { fetchUserBookings, cancelBooking } from "../../utils/queryService";
 import "./myProfile.css";
 
-// Define a type for booking items
+// Define a Booking interface according to the fetched data structure
 interface Booking {
-  movieName: string;
-  date: string;
-  time: string;
-  price: string; // Retaining price in booking for modal usage
-  ticketTypes: string; // New field for ticket types
-  seats: string; // New field for seats
-  numberOfTickets: number; // New field for number of tickets
+  bookingId: number; // Update to match your fetched data
+  bookingNumber: string;
+  screeningId: number;
+  screeningTime: string; // Assuming this is the date and time
+  movieTitle: string; // The movie name
+  // Add any other relevant fields here as needed
 }
 
 const MinProfil = () => {
-  // Temporary data to simulate fetched data
-  const currentBookings: Booking[] = [
-    { movieName: "Inception", date: "2024-11-01", time: "18:00", price: "120 kr", ticketTypes: "Standard", seats: "A1, A2", numberOfTickets: 2 },
-    { movieName: "Titanic", date: "2024-11-03", time: "20:00", price: "110 kr", ticketTypes: "VIP", seats: "B1", numberOfTickets: 1 },
-    { movieName: "The Matrix", date: "2024-11-05", time: "19:30", price: "130 kr", ticketTypes: "Standard", seats: "C1, C2", numberOfTickets: 2 },
-    { movieName: "Interstellar", date: "2024-11-10", time: "18:00", price: "125 kr", ticketTypes: "Student", seats: "D1", numberOfTickets: 1 },
-    // ...additional bookings
-  ];
+  const { userEmail } = useAuth(); // Get user email from context
+  console.log("User Email:", userEmail);
 
-  const pastBookings: Booking[] = [
-    { movieName: "Avatar", date: "2023-12-20", time: "16:00", price: "100 kr", ticketTypes: "Standard", seats: "E1, E2", numberOfTickets: 2 },
-    { movieName: "The Godfather", date: "2023-12-22", time: "21:00", price: "90 kr", ticketTypes: "VIP", seats: "F1", numberOfTickets: 1 },
-    { movieName: "Pulp Fiction", date: "2023-12-24", time: "20:30", price: "110 kr", ticketTypes: "Standard", seats: "G1, G2", numberOfTickets: 2 },
-    { movieName: "Forrest Gump", date: "2023-12-25", time: "18:00", price: "95 kr", ticketTypes: "Student", seats: "H1", numberOfTickets: 1 },
-    { movieName: "The Dark Knight", date: "2023-12-26", time: "19:00", price: "105 kr", ticketTypes: "VIP", seats: "I1, I2", numberOfTickets: 2 },
-    { movieName: "Fight Club", date: "2023-12-27", time: "22:00", price: "115 kr", ticketTypes: "Standard", seats: "J1", numberOfTickets: 1 },
-    // ...additional past bookings
-  ];
+  // Fetch user bookings with React Query
+  const { data: bookings, isLoading, error, refetch } = useQuery({
+    queryKey: ["userBookings", userEmail],
+    queryFn: () => fetchUserBookings(userEmail),
+    enabled: !!userEmail, // Only run the query if userEmail exists
+    retry: 1,
+  });
 
-  // Modal and booking state
+  // States for current and past bookings
+  const [currentBookings, setCurrentBookings] = useState<Booking[]>([]);
+  const [pastBookings, setPastBookings] = useState<Booking[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null); // Use the Booking type or null
-
-  // Pagination state
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [currentBookingPage, setCurrentBookingPage] = useState(1);
   const [pastBookingPage, setPastBookingPage] = useState(1);
 
-  // Pagination constants
-  const itemsPerPage = 5;
+  const itemsPerPage = 5; // Items to display per page
 
-  // Pagination logic for current bookings
-  const indexOfLastBooking = currentBookingPage * itemsPerPage;
-  const indexOfFirstBooking = indexOfLastBooking - itemsPerPage;
-  const currentBookingsToShow = currentBookings.slice(indexOfFirstBooking, indexOfLastBooking);
-  const totalBookingPages = Math.ceil(currentBookings.length / itemsPerPage);
+  // Separate bookings into current and past based on the screening time
+  useEffect(() => {
+    if (bookings) {
+      const now = new Date();
+      const current = bookings.filter((booking) => new Date(booking.screeningTime) >= now);
+      const past = bookings.filter((booking) => new Date(booking.screeningTime) < now);
+      setCurrentBookings(current);
+      setPastBookings(past);
+    }
+  }, [bookings]);
 
-  // Pagination logic for past bookings
-  const indexOfLastPastBooking = pastBookingPage * itemsPerPage;
-  const indexOfFirstPastBooking = indexOfLastPastBooking - itemsPerPage;
-  const pastBookingsToShow = pastBookings.slice(indexOfFirstPastBooking, indexOfLastPastBooking);
-  const totalPastBookingPages = Math.ceil(pastBookings.length / itemsPerPage);
-
-  // Function to change page
-  const handlePageChange = (setPage: React.Dispatch<React.SetStateAction<number>>, page: number) => {
-    setPage(page); // Update current page directly without transition
+  // Cancel booking and refetch data
+  const handleCancelBooking = async (bookingId: string) => {
+    try {
+      await cancelBooking(bookingId);
+      refetch(); // Refresh bookings after cancellation
+    } catch (error) {
+      console.error("Error cancelling booking:", error);
+    }
   };
 
-  // Function to open modal with selected booking details
+  // Handle modal display for booking details
   const handleBookingClick = (booking: Booking) => {
     setSelectedBooking(booking);
     setShowModal(true);
   };
 
-  // Function to close modal
   const handleCloseModal = () => setShowModal(false);
+
+  const paginate = (bookings: Booking[], page: number) => {
+    const indexOfLast = page * itemsPerPage;
+    const indexOfFirst = indexOfLast - itemsPerPage;
+    return bookings.slice(indexOfFirst, indexOfLast); // Return the sliced bookings for pagination
+  };
+
+  // UI conditions for loading, error, and no bookings
+  if (isLoading) return <div>Loading bookings...</div>;
+  if (error) return <div>Error fetching bookings: {(error as Error).message}</div>;
 
   return (
     <div className="profile-container">
-      {/* Welcome Section */}
       <div className="profile-section">
-        <h2>Välkommen, Alex</h2>
-        <form className="profile-form">
-          {/* Inputs removed as requested */}
-        </form>
+        <h2>Welcome, {userEmail}</h2>
       </div>
-      <hr /> {/* Horizontal line between sections */}
-      
+      <hr />
+
       {/* Current Bookings Section */}
       <div className="profile-section">
-        <h2>Bokningar</h2>
-        <div className="content"> {/* Removed transition classes */}
-          <table className="profile-table">
-            <thead>
-              <tr>
-                <th>Filmtitel</th>
-                <th>Datum</th>
-                <th>Tid</th>
-                <th>Åtgärd</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentBookingsToShow.map((booking, index) => (
-                <tr key={index} onClick={() => handleBookingClick(booking)}>
-                  <td>{booking.movieName}</td>
-                  <td>{booking.date}</td>
-                  <td>{booking.time}</td>
-                  <td>
-                    <button
-                      className="cancel-button"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent modal from opening
-                        console.log("Booking canceled for", booking.movieName);
-                      }}
-                    >
-                      Avboka
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {totalBookingPages > 1 && (
-          <div className="pagination">
-            {[...Array(totalBookingPages).keys()].map((num) => (
-              <button
-                key={num}
-                onClick={() => handlePageChange(setCurrentBookingPage, num + 1)}
-                className={currentBookingPage === num + 1 ? "active" : ""}
-              >
-                {num + 1}
-              </button>
-            ))}
-          </div>
+        <h2>Current Bookings</h2>
+        {currentBookings.length === 0 ? (
+          <p>No current bookings found.</p>
+        ) : (
+          <>
+            <BookingTable
+              bookings={paginate(currentBookings, currentBookingPage)}
+              onBookingClick={handleBookingClick}
+              onCancelBooking={handleCancelBooking}
+            />
+            <Pagination
+              totalPages={Math.ceil(currentBookings.length / itemsPerPage)}
+              currentPage={currentBookingPage}
+              setPage={setCurrentBookingPage}
+            />
+          </>
         )}
       </div>
-      <hr /> {/* Horizontal line between sections */}
-      
+      <hr />
+
       {/* Past Bookings Section */}
       <div className="profile-section">
-        <h2>Boknings Historik</h2>
-        <div className="content"> {/* Removed transition classes */}
-          <table className="profile-table">
-            <thead>
-              <tr>
-                <th>Filmtitel</th>
-                <th>Datum</th>
-                <th>Tid</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pastBookingsToShow.map((booking, index) => (
-                <tr key={index} onClick={() => handleBookingClick(booking)}>
-                  <td>{booking.movieName}</td>
-                  <td>{booking.date}</td>
-                  <td>{booking.time}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {totalPastBookingPages > 1 && (
-          <div className="pagination">
-            {[...Array(totalPastBookingPages).keys()].map((num) => (
-              <button
-                key={num}
-                onClick={() => handlePageChange(setPastBookingPage, num + 1)}
-                className={pastBookingPage === num + 1 ? "active" : ""}
-              >
-                {num + 1}
-              </button>
-            ))}
-          </div>
+        <h2>Booking History</h2>
+        {pastBookings.length === 0 ? (
+          <p>No past bookings found.</p>
+        ) : (
+          <>
+            <BookingTable
+              bookings={paginate(pastBookings, pastBookingPage)}
+              onBookingClick={handleBookingClick}
+            />
+            <Pagination
+              totalPages={Math.ceil(pastBookings.length / itemsPerPage)}
+              currentPage={pastBookingPage}
+              setPage={setPastBookingPage}
+            />
+          </>
         )}
       </div>
 
-      {/* Modal for Booking Details */}
-      {showModal && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Bokningsdetaljer</h2>
-            {selectedBooking && (
-              <div>
-                <p><strong>Film:</strong> {selectedBooking.movieName}</p>
-                <p><strong>Datum:</strong> {selectedBooking.date}</p>
-                <p><strong>Tid:</strong> {selectedBooking.time}</p>
-                <p><strong>Pris:</strong> {selectedBooking.price}</p>
-                <p><strong>Biljettyper:</strong> {selectedBooking.ticketTypes}</p>
-                <p><strong>Platser:</strong> {selectedBooking.seats}</p>
-                <p><strong>Antal biljetter:</strong> {selectedBooking.numberOfTickets}</p>
-              </div>
-            )}
-            <button className="close-modal-button" onClick={handleCloseModal}>Stäng</button>
-          </div>
-        </div>
+      {/* Booking Details Modal */}
+      {showModal && selectedBooking && (
+        <BookingModal booking={selectedBooking} onClose={handleCloseModal} />
       )}
     </div>
   );
 };
 
+// BookingTable component for current/past bookings
+const BookingTable = ({ bookings, onBookingClick, onCancelBooking }) => (
+  <div className="content">
+    <table className="profile-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Screening Time</th>
+          <th>Booking Number</th>
+          {onCancelBooking && <th>Action</th>} {/* Show cancel button only for current bookings */}
+        </tr>
+      </thead>
+      <tbody>
+        {bookings.map((booking) => (
+          <tr key={booking.bookingId} onClick={() => onBookingClick(booking)}>
+            <td>{booking.movieTitle}</td>
+            <td>{new Date(booking.screeningTime).toLocaleString()}</td> {/* Format date */}
+            <td>{booking.bookingNumber}</td> {/* Display booking number */}
+            {onCancelBooking && (
+              <td>
+                <button
+                  className="cancel-button"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent row click event
+                    onCancelBooking(booking.bookingId.toString());
+                  }}
+                >
+                  Cancel
+                </button>
+              </td>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+// Pagination component
+const Pagination = ({ totalPages, currentPage, setPage }) => (
+  <div className="pagination">
+    {[...Array(totalPages).keys()].map((num) => (
+      <button
+        key={num}
+        onClick={() => setPage(num + 1)}
+        className={currentPage === num + 1 ? "active" : ""}
+      >
+        {num + 1}
+      </button>
+    ))}
+  </div>
+);
+
+// BookingModal component
+const BookingModal = ({ booking, onClose }) => (
+  <div className="modal-overlay" onClick={onClose}>
+    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <h2>Booking Details</h2>
+      <div>
+        <p><strong>Title:</strong> {booking.movieTitle}</p>
+        <p><strong>Screening Time:</strong> {new Date(booking.screeningTime).toLocaleString()}</p>
+        <p><strong>Booking Number:</strong> {booking.bookingNumber}</p>
+        {/* Add any additional details you want to display here */}
+      </div>
+      <button className="close-modal-button" onClick={onClose}>Close</button>
+    </div>
+  </div>
+);
+
 export default MinProfil;
+
+
+
+
 
 
 
