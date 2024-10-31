@@ -3,7 +3,7 @@ import bookingsService from "../services/bookingsService.js";
 import MailService from "../services/mailService.js";
 import { db } from "../index.js";
 
-const regExes = {
+const regExes = { 
   id: /^[1-9][0-9]*$/,
   bookingNumber: /^[A-Z]{3}[\d]{3}$/,
   email: /^[\w\-.]+@[\w-]+\.+[\w-]{2,4}$/,
