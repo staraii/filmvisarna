@@ -48,7 +48,13 @@ export default function BookingPage() {
   // useEffect(() => {
   //   console.log(screeningData);
   // }, []);
-
+  useEffect(() => {
+    window.scrollTo({
+      top: 180,
+      left: 0,
+      behavior: "instant",
+    });
+  }, []);
   useEffect(() => {
     if (actionData?.bookingSuccess) {
       navigate(
@@ -82,13 +88,7 @@ export default function BookingPage() {
       );
     }
   }, [screeningData]);
-  useEffect(() => {
-    window.scrollTo({
-      top: 180,
-      left: 0,
-      behavior: "instant",
-    });
-  }, []);
+
   // nog skriva om SSE för att passa bättre här
   const [seatData, setData] = useState<{ num: number } | null>();
   useEffect(() => {
@@ -153,7 +153,11 @@ export default function BookingPage() {
         <Stack className="container booking-header justify-content-center">
           <Row className="pt-4">
             <Col>
-              <h1 className="">{screeningData.movieTitle}</h1>
+              {screeningData.movieTitle.length < 15 ? (
+                <h1 className="">{screeningData.movieTitle}</h1>
+              ) : (
+                <h3>{screeningData.movieTitle} </h3>
+              )}
             </Col>
             <Col className="pt-2">
               <h5>
