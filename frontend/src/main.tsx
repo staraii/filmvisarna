@@ -20,14 +20,9 @@ import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin"
 import LoginPage from "./components/Login-pop-up/LoginPage.tsx";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
 import BookingConfirmationPage from "./pages/BookingConfirmation.tsx";
-import MinProfil from './pages/myProfile/myProfile.tsx';
-import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.tsx';
-import { AuthProvider } from './utils/authContext.tsx';
-
-
-
-
-
+import MinProfil from "./pages/myProfile/myProfile.tsx";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.tsx";
+import { AuthProvider } from "./utils/authContext.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -53,7 +48,8 @@ const router = createBrowserRouter([
           ["/api/bookings/homePageMovies", "/api/bookings/homePageScreenings"],
           ["homePageMovies", "homePageScreeings"]
         ),
-        },
+
+      },
       {
         path: "filmer",
         element: <Movies />,
@@ -134,7 +130,7 @@ const router = createBrowserRouter([
             <MinProfil />
           </ProtectedRoute>
         ),
-      
+
         errorElement: <ErrorPage />,
       },
     ],
@@ -143,11 +139,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-     <AuthProvider>
-    <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
-      </AuthProvider>
+    </AuthProvider>
   </StrictMode>
 );

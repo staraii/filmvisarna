@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import { loaderQuery, QueryParams } from "../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import getWeekday from "../utils/getWeekday";
+import { getWeekday } from "../utils/dateTimeUtils";
 
 interface RowSeats {
   seats: number;

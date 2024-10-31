@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bookingsService from "../services/bookingsService.js";
 import MailService from "../services/mailService.js";
 import { db } from "../index.js";
- 
+
 const regExes = { 
   id: /^[1-9][0-9]*$/,
   bookingNumber: /^[A-Z]{3}[\d]{3}$/,
@@ -10,7 +10,7 @@ const regExes = {
   seats: /^[1-9][0-9]{0,2}$/,
   ticketType: /^[1-9][0-9]{0,1}$/,
   boolean: /^[0-1]$/,
-}; 
+};
 
 // --- VALID QUERIE PARAMETERS/VALUES ---
 
@@ -44,22 +44,8 @@ const handleGetBookings = async (req: Request, res: Response) => {
     const { table } = req.params;
     const queryParams = req.query;
     const whereArgs: string[] = [];
-    const queryParamsArr: (string)[] = [];
+    const queryParamsArr: string[] = [];
     let sql = `SELECT * FROM \`${table}\``;
-
-// Extract userId from query params (if needed)
-    const userId = queryParams.userId;
-    if (typeof userId === 'string' && regExes.id.test(userId)) {
-      whereArgs.push(`userId = ?`);
-      queryParamsArr.push(Number(userId)); // Convert to number if needed
-    }
-
-    // Check if email is provided as a query parameter
-    const email = queryParams.email; // Access the email query parameter
-    if (typeof email === 'string' && regExes.email.test(email)) {
-      whereArgs.push(`email = ?`); // Add email condition
-      queryParamsArr.push(email); // Push email to parameters array
-    }
 
     // Handle other query parameters
     for (const [key, value] of Object.entries(queryParams)) {
@@ -70,15 +56,21 @@ const handleGetBookings = async (req: Request, res: Response) => {
         });
       }
 
-      if (typeof key === "string" && typeof value === "string") {   
+      if (typeof key === "string" && typeof value === "string") {
         if (key === "limit" || key === "offset" || key === "sort") {
           continue;
         }
         if (key.endsWith(">") || key.endsWith("<") || key.endsWith("!")) {
           const [newKey, op] = key.split(/(!|<|>)/);
-          if (op === ">") { whereArgs.push(`\`${newKey}\` >= ?`) }
-          if (op === "<") { whereArgs.push(`\`${newKey}\` <= ?`) }
-          if (op === "!") { whereArgs.push(`\`${newKey}\` <> ?`)}
+          if (op === ">") {
+            whereArgs.push(`\`${newKey}\` >= ?`);
+          }
+          if (op === "<") {
+            whereArgs.push(`\`${newKey}\` <= ?`);
+          }
+          if (op === "!") {
+            whereArgs.push(`\`${newKey}\` <> ?`);
+          }
           queryParamsArr.push(value);
         } else if (
           (table === "fullMovies" && key === "categories") ||
@@ -100,7 +92,8 @@ const handleGetBookings = async (req: Request, res: Response) => {
     if (queryParams.sort) {
       const sortParams = queryParams.sort.toString().split(":");
       const sortColumn = sortParams[0];
-      const sortOrder = sortParams[1]?.toUpperCase() === "DESC" ? "DESC" : "ASC";
+      const sortOrder =
+        sortParams[1]?.toUpperCase() === "DESC" ? "DESC" : "ASC";
       sql += ` ORDER BY \`${sortColumn}\` ${sortOrder}`;
     }
     if (queryParams.limit) {
@@ -120,20 +113,36 @@ const handleGetBookings = async (req: Request, res: Response) => {
     console.error(error);
     return res.status(500).send("Server error");
   }
-}
+};
 type Seat = {
   seatId: number;
   ticketTypeId: number;
-} 
+};
 // POST /api/bookings/:userId?  body{ email, screeningId, seats: [{seatId: number, ticketTypeId: number}]}
 const createNewBooking = async (req: Request, res: Response) => {
   //const userId = regExes.id.test(req.params.userId) ? +req.params.userId : null;
-  const userId = (typeof req.query.userId === "string" && regExes.id.test(req.query.userId)) ? +req.query.userId : null;
+  const userId =
+    typeof req.query.userId === "string" && regExes.id.test(req.query.userId)
+      ? +req.query.userId
+      : null;
   const { email, screeningId, seats } = req.body;
-  if (!regExes.email.test(email) || !regExes.id.test(screeningId.toString()) || !seats.every((seat: Seat) => regExes.seats.test(seat.seatId.toString()) && regExes.ticketType.test(seat.ticketTypeId.toString()))) {
+  if (
+    !regExes.email.test(email) ||
+    !regExes.id.test(screeningId.toString()) ||
+    !seats.every(
+      (seat: Seat) =>
+        regExes.seats.test(seat.seatId.toString()) &&
+        regExes.ticketType.test(seat.ticketTypeId.toString())
+    )
+  ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const result = await bookingsService.createNewBooking(userId, email, screeningId, seats);
+  const result = await bookingsService.createNewBooking(
+    userId,
+    email,
+    screeningId,
+    seats
+  );
   if (!result) {
     return res.status(500).json({ error: "An error accured while booking" });
   }
@@ -145,42 +154,94 @@ const createNewBooking = async (req: Request, res: Response) => {
   const mailService = new MailService();
   await mailService.sendMail(result.bookingNumber);
   return res.status(201).json(booking);
-}
-
+};
 
 // Update bookings isActive status
 // PUT /api/bookings/bookings?bookingNumber=GGJ432&isActive=0
 // Update bookings isPayed status
 // PUT /api/bookings/bookings?bookingNumber=GGJ432&isPayed=1
 const updateBooking = async (req: Request, res: Response) => {
-  const bookingNumber = (typeof req.query.bookingNumber === "string" && regExes.bookingNumber.test(req.query.bookingNumber)) ? req.query.bookingNumber : undefined;
-  const isPayed = (typeof req.query.isPayed === "string" && regExes.boolean.test(req.query.isPayed)) ? req.query.isPayed : undefined;
-  const isActive = (typeof req.query.isActive === "string" && regExes.boolean.test(req.query.isActive)) ? req.query.isActive : undefined;
+  const bookingNumber =
+    typeof req.query.bookingNumber === "string" &&
+    regExes.bookingNumber.test(req.query.bookingNumber)
+      ? req.query.bookingNumber
+      : undefined;
+  const isPayed =
+    typeof req.query.isPayed === "string" &&
+    regExes.boolean.test(req.query.isPayed)
+      ? req.query.isPayed
+      : undefined;
+  const isActive =
+    typeof req.query.isActive === "string" &&
+    regExes.boolean.test(req.query.isActive)
+      ? req.query.isActive
+      : undefined;
   if (bookingNumber && (isPayed || isActive)) {
-    const result = await bookingsService.updateBookingStatus(bookingNumber, isPayed!, isActive!);
+    const result = await bookingsService.updateBookingStatus(
+      bookingNumber,
+      isPayed!,
+      isActive!
+    );
     if (!result) {
-      return res.status(500).json({ error: "An error occured while updating record" });
+      return res
+        .status(500)
+        .json({ error: "An error occured while updating record" });
     }
-    return res.status(200).json({ message: `Booking: ${bookingNumber}, updated status ${isPayed ? "isPayed: " : "isActive: "} ${isPayed ? isPayed === "1" ? "true" : "false" : isActive === "0" ? "false" : "true"}` });
+    return res
+      .status(200)
+      .json({
+        message: `Booking: ${bookingNumber}, updated status ${
+          isPayed ? "isPayed: " : "isActive: "
+        } ${
+          isPayed
+            ? isPayed === "1"
+              ? "true"
+              : "false"
+            : isActive === "0"
+            ? "false"
+            : "true"
+        }`,
+      });
   }
-}
+};
 
 // DELETE /api/bookings/:bookings?bookingNumber=ADR304    /admin, staff
 // DELETE /api/bookings/:bookings?bookingNumber=ADR304&userId=4     /user
 // DELETE /api/bookings/:bookings?bookingNumber=ADR304&email=adress@email.se    /visitor
 const deleteBooking = async (req: Request, res: Response) => {
-  const bookingNumber = (typeof req.query.bookingNumber === "string" && regExes.bookingNumber.test(req.query.bookingNumber)) ? req.query.bookingNumber : undefined;
-  const email = (typeof req.query.email === "string" && regExes.email.test(req.query.email)) ? req.query.email : undefined;
-  const userId = (typeof req.query.userId === "string" && regExes.id.test(req.query.userId)) ? req.query.userId : undefined;
+  const bookingNumber =
+    typeof req.query.bookingNumber === "string" &&
+    regExes.bookingNumber.test(req.query.bookingNumber)
+      ? req.query.bookingNumber
+      : undefined;
+  const email =
+    typeof req.query.email === "string" && regExes.email.test(req.query.email)
+      ? req.query.email
+      : undefined;
+  const userId =
+    typeof req.query.userId === "string" && regExes.id.test(req.query.userId)
+      ? req.query.userId
+      : undefined;
 
   if (!bookingNumber) {
     return res.status(400).json({ message: "Invalid request parameters" });
   }
-  const result = await bookingsService.deleteBooking(bookingNumber, email!, userId!);
+  const result = await bookingsService.deleteBooking(
+    bookingNumber,
+    email!,
+    userId!
+  );
   if (!result) {
     return res.status(500).json({ message: "Error deleting resource" });
   }
-  return res.status(200).json({message: `Booking: ${bookingNumber} successfully deleted`})
-} 
+  return res
+    .status(200)
+    .json({ message: `Booking: ${bookingNumber} successfully deleted` });
+};
 
-export default { handleGetBookings, createNewBooking, deleteBooking, updateBooking };
+export default {
+  handleGetBookings,
+  createNewBooking,
+  deleteBooking,
+  updateBooking,
+};
