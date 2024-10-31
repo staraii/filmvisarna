@@ -44,13 +44,29 @@ const handleGetBookings = async (req: Request, res: Response) => {
     const { table } = req.params;
     const queryParams = req.query;
     const whereArgs: string[] = [];
-    const queryParamsArr: (string | number)[] = [];
+    const queryParamsArr: (string)[] = [];
     let sql = `SELECT * FROM \`${table}\``;
+
+// Extract userId from query params (if needed)
+    const userId = queryParams.userId;
+    if (typeof userId === 'string' && regExes.id.test(userId)) {
+      whereArgs.push(`userId = ?`);
+      queryParamsArr.push(Number(userId)); // Convert to number if needed
+    }
+
+    // Check if email is provided as a query parameter
+    const email = queryParams.email; // Access the email query parameter
+    if (typeof email === 'string' && regExes.email.test(email)) {
+      whereArgs.push(`email = ?`); // Add email condition
+      queryParamsArr.push(email); // Push email to parameters array
+    }
+
+    // Handle other query parameters
     for (const [key, value] of Object.entries(queryParams)) {
       if (typeof key === "string" && value instanceof Array) {
         value.forEach((val) => {
-            whereArgs.push(`FIND_IN_SET(?, REPLACE(\`${key}\`, " ", ""))`);
-            queryParamsArr.push(val as string);
+          whereArgs.push(`FIND_IN_SET(?, REPLACE(\`${key}\`, " ", ""))`);
+          queryParamsArr.push(val as string);
         });
       }
 
@@ -89,11 +105,11 @@ const handleGetBookings = async (req: Request, res: Response) => {
     }
     if (queryParams.limit) {
       sql += ` LIMIT ?`;
-      queryParamsArr.push(Number(queryParams.limit));
+      queryParamsArr.push(queryParams.limit.toString());
     }
     if (queryParams.offset) {
       sql += ` OFFSET ?`;
-      queryParamsArr.push(Number(queryParams.offset));
+      queryParamsArr.push(queryParams.offset.toString());
     }
     const [rows] = await db.execute(sql, queryParamsArr);
     if (rows instanceof Array && rows.length === 0) {

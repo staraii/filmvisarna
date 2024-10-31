@@ -1,196 +1,261 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../../utils/authContext";
+import { fetchUserBookings, cancelBooking } from "../../utils/queryService";
 import "./myProfile.css";
 
+// Define a Booking interface according to the fetched data structure
+interface Booking {
+  bookingId: number; // Unique ID for the booking
+  bookingNumber: string; // Booking reference number
+  screeningId: number; // ID of the screening
+  screeningTime: string; // Screening date and time (ISO 8601 format)
+  movieTitle: string; // Name of the movie
+  seats: string[]; // Array of seat numbers
+  bookingDate: string; // The date when the booking was made
+}
+
 const MinProfil = () => {
-  // Temporary data to simulate fetched data
-  const currentBookings = [
-    { movieName: "Inception", date: "2024-11-01", time: "18:00", price: "120 kr" },
-    { movieName: "Titanic", date: "2024-11-03", time: "20:00", price: "110 kr" },
-    { movieName: "The Matrix", date: "2024-11-05", time: "19:30", price: "130 kr" },
-    { movieName: "Interstellar", date: "2024-11-10", time: "18:00", price: "125 kr" },
-    // ...additional bookings
-  ];
+  const { userEmail } = useAuth(); // Get user email from context
+  console.log("Användarens e-post:", userEmail);
 
-  const pastBookings = [
-    { movieName: "Avatar", date: "2023-12-20", time: "16:00", price: "100 kr" },
-    { movieName: "The Godfather", date: "2023-12-22", time: "21:00", price: "90 kr" },
-    { movieName: "Pulp Fiction", date: "2023-12-24", time: "20:30", price: "110 kr" },
-    { movieName: "Forrest Gump", date: "2023-12-25", time: "18:00", price: "95 kr" },
-    { movieName: "The Dark Knight", date: "2023-12-26", time: "19:00", price: "105 kr" },
-    { movieName: "Fight Club", date: "2023-12-27", time: "22:00", price: "115 kr" },
-    // ...additional past bookings
-  ];
+  // Fetch user bookings with React Query
+  const { data: bookings, isLoading, error, refetch } = useQuery({
+    queryKey: ["userBookings", userEmail],
+    queryFn: () => fetchUserBookings(userEmail!),
+    enabled: !!userEmail, // Only run the query if userEmail exists
+    retry: 1,
+  });
 
-  // Modal and booking state
+  // States for current and past bookings
+  const [currentBookings, setCurrentBookings] = useState<Booking[]>([]);
+  const [pastBookings, setPastBookings] = useState<Booking[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState(null);
-
-  // Pagination state
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [currentBookingPage, setCurrentBookingPage] = useState(1);
   const [pastBookingPage, setPastBookingPage] = useState(1);
-  
-  // State for transitions
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Pagination constants
-  const itemsPerPage = 5;
+  const itemsPerPage = 5; // Items to display per page
 
-  // Pagination logic for current bookings
-  const indexOfLastBooking = currentBookingPage * itemsPerPage;
-  const indexOfFirstBooking = indexOfLastBooking - itemsPerPage;
-  const currentBookingsToShow = currentBookings.slice(indexOfFirstBooking, indexOfLastBooking);
-  const totalBookingPages = Math.ceil(currentBookings.length / itemsPerPage);
+  // Separate bookings into current and past based on the screening time
+  useEffect(() => {
+    if (bookings) {
+      const now = new Date();
+      const current = bookings.filter((booking: Booking) => new Date(booking.screeningTime) >= now);
+      const past = bookings.filter((booking: Booking) => new Date(booking.screeningTime) < now);
+      setCurrentBookings(current);
+      setPastBookings(past);
+    }
+  }, [bookings]);
 
-  // Pagination logic for past bookings
-  const indexOfLastPastBooking = pastBookingPage * itemsPerPage;
-  const indexOfFirstPastBooking = indexOfLastPastBooking - itemsPerPage;
-  const pastBookingsToShow = pastBookings.slice(indexOfFirstPastBooking, indexOfLastPastBooking);
-  const totalPastBookingPages = Math.ceil(pastBookings.length / itemsPerPage);
-
-  // Function to change page with transition
-  const handlePageChange = (setPage, page) => {
-    setIsTransitioning(true); // Start transition
-    setTimeout(() => {
-      setPage(page); // Update current page after transition
-      setIsTransitioning(false); // End transition
-    }, 500); // Match this duration with CSS transition duration
+  // Cancel booking and refetch data
+  const handleCancelBooking = async (bookingId: number) => {
+    try {
+      await cancelBooking(bookingId, userEmail!); // Ensure userEmail is not null or undefined
+      refetch(); // Refresh bookings after cancellation
+    } catch (error) {
+      console.error("Fel vid avbokning:", error);
+    }
   };
 
-  // Function to open modal with selected booking details
-  const handleBookingClick = (booking) => {
+  // Handle modal display for booking details
+  const handleBookingClick = (booking: Booking) => {
     setSelectedBooking(booking);
     setShowModal(true);
   };
 
-  // Function to close modal
   const handleCloseModal = () => setShowModal(false);
+
+  const paginate = (bookings: Booking[], page: number) => {
+    const indexOfLast = page * itemsPerPage;
+    const indexOfFirst = indexOfLast - itemsPerPage;
+    return bookings.slice(indexOfFirst, indexOfLast); // Return the sliced bookings for pagination
+  };
+
+  // UI conditions for loading, error, and no bookings
+  if (isLoading) return <div>Laddar bokningar...</div>;
+  if (error) return <div>Fel vid hämtning av bokningar: {(error as Error).message}</div>;
 
   return (
     <div className="profile-container">
-      {/* Welcome Section */}
       <div className="profile-section">
-        <h2>Välkommen Alex</h2>
-        <form className="profile-form">
-          {/* Inputs removed as requested */}
-        </form>
+        <h2>Välkommen, {userEmail}</h2>
       </div>
-      <hr /> {/* Horizontal line between sections */}
-      
+      <hr />
+
       {/* Current Bookings Section */}
       <div className="profile-section">
-        <h2>Bokningar</h2>
-        <div className={`content ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
-          <table className="profile-table">
-            <thead>
-              <tr>
-                <th>Filmtitel</th>
-                <th>Datum</th>
-                <th>Tid</th>
-                <th>Pris</th>
-                <th>Åtgärd</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentBookingsToShow.map((booking, index) => (
-                <tr key={index} onClick={() => handleBookingClick(booking)}>
-                  <td>{booking.movieName}</td>
-                  <td>{booking.date}</td>
-                  <td>{booking.time}</td>
-                  <td>{booking.price}</td>
-                  <td>
-                    <button
-                      className="cancel-button"
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent modal from opening
-                        console.log("Booking canceled for", booking.movieName);
-                      }}
-                    >
-                      Avboka
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {totalBookingPages > 1 && (
-          <div className="pagination">
-            {[...Array(totalBookingPages).keys()].map((num) => (
-              <button
-                key={num}
-                onClick={() => handlePageChange(setCurrentBookingPage, num + 1)}
-                className={currentBookingPage === num + 1 ? "active" : ""}
-              >
-                {num + 1}
-              </button>
-            ))}
-          </div>
+        <h2>Aktuella Bokningar</h2>
+        {currentBookings.length === 0 ? (
+          <p>Inga aktuella bokningar hittades.</p>
+        ) : (
+          <>
+            <BookingTable
+              bookings={paginate(currentBookings, currentBookingPage)}
+              onBookingClick={handleBookingClick}
+              onCancelBooking={handleCancelBooking}
+            />
+            {/* Show pagination only if there are more than itemsPerPage bookings */}
+            {currentBookings.length > itemsPerPage && (
+              <Pagination
+                totalPages={Math.ceil(currentBookings.length / itemsPerPage)}
+                currentPage={currentBookingPage}
+                setPage={setCurrentBookingPage}
+              />
+            )}
+          </>
         )}
       </div>
-      <hr /> {/* Horizontal line between sections */}
-      
+      <hr />
+
       {/* Past Bookings Section */}
       <div className="profile-section">
-        <h2>Boknings Historik</h2>
-        <div className={`content ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
-          <table className="profile-table">
-            <thead>
-              <tr>
-                <th>Filmtitel</th>
-                <th>Datum</th>
-                <th>Tid</th>
-                <th>Pris</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pastBookingsToShow.map((booking, index) => (
-                <tr key={index} onClick={() => handleBookingClick(booking)}>
-                  <td>{booking.movieName}</td>
-                  <td>{booking.date}</td>
-                  <td>{booking.time}</td>
-                  <td>{booking.price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {totalPastBookingPages > 1 && (
-          <div className="pagination">
-            {[...Array(totalPastBookingPages).keys()].map((num) => (
-              <button
-                key={num}
-                onClick={() => handlePageChange(setPastBookingPage, num + 1)}
-                className={pastBookingPage === num + 1 ? "active" : ""}
-              >
-                {num + 1}
-              </button>
-            ))}
-          </div>
+        <h2>Bokningshistorik</h2>
+        {pastBookings.length === 0 ? (
+          <p>Inga tidigare bokningar hittades.</p>
+        ) : (
+          <>
+            <BookingTable
+              bookings={paginate(pastBookings, pastBookingPage)}
+              onBookingClick={handleBookingClick}
+            />
+            {/* Show pagination only if there are more than itemsPerPage bookings */}
+            {pastBookings.length > itemsPerPage && (
+              <Pagination
+                totalPages={Math.ceil(pastBookings.length / itemsPerPage)}
+                currentPage={pastBookingPage}
+                setPage={setPastBookingPage}
+              />
+            )}
+          </>
         )}
       </div>
 
-      {/* Modal for Booking Details */}
-      {showModal && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Bokningsdetaljer</h2>
-            {selectedBooking && (
-              <div>
-                <p><strong>Film:</strong> {selectedBooking.movieName}</p>
-                <p><strong>Datum:</strong> {selectedBooking.date}</p>
-                <p><strong>Tid:</strong> {selectedBooking.time}</p>
-                <p><strong>Pris:</strong> {selectedBooking.price}</p>
-              </div>
-            )}
-            <button className="close-modal-button" onClick={handleCloseModal}>Stäng</button>
-          </div>
-        </div>
+      {/* Booking Details Modal */}
+      {showModal && selectedBooking && (
+        <BookingModal booking={selectedBooking} onClose={handleCloseModal} />
       )}
     </div>
   );
 };
 
+interface BookingTableProps {
+  bookings: Booking[];
+  onBookingClick: (booking: Booking) => void;
+  onCancelBooking?: (bookingId: number) => void; // Optional prop
+}
+
+const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, onCancelBooking }) => (
+  <div className="content">
+    <table className="profile-table">
+      <thead>
+        <tr>
+          <th>Titel</th>
+          <th>Visningsdatum</th>
+          <th>Visningstid</th>
+          <th>Booking Number</th>
+          {onCancelBooking && <th>Avboka</th>}
+        </tr>
+      </thead>
+      <tbody>
+        {bookings.map((booking) => (
+          <tr key={booking.bookingId} onClick={() => onBookingClick(booking)}>
+            <td>{booking.movieTitle}</td>
+            <td>{new Date(booking.screeningTime).toLocaleDateString('sv-SE')}</td> {/* Swedish Date Format */}
+            <td>{new Date(booking.screeningTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td> {/* Time Display */}
+            <td>{booking.bookingNumber}</td>
+            {onCancelBooking && (
+              <td>
+                <button
+                  className="cancel-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onCancelBooking(booking.bookingId); // No need to convert to string
+                  }}
+                >
+                  Avboka
+                </button>
+              </td>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+);
+
+// Pagination component
+interface PaginationProps {
+  totalPages: number;
+  currentPage: number;
+  setPage: (page: number) => void; // Function to set the page
+}
+
+const Pagination: React.FC<PaginationProps> = ({ totalPages, currentPage, setPage }) => (
+  <div className="pagination">
+    {[...Array(totalPages).keys()].map((num) => (
+      <button
+        key={num}
+        onClick={() => setPage(num + 1)}
+        className={currentPage === num + 1 ? "active" : ""}
+      >
+        {num + 1}
+      </button>
+    ))}
+  </div>
+);
+
+// Booking Modal component
+interface BookingModalProps {
+  booking: Booking;
+  onClose: () => void;
+}
+
+const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
+  const screeningDate = new Date(booking.screeningTime);
+  const formattedDate = screeningDate.toLocaleDateString('sv-SE'); // Format date in Swedish
+  const formattedTime = screeningDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format time
+  const formattedBookingDate = new Date(booking.bookingDate).toLocaleString('sv-SE'); // Format booking date
+
+  // Check if seats is an array and provide a fallback if not
+  const seatsDisplay = Array.isArray(booking.seats) ? booking.seats.join(', ') : 'Inga platser valda';
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <h2>Bokningsdetaljer</h2>
+        <div>
+          <p><strong>Film titel:</strong> {booking.movieTitle}</p>
+          <p><strong>Visningarsdatum:</strong> {formattedDate}</p>
+          <p><strong>Visningarstid:</strong> {formattedTime}</p>
+          <p><strong>Platser:</strong> {seatsDisplay}</p>
+          <p><strong>Bokningsnummer:</strong> {booking.bookingNumber}</p>
+          <p><strong>Bokningsdatum:</strong> {formattedBookingDate}</p>
+        </div>
+        <button className="close-modal-button" onClick={onClose}>Stäng</button>
+      </div>
+    </div>
+  );
+};
+
 export default MinProfil;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

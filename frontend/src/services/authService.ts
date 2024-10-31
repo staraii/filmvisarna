@@ -96,7 +96,3 @@ export const getMe = async () => {
 };
 
 
-function MoveDetailsPage() {
-  const queryParams = useLoaderData() as QueryParams;
-  const { data: movies } = useSuspenseQuery(loaderQuery(queryParams));
-}

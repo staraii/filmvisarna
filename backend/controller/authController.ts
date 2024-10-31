@@ -72,7 +72,8 @@ export const login = async (req: Request, res: Response) => {
     req.session.userRole = user.role;
     
 
-    res.json({ message: 'Login successful', user: { id: user.id, email: user.email, role: user.role } });
+     // Return the user's email along with a success message
+    res.json({ message: 'Login successful', email: user.email });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Error during login' });

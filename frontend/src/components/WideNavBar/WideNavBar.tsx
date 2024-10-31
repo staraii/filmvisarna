@@ -1,24 +1,24 @@
-
 import Navbar from "react-bootstrap/Navbar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Nav from "react-bootstrap/Nav";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/authContext"; // Importing AuthContext for auth state
 import { logout as authLogout } from "../../services/authService"; // Import your logout function from authService
+import { Modal, Button } from "react-bootstrap"; // Import Modal and Button for confirmation
 import "./wide-navbar.css";
 
-interface WideNavBarProps {
-  onLoginShow: () => void; // Props to trigger login modal
-}
-
-const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
+const WideNavBar = () => {
   const { isAuthenticated, logout } = useAuth(); // Access authentication state and logout function
   const navigate = useNavigate();
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); // State for logout confirmation modal
 
-   useEffect(() => {
+  useEffect(() => {
     console.log("Authentication state changed:", isAuthenticated);
   }, [isAuthenticated]); // Re-render the navbar when `isAuthenticated` changes
 
+  const handleLogoutConfirmation = () => {
+    setShowLogoutConfirmation(true); // Show the logout confirmation modal
+  };
 
   const handleLogout = async () => {
     try {
@@ -28,7 +28,13 @@ const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
     } catch (error) {
       console.error("Logout failed:", error);
       // Optionally, show a user-friendly message here
+    } finally {
+      setShowLogoutConfirmation(false); // Close the logout confirmation modal
     }
+  };
+
+  const handleCloseLogoutConfirmation = () => {
+    setShowLogoutConfirmation(false); // Close the logout confirmation modal
   };
 
   return (
@@ -50,8 +56,7 @@ const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
           Bio kalender
         </Nav.Link>
 
-
-          {/* Conditionally show the "Avboka biljetter" link if not authenticated */}
+        {/* Conditionally show the "Avboka biljetter" link if not authenticated */}
         {!isAuthenticated && (
           <Nav.Link className="fw-medium" onClick={() => navigate("/avboka")}>
             Avboka biljetter
@@ -64,13 +69,13 @@ const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
             <Nav.Link as={Link} to="/profil" className="fw-medium">
               Min profil
             </Nav.Link>
-            <Nav.Link className="fw-medium" onClick={handleLogout}>
+            <Nav.Link className="fw-medium" onClick={handleLogoutConfirmation}>
               Logga ut
             </Nav.Link>
           </>
         ) : (
           <>
-            <Nav.Link className="fw-medium" onClick={onLoginShow}>
+            <Nav.Link as={Link} to="/loggain" className="fw-medium"> {/* Direct link to login page */}
               Logga in
             </Nav.Link>
             <Nav.Link as={Link} to="/register" className="fw-medium">
@@ -79,11 +84,33 @@ const WideNavBar = ({ onLoginShow }: WideNavBarProps) => {
           </>
         )}
       </Navbar>
+
+      {/* Logout Confirmation Modal */}
+      <Modal show={showLogoutConfirmation} onHide={handleCloseLogoutConfirmation}>
+        <Modal.Header closeButton>
+          <Modal.Title>Bekräfta utloggning</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Är du säker på att du vill logga ut?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseLogoutConfirmation}>
+            Avbryt
+          </Button>
+          <Button variant="primary" onClick={handleLogout}>
+            Ja, logga ut
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </header>
   );
 };
 
 export default WideNavBar;
+
+
+
+
+
+
 
 
 

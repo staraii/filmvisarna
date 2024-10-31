@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { useAuth } from '../../utils/authContext'; // Import useAuth to get access to register
@@ -31,6 +31,8 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // Success modal state
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,25 +44,25 @@ const Register = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
     if (formData.password !== formData.confirmPassword) {
-      alert('Lösenord och bekräfta lösenord matchar inte.');
+      setError('Lösenord och bekräfta lösenord matchar inte.');
       return;
     }
-
-    // Log the data being sent
-    console.log('Submitting registration data:', formData);
 
     try {
       // Use the register function from AuthContext to handle registration and authentication
       await register(formData);
-
-      alert('Du har blivit medlem, välkommen till Filmvisarna');
-      navigate('/'); // Redirect to the home page after successful registration
+      setShowSuccessModal(true); // Show modal on successful registration
     } catch (error) {
-      console.error('Registration failed:', error);
-      alert('Registrering misslyckades: ' + (error as Error).message);
+      setError('Registrering misslyckades: ' + (error as Error).message);
     }
+  };
+
+  const handleModalClose = () => {
+    setShowSuccessModal(false); // Close modal
+    navigate('/profil'); // Redirect to profile page after successful registration
   };
 
   return (
@@ -71,6 +73,9 @@ const Register = () => {
           <p className="text-center mb-4">
             Skapa ett konto på Filmvisarna.se och få full kontroll över dina biobesök och biljetter. Om du också väljer att ta emot nyhetsbrev och inbjudningar, kommer du aldrig att missa ett fantastiskt erbjudande eller spännande förhandsvisningar.
           </p>
+
+          {/* Error Alert */}
+          {error && <div className="alert alert-danger">{error}</div>}
 
           <Form onSubmit={handleSubmit}>
             {/* First and Last Name Fields */}
@@ -203,10 +208,28 @@ const Register = () => {
           </Form>
         </Col>
       </Row>
+
+      {/* Success Modal */}
+      <Modal show={showSuccessModal} onHide={handleModalClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Registrering lyckades</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Välkommen till Filmvisarna! Du har nu skapat ett konto.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleModalClose}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
 
 export default Register;
+
+
+
 
 
