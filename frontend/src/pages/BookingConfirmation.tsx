@@ -1,5 +1,5 @@
 import { Row, Col, Container } from "react-bootstrap";
-import { useLoaderData, useLocation } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import getWeekday from "../utils/getWeekday";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DualQueryParams, loaderQuery } from "../utils/queryService";
@@ -13,13 +13,6 @@ export default function BookingConfirmationPage() {
   const booking = bookingData["success"][0];
   const screening = screeningData["success"][0]; //den hämtar fortfarande alla visningar tror jag.
 
-  console.log(booking.totalPrice);
-  // const location = useLocation();
-  // const { selectedSeats, price, screeningData } = location.state || {
-  //   tickets: 0,
-  //   price: 0,
-  //   screeningData: {},
-  // };
   return (
     <>
       <h2>Tack för din bokning!</h2>

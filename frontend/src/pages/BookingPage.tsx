@@ -33,10 +33,9 @@ export default function BookingPage() {
   const [tickets, setTickets] = useState<number>(2);
   const [selectedSeats, setSelectedSeat] = useState<string[]>([]);
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
-  const [price, setPrice] = useState<number>(0);
-  //react easier state add?
   const [seats, setSeats] = useState<Seats>({});
   const [email, setEmail] = useState("");
+  //react easier state add?
 
   const queryParams = useLoaderData() as QueryParams;
   const { data } = useSuspenseQuery(loaderQuery(queryParams));
@@ -89,7 +88,7 @@ export default function BookingPage() {
     }
   }, [screeningData]);
 
-  // nog skriva om SSE för att passa bättre här
+  // nog skriva om SSE för att passa bättre här, gör detta för sprint 5
   const [seatData, setData] = useState<{ num: number } | null>();
   useEffect(() => {
     const evtSource = new EventSource(
@@ -106,7 +105,6 @@ export default function BookingPage() {
   }, []);
 
   useEffect(() => {
-    setPrice(ticketAdult * 140 + ticketSenior * 120 + ticketChild * 80);
     setTickets(ticketAdult + ticketSenior + ticketChild);
   }, [ticketAdult, ticketSenior, ticketChild]);
 
@@ -141,9 +139,7 @@ export default function BookingPage() {
 
   let cumulativeIndex = 0;
 
-  function handleSeatSelect(seatId: string) {
-    let seatIds: string[] = [];
-    //console.log("handleseatselect", "number", seatId, seatIds);
+  function handleSeatSelect() {
     setSelectedSeat(hoveredSeats);
   }
 
@@ -240,14 +236,14 @@ export default function BookingPage() {
                     {Array.from({ length: seatCount })
                       .map((_, index) => {
                         cumulativeIndex++;
-                        const seatId = `${rowCumulativeIndex + index + 1}`;
+                        const seatId = `${rowCumulativeIndex + index}`;
 
                         const isPreBooked =
                           screeningData.occupiedSeats.includes(seatId) || false;
                         //something here is bugging out, first row has seats booked? wth
                         return (
                           <Button
-                            onClick={() => handleSeatSelect(seatId)}
+                            onClick={() => handleSeatSelect()}
                             onMouseOver={() =>
                               displaySeats(
                                 Number(row),

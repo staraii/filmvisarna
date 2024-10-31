@@ -161,7 +161,6 @@ export const bookingAction = async ({ request }: ActionFunctionArgs) => {
     email,
     seats: formattedSeats,
   };
-  console.log(BookingData);
   try {
     const { data, status } = await reqUtil(
       "POST",
