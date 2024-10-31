@@ -82,7 +82,7 @@ hr {
 }
 
 .modal-content h2 {
-  color: #e7dede;
+  color: #c15f6f;
   /* Dark text color for headings */
 }
 
@@ -94,7 +94,7 @@ hr {
 .close-modal-button {
   margin-top: 20px;
   padding: 8px 16px;
-  background: white;
+  background: #c15f6f;
   /* Primary button color from the profile page */
   color: black;
   border: none;
