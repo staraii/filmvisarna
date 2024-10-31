@@ -53,6 +53,7 @@ const router = createBrowserRouter([
           ["/api/bookings/homePageMovies", "/api/bookings/homePageScreenings"],
           ["homePageMovies", "homePageScreeings"]
         ),
+        },
       {
         path: "filmer",
         element: <Movies />,
