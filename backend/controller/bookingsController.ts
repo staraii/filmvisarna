@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bookingsService from "../services/bookingsService.js";
 import MailService from "../services/mailService.js";
 import { db } from "../index.js";
-
+ 
 const regExes = { 
   id: /^[1-9][0-9]*$/,
   bookingNumber: /^[A-Z]{3}[\d]{3}$/,
