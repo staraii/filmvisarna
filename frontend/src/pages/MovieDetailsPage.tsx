@@ -1,8 +1,6 @@
 import { useState, useRef,} from 'react';
-//import fightClubTrailer from '../assets/fightClubTrailer.webp'
 import './MovieDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
-//import  FightClubPoster from '../assets/FightClubPoster.jpg'
 import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
 import { sv } from 'date-fns/locale';
