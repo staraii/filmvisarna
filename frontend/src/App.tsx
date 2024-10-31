@@ -1,12 +1,12 @@
 
+
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import { Outlet } from "react-router-dom";
-// import HomePage from "./pages/HomePage/HomePage";
-// import Register from "./pages/Register/Register";
-// import MoveDetailsPage from "./pages/MoveDetailsPage";
-// import BookingPage from "./pages/BookingPage";
 import MobileNavBar from "./components/MobileNavBar/MobileNavBar";
 import WideNavBar from "./components/WideNavBar/WideNavBar";
+
+
 
 // import BookingConfirmationPage from "./pages/BookingConfirmation";
 // import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
@@ -24,22 +24,27 @@ import WideNavBar from "./components/WideNavBar/WideNavBar";
 
 // import LoginPage from "./components/Login-pop-up/LoginPage";
 
+
 import "./App.css";
 //import PasswordReset from "./components/Login-pop-up/passwordReset";
 
 
 
 // Import the AuthProvider
+
 // import { AuthProvider } from "./utils/authContext"; // Adjust the path as necessary
 // import CancelTicketsContainer from "./utils/CancelTicketsContainer";
 // import MinProfil from "./pages/myProfile/myProfile";
 // import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 
+
 export default function App() {
 
 
   return (
+
+       
 
     
     <section className="app-section">
@@ -87,6 +92,7 @@ export default function App() {
           
    
       {/* </Router> */}
+
     </section>
 
 

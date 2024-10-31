@@ -46,7 +46,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-        loader: doubleLoader(queryClient, ["/api/bookings/homePageMovies", "/api/bookings/homePageScreenings"], ["homePageMovies", "homePageScreeings"]),
+        loader: doubleLoader(queryClient, ["/api/bookings/homePageMovies", "/api/bookings/homePageScreenings"], ["homePageMovies", "homePageScreenings"]),
         errorElement: <ErrorPage />,
       },
       {

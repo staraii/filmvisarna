@@ -57,3 +57,14 @@ export const getScreeningDates = (startDate: Date, days: number) => {
   }
   return dates;
 }
+
+
+export const getFilterDisplayDate = (inputDate: string) => {
+  const newDate = new Date(inputDate)
+  //const year = newDate.getFullYear();
+  const month = newDate.getMonth();
+  const date = newDate.getDate();
+  const dayName = WEEKDAY_NAMES[newDate.getDay()];
+  return `${dayName} ${date}/${month}`
+
+}

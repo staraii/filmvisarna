@@ -2,7 +2,7 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import reqUtil from "./reqUtil";
 import {
   QueryClient,
-  queryOptions,
+  queryOptions
 } from "@tanstack/react-query";
 
 
@@ -16,8 +16,8 @@ export type DualQueryParams = {
   queryParamsTwo: QueryParams;
 }
 export type HomePageMovies = {
-  id: number;
-  title: string;
+  movieId: number;
+  movieTitle: string;
   createdAt: string;
   categories: string;
   slideURL: string;
@@ -38,7 +38,7 @@ export type HomePageScreenings = {
   occupiedPercent: number;
   ageRating: string;
   slideURL: string;
-  posterURL: string;
+  posterURL: string[];
   subtitles: string;
   spokenLanguage: string;
 };
@@ -47,7 +47,7 @@ export type HomePageScreenings = {
 export async function getQueryData(query: string) {
   try {
     const { data, status } = await reqUtil("GET", query);
-    if (status === 200 && data) {
+    if ((status < 300) && data) {
       return data;
     }
     return [];
@@ -106,6 +106,7 @@ export const doubleLoader = (queryClient: QueryClient, querys: string[], queryNa
   return {queryParamsOne, queryParamsTwo}
 }
 
+
 export const fetchUserBookings = async (email: string) => {
   if (!email) {
     throw new Error("Email is required to fetch bookings.");
@@ -163,4 +164,5 @@ export const cancelBooking = async (bookingId: number, email: string) => {
         throw error; // Re-throw to handle in your UI component
     }
 };
+
 
