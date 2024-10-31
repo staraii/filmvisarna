@@ -2,6 +2,8 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import reqUtil from "./reqUtil";
 import { ActionFunctionArgs } from "react-router-dom";
 
+import { QueryClient, queryOptions } from "@tanstack/react-query";
+
 export type QueryParams = {
   query: string;
   queryName: string;
