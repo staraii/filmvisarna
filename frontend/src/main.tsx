@@ -17,9 +17,12 @@ import BookingPage from "./pages/BookingPage";
 import Register from "./pages/Register/Register";
 import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
 import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin";
-import LoginPage from "./components/Login-pop-up/LoginMobile";
+import LoginPage from "./components/Login-pop-up/LoginPage.tsx";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
 import BookingConfirmationPage from "./pages/BookingConfirmation";
+import MinProfil from './pages/myProfile/myProfile.tsx';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute.tsx';
+import { AuthProvider } from './utils/authContext.tsx';
 
 
 
@@ -112,6 +115,16 @@ const router = createBrowserRouter([
         element: <BookingConfirmationPage />,
         errorElement: <ErrorPage />,
       },
+      {
+        path: "profil",
+        element: (
+          <ProtectedRoute>
+            <MinProfil />
+          </ProtectedRoute>
+        ),
+      
+        errorElement: <ErrorPage />,
+      },
     ],
   },
 ]);
@@ -119,9 +132,11 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+     <AuthProvider>
     <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+      </QueryClientProvider>
+      </AuthProvider>
   </StrictMode>
 );
