@@ -1,65 +1,122 @@
-import { db } from "../index.js";
+import { Request, Response } from "express";
+import screeningsService from "../services/screeningsService.js";
 
-export default class ScreeningsController {
-  public async getScreenings(): Promise<any> {
-    const result = await db.execute("SELECT * FROM fullScreenings;");
-    return result;
+const handleGetScreenings = async (_req: Request, res: Response) => {
+  try {
+    const result = await screeningsService.getScreenings();
+    if (!result) {
+      return res.status(500).json({ error: "Error getting screenings" });
+    }
+    return res.status(200).json({ success: result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
+};
 
-  public async createScreening(data: any): Promise<any> {
-    const query = `
-    INSERT INTO screenings (movieId, theatreId, dateTime)
-    VALUES (?, ?, ?)
-  `;
-    const values = [data.movieId, data.theatreId, data.dateTime];
-    let result = await db.execute(query, values);
-
-    return result;
+const handleCreateScreening = async (req: Request, res: Response) => {
+  const reqBody = {
+    movieId: req.body.movieId,
+    theatreId: req.body.theatreId,
+    dateTime: req.body.dateTime,
+  };
+  try {
+    const result = await screeningsService.createScreening(reqBody);
+    if (!result) {
+      return res.status(500).json({ error: "Error creating screening" });
+    }
+    return res.status(201).json({ success: result });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
   }
+};
 
-  public async updateScreening(data: any, id: number): Promise<any> {
-    const query = `UPDATE screenings SET movieId=?, theatreId=?, dateTime=? WHERE id=?`;
-    const values = [data.movieId, data.theatreId, data.dateTime, id];
-
-    let result = await db.execute(query, values);
-    return result;
+const handleUpdateScreening = async (req: Request, res: Response) => {
+  try {
+    const reqBody = {
+      movieId: req.body.movieId,
+      theatreId: req.body.theatreId,
+      dateTime: req.body.dateTime,
+    };
+    const result = await screeningsService.updateScreening(reqBody);
+    if (!result) {
+      return res.status(500).json({ error: "Error updating screening" });
+    }
+    return res.status(201).json({ success: result });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server error");
   }
+};
 
-  public async deleteScreening(id: number): Promise<any> {
-    const query = `DELETE FROM screenings WHERE id=?`;
-
-    let result = await db.query(query, [id]); // Use array for parameter
-
-    return result;
+const handleDeleteScreening = async (req: Request, res: Response) => {
+  const { screeningId } = req.params;
+  try {
+    const result = await screeningsService.deleteScreening(Number(screeningId));
+    if (!result) {
+      return res.status(500).json({ error: "Error deleting screening" });
+    }
+    return res.status(201).json({ success: result });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server error");
   }
+};
 
-  public async getScreeningById(id: number): Promise<any> {
-    const query = `SELECT * FROM fullScreenings WHERE screeningId=?`;
-    const value = id;
-
-    let result = await db.query(query, value);
-    return result;
+const handleGetScreeningById = async (req: Request, res: Response) => {
+  const { screeningId } = req.params;
+  try {
+    const result = await screeningsService.getScreeningById(
+      Number(screeningId)
+    );
+    if (!result) {
+      return res.status(500).json({ error: "Error getting screening" });
+    }
+    return res.status(200).json({ success: result });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server error");
   }
+};
 
-  public async getScreeningsByUserId(userId: number): Promise<any> {
-    const query = `SELECT * FROM fullScreenings WHERE userId = ?`;
-    const values = [userId];
-    const result = await db.query(query, values);
-    return result;
+const handleGetScreeningsByTitle = async (req: Request, res: Response) => {
+  const { title } = req.params;
+  try {
+    const result = await screeningsService.getScreeningByTitle(title);
+    if (!result) {
+      return res.status(500).json({ error: "Error getting screening" });
+    }
+    return res.status(201).json({ success: result });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server error");
   }
-
-  public async getScreeningsByTitle(title: string): Promise<any> {
-    const query = `SELECT * FROM fullScreenings WHERE movieTitle LIKE ?`;
-    const value = `%${title}%`;
-
-    const result = await db.execute(query, value);
-    return result;
+};
+const handleGetBookingsByBookingNumber = async (
+  req: Request,
+  res: Response
+) => {
+  const { bookingNumber } = req.params;
+  try {
+    const result = await screeningsService.getBookingsByBookingNumber(
+      bookingNumber
+    );
+    if (!result) {
+      return res.status(500).json({ error: "Error getting booking" });
+    }
+    return res.status(200).json({ success: result });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Server error");
   }
-
-  public async getBookingsByBookingNumber(bookingNumber: string): Promise<any> {
-    const query = `SELECT * FROM fullBookings WHERE bookingNumber = ?`;
-    const result = await db.execute(query, [bookingNumber]);
-
-    return result;
-  }
-}
+};
+export default {
+  handleGetScreenings,
+  handleCreateScreening,
+  handleUpdateScreening,
+  handleDeleteScreening,
+  handleGetScreeningById,
+  handleGetScreeningsByTitle,
+  handleGetBookingsByBookingNumber,
+};

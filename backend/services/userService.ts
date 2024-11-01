@@ -8,18 +8,17 @@ import { RegisterUser } from '../types/userTypes.js';
 
 // Create a new user and insert into the database
 export const createUser = async (userData: RegisterUser) => {
-  const { firstname, lastname, email, password, phone } = userData;
+  const { firstName, lastName, email, password, phone } = userData;
 
   try {
 
       // Set a default role for users
     const defaultRole = "user"; // Or whatever role you want as default
-
-    
+  
     // Insert user data into the 'users' table
     const [result] = await db.query(
       'INSERT INTO users (firstName, lastName, email, password, phone, role) VALUES (?, ?, ?, ?, ?, ?)',
-      [firstname, lastname, email, password, phone, defaultRole]
+      [firstName, lastName, email, password, phone, defaultRole]
     );
     
     // Return the insertion result (could include the inserted ID)
@@ -55,5 +54,33 @@ export const findUserById = async (id: number) => {
   } catch (error) {
     console.error('Error finding user by ID:', error);
     throw error; 
+  }
+};
+
+
+
+// Function to fetch user profile by email
+export const fetchUserBookings = async (email: string | null) => {
+  if (!email) {
+    throw new Error("Email is required to fetch bookings.");
+  }
+
+  try {
+    const response = await fetch(`/api/bookings/fullBookings?email=${encodeURIComponent(email)}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+    throw error;
   }
 };

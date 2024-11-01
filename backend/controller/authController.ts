@@ -7,11 +7,11 @@ import { RegisterUser, LoginUser } from '../types/userTypes.js';
 
 export const register = async (req: Request, res: Response) => {
   // Destructure only the required fields from the request body
-  const { firstname, lastname, email, password, phone, role }: RegisterUser = req.body;
+  const { firstName, lastName, email, password, phone }: RegisterUser = req.body;
 
-   // Validate if the role is provided
-  if (role) {
-    return res.status(400).json({ message: 'Role should not be specified during registration' });
+  // Validate required fields
+  if (!firstName || !lastName || !email || !password || !phone) {
+    return res.status(400).json({ message: 'All fields must be filled out.' });
   }
 
   try {
@@ -24,15 +24,17 @@ export const register = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 12); // Hash password
 
-    // Create a new user, omitting role from the request
+    // Create a new user
     await createUser({
-      firstname,
-      lastname,
+      firstName: firstName, // Ensure this matches your database field
+      lastName: lastName,   // Ensure this matches your database field
       email: normalizedEmail,
       password: hashedPassword,
       phone,
       // No role is passed here
     });
+
+    
 
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
@@ -70,7 +72,8 @@ export const login = async (req: Request, res: Response) => {
     req.session.userRole = user.role;
     
 
-    res.json({ message: 'Login successful', user: { id: user.id, email: user.email, role: user.role } });
+     // Return the user's email along with a success message
+    res.json({ message: 'Login successful', email: user.email });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Error during login' });
@@ -84,15 +87,24 @@ export const getLoggedInUser = async (req: Request, res: Response) => {
   }
 
   try {
-    // Fetch the user by ID from the database
+    // Fetch the user by ID from the database, now with additional fields
     const user = await findUserById(req.session.userId);
 
     if (!user) {
       return res.status(401).json({ message: 'No user is logged in' });
     }
 
-    // Return user details (excluding sensitive info)
-    res.json({ user: { id: user.id, email: user.email, role: user.role } });
+    // Include additional fields in the response
+    res.json({ 
+      user: { 
+        id: user.id, 
+        email: user.email, 
+        role: user.role,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phone: user.phone 
+      } 
+    });
   } catch (error) {
     console.error('Error fetching logged-in user:', error);
     res.status(500).json({ message: 'Error fetching logged-in user' });

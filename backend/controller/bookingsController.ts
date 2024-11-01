@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import bookingsService from "../services/bookingsService.js";
+import MailService from "../services/mailService.js";
 import { db } from "../index.js";
 
 const regExes = { 
@@ -9,7 +10,7 @@ const regExes = {
   seats: /^[1-9][0-9]{0,2}$/,
   ticketType: /^[1-9][0-9]{0,1}$/,
   boolean: /^[0-1]$/,
-}; 
+};
 
 // --- VALID QUERIE PARAMETERS/VALUES ---
 
@@ -28,31 +29,48 @@ const regExes = {
 // - LOGICAL COMPARISON OPERATORS -  equal to( = ), greater than or equal ( >= ), lesser than or equal ( <= ), equal to ( = )
 // GET /api/bookings/:table?key>=5
 
+// - LIMIT - limit number of records in response
+// GET /api/bookings/:table?limit=5
+
+// - OFFSET - pagination, set an offset value for records to retrieve
+// GET /api/bookings/:table?offset=10
+
+// - SORT - select column/field to sort results by, ascending or descending order.
+// GET /api/bookings/:table?sort=bookingDate:desc
+
 // GET /api/bookings    - DYNAMIC ROUTE, by using request parameter :table you can query from all tables not just bookings
 const handleGetBookings = async (req: Request, res: Response) => {
   try {
     const { table } = req.params;
     const queryParams = req.query;
     const whereArgs: string[] = [];
-    const queryParamsArr: (string | number)[] = [];
+    const queryParamsArr: string[] = [];
     let sql = `SELECT * FROM \`${table}\``;
+
+    // Handle other query parameters
     for (const [key, value] of Object.entries(queryParams)) {
       if (typeof key === "string" && value instanceof Array) {
         value.forEach((val) => {
-            whereArgs.push(`FIND_IN_SET(?, REPLACE(\`${key}\`, " ", ""))`);
-            queryParamsArr.push(val as string);
+          whereArgs.push(`FIND_IN_SET(?, REPLACE(\`${key}\`, " ", ""))`);
+          queryParamsArr.push(val as string);
         });
       }
 
-      if (typeof key === "string" && typeof value === "string") {   
+      if (typeof key === "string" && typeof value === "string") {
         if (key === "limit" || key === "offset" || key === "sort") {
           continue;
         }
         if (key.endsWith(">") || key.endsWith("<") || key.endsWith("!")) {
           const [newKey, op] = key.split(/(!|<|>)/);
-          if (op === ">") { whereArgs.push(`\`${newKey}\` >= ?`) }
-          if (op === "<") { whereArgs.push(`\`${newKey}\` <= ?`) }
-          if (op === "!") { whereArgs.push(`\`${newKey}\` <> ?`)}
+          if (op === ">") {
+            whereArgs.push(`\`${newKey}\` >= ?`);
+          }
+          if (op === "<") {
+            whereArgs.push(`\`${newKey}\` <= ?`);
+          }
+          if (op === "!") {
+            whereArgs.push(`\`${newKey}\` <> ?`);
+          }
           queryParamsArr.push(value);
         } else if (
           (table === "fullMovies" && key === "categories") ||
@@ -74,79 +92,156 @@ const handleGetBookings = async (req: Request, res: Response) => {
     if (queryParams.sort) {
       const sortParams = queryParams.sort.toString().split(":");
       const sortColumn = sortParams[0];
-      const sortOrder = sortParams[1]?.toUpperCase() === "DESC" ? "DESC" : "ASC";
+      const sortOrder =
+        sortParams[1]?.toUpperCase() === "DESC" ? "DESC" : "ASC";
       sql += ` ORDER BY \`${sortColumn}\` ${sortOrder}`;
     }
     if (queryParams.limit) {
       sql += ` LIMIT ?`;
-      queryParamsArr.push(Number(queryParams.limit));
+      queryParamsArr.push(queryParams.limit.toString());
     }
     if (queryParams.offset) {
       sql += ` OFFSET ?`;
-      queryParamsArr.push(Number(queryParams.offset));
+      queryParamsArr.push(queryParams.offset.toString());
     }
-    const [rows] = await db.query(sql, queryParamsArr);
-    return res.json(rows);
+    const [rows] = await db.execute(sql, queryParamsArr);
+    if (rows instanceof Array && rows.length === 0) {
+      return res.status(404).json({ message: "Resource not found" });
+    }
+    return res.status(200).json(rows);
   } catch (error) {
     console.error(error);
     return res.status(500).send("Server error");
   }
-}
+};
 type Seat = {
   seatId: number;
   ticketTypeId: number;
-} 
+};
 // POST /api/bookings/:userId?  body{ email, screeningId, seats: [{seatId: number, ticketTypeId: number}]}
 const createNewBooking = async (req: Request, res: Response) => {
-  const userId = regExes.id.test(req.params.userId) ? +req.params.userId : null;
+  //const userId = regExes.id.test(req.params.userId) ? +req.params.userId : null;
+  const userId =
+    typeof req.query.userId === "string" && regExes.id.test(req.query.userId)
+      ? +req.query.userId
+      : null;
   const { email, screeningId, seats } = req.body;
-  if (!regExes.email.test(email) || !regExes.id.test(screeningId.toString()) || !seats.every((seat: Seat) => (regExes.seats.test(seat.seatId.toString()) && regExes.ticketType.test(seat.ticketTypeId.toString())))) {
+  if (
+    !regExes.email.test(email) ||
+    !regExes.id.test(screeningId.toString()) ||
+    !seats.every(
+      (seat: Seat) =>
+        regExes.seats.test(seat.seatId.toString()) &&
+        regExes.ticketType.test(seat.ticketTypeId.toString())
+    )
+  ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
-  const bookingNumber = await bookingsService.createNewBooking(userId, email, screeningId, seats);
-  if (!bookingNumber) {
+  const result = await bookingsService.createNewBooking(
+    userId,
+    email,
+    screeningId,
+    seats
+  );
+  if (!result) {
     return res.status(500).json({ error: "An error accured while booking" });
   }
-  return res.status(201).json({ message: "Booking created ", bookingNumber });
-}
+  const booking = await bookingsService.getBookingValidation(result.bookingId);
+  if (!booking) {
+    return res.status(404).json({ message: "Booking confirmation not found" });
+  }
+  //Send email
+  const mailService = new MailService();
+  await mailService.sendMail(result.bookingNumber);
+  return res.status(201).json(booking);
+};
 
-// PUT /api/bookings/:bookingNumber/isPayed/:status     - :bookingNumber ( ABC123 ), status ( 0 or 1, 0 = false 1, = true)
-const updatePaymentStatus = async (req: Request, res: Response) => {
-  const { bookingNumber, status } = req.params;
-  if (!regExes.bookingNumber.test(bookingNumber) || !regExes.boolean.test(status)) {
-    return res.status(400).json({ error: "Request is missing required fields" });
+// Update bookings isActive status
+// PUT /api/bookings/bookings?bookingNumber=GGJ432&isActive=0
+// Update bookings isPayed status
+// PUT /api/bookings/bookings?bookingNumber=GGJ432&isPayed=1
+const updateBooking = async (req: Request, res: Response) => {
+  const bookingNumber =
+    typeof req.query.bookingNumber === "string" &&
+    regExes.bookingNumber.test(req.query.bookingNumber)
+      ? req.query.bookingNumber
+      : undefined;
+  const isPayed =
+    typeof req.query.isPayed === "string" &&
+    regExes.boolean.test(req.query.isPayed)
+      ? req.query.isPayed
+      : undefined;
+  const isActive =
+    typeof req.query.isActive === "string" &&
+    regExes.boolean.test(req.query.isActive)
+      ? req.query.isActive
+      : undefined;
+  if (bookingNumber && (isPayed || isActive)) {
+    const result = await bookingsService.updateBookingStatus(
+      bookingNumber,
+      isPayed!,
+      isActive!
+    );
+    if (!result) {
+      return res
+        .status(500)
+        .json({ error: "An error occured while updating record" });
+    }
+    return res
+      .status(200)
+      .json({
+        message: `Booking: ${bookingNumber}, updated status ${
+          isPayed ? "isPayed: " : "isActive: "
+        } ${
+          isPayed
+            ? isPayed === "1"
+              ? "true"
+              : "false"
+            : isActive === "0"
+            ? "false"
+            : "true"
+        }`,
+      });
   }
-  const result = await bookingsService.updatePaymentStatus(bookingNumber, +status);
-  if (!result) {
-    return res.status(500).json({ error: "An error occured while updating record" });
-  }
-  return res.status(200).json({message: `Booking status updated for bookingNumber: ${bookingNumber}`})
-}
+};
 
-// PUT /api/bookings/:bookingNumber/isActive/:status    - :bookingNumber ( ABC123 ), status ( 0 or 1, 0 = false, 1 = true)
-const updateActiveStatus = async (req: Request, res: Response) => {
-  const { bookingNumber, status } = req.params;
-  if (!regExes.bookingNumber.test(bookingNumber) || !regExes.boolean.test(status)) {
-    return res.status(400).json({ error: "Invalid request data" });
-  }
-  const result = await bookingsService.updateActiveStatus(bookingNumber, +status)
-  if (!result) {
-    return res.status(500).json({ error: "An error occured while updating record" });
-  }
-  return res.status(200).json({ message: "Record updated successfully" });
-}
-
-// DELETE /api/bookings/:bookingNumber/:email
+// DELETE /api/bookings/:bookings?bookingNumber=ADR304    /admin, staff
+// DELETE /api/bookings/:bookings?bookingNumber=ADR304&userId=4     /user
+// DELETE /api/bookings/:bookings?bookingNumber=ADR304&email=adress@email.se    /visitor
 const deleteBooking = async (req: Request, res: Response) => {
-  const { bookingNumber, email } = req.params;
-  if (!regExes.bookingNumber.test(bookingNumber) || !regExes.email.test(email)) {
-    return res.status(400).json({ error: "Ivalid request data" });
-  }
-  const result = await bookingsService.deleteBooking(bookingNumber, email);
-  if (!result) {
-    return res.status(500).json({ error: "Error deleting resource" });
-  }
-  return res.status(205).json({message: `Booking deleted, bookingNumber: ${bookingNumber}`})
-} 
+  const bookingNumber =
+    typeof req.query.bookingNumber === "string" &&
+    regExes.bookingNumber.test(req.query.bookingNumber)
+      ? req.query.bookingNumber
+      : undefined;
+  const email =
+    typeof req.query.email === "string" && regExes.email.test(req.query.email)
+      ? req.query.email
+      : undefined;
+  const userId =
+    typeof req.query.userId === "string" && regExes.id.test(req.query.userId)
+      ? req.query.userId
+      : undefined;
 
-export default { handleGetBookings, createNewBooking, deleteBooking, updatePaymentStatus, updateActiveStatus };
+  if (!bookingNumber) {
+    return res.status(400).json({ message: "Invalid request parameters" });
+  }
+  const result = await bookingsService.deleteBooking(
+    bookingNumber,
+    email!,
+    userId!
+  );
+  if (!result) {
+    return res.status(500).json({ message: "Error deleting resource" });
+  }
+  return res
+    .status(200)
+    .json({ message: `Booking: ${bookingNumber} successfully deleted` });
+};
+
+export default {
+  handleGetBookings,
+  createNewBooking,
+  deleteBooking,
+  updateBooking,
+};

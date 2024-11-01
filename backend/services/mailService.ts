@@ -1,7 +1,5 @@
 import nodemailer from "nodemailer";
-import ScreeningsController from "../controller/screeningsController.js";
-
-const screeningsController = new ScreeningsController();
+import screeningsService from "./screeningsService.js";
 
 export default class MailService {
   public transporter = nodemailer.createTransport({
@@ -15,12 +13,13 @@ export default class MailService {
     },
   });
 
-
   public async sendMail(bookingNumber: string) {
-    const data = await screeningsController.getBookingsByBookingNumber(
+    const data = await screeningsService.getBookingsByBookingNumber(
       bookingNumber
     );
-    const bookingData = data[0][0];
+    console.log(data);
+    const bookingData = data[0];
+
     const info = await this.transporter.sendMail({
       from: '"Filmvisarna" <Filmvisarna@hotmail.com>', // sender addresss
       to: "dejuan.watsica63@ethereal.email", // list of receivers

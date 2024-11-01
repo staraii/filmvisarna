@@ -1,0 +1,247 @@
+/* myProfile.css */
+
+.profile-container {
+  padding: 20px;
+  max-width: 800px;
+
+  /* Limit the width for larger screens */
+  margin: auto;
+  /* Center the container */
+}
+
+.profile-section {
+  margin-bottom: 20px;
+}
+
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+  /* Enable horizontal scroll on small screens */
+}
+
+.profile-table th,
+.profile-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+
+/* Fade transitions */
+.content {
+  transition: opacity 0.5s ease-in-out;
+}
+
+.fade-out {
+  opacity: 0;
+  /* Fade out effect */
+}
+
+.fade-in {
+  opacity: 1;
+  /* Fade in effect */
+}
+
+hr {
+  border: 0;
+  height: 2px;
+  background: #ccc;
+  /* Light gray color */
+  margin: 50px 0;
+  /* Space above and below the line */
+}
+
+
+/* Css for Modals overlay */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  /* Slightly lighter overlay for a softer look */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #0b0815;
+  /* Light background color, similar to a profile page's light sections */
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* Subtle shadow for a soft popup effect */
+}
+
+.modal-content h2 {
+  color: #c15f6f;
+  /* Dark text color for headings */
+}
+
+.modal-content p {
+  color: #e7dede;
+  /* Slightly lighter text for details */
+}
+
+.close-modal-button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  background: #c15f6f;
+  /* Primary button color from the profile page */
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.close-modal-button:hover {
+  background: #551a3a;
+  /* Darker shade on hover for interactivity */
+}
+
+
+/* Center align pagination and adjust top margin */
+.custom-pagination .pagination {
+  justify-content: center;
+  margin-top: 1rem;
+  /* Adjust the top margin */
+}
+
+/* General page link styles */
+.custom-pagination .pagination .page-link {
+  color: #ffffff;
+  /* Change link text color */
+  border: 1px solid #e9dfe1;
+  /* Change link border color */
+}
+
+/* Hover state for page links */
+.custom-pagination .pagination .page-link:hover {
+  background-color: rgba(206, 76, 97, 0.1);
+  /* Lighten the hover background */
+}
+
+/* Active page link styles */
+.custom-pagination .pagination .active .page-link {
+  background-color: #c15f6f;
+  /* Change active item background */
+  border-color: #c15f6f;
+  /* Change active item border color */
+  color: white;
+  /* Change active item text color to white for contrast */
+}
+
+/* Disabled page link styles */
+.custom-pagination .pagination .disabled .page-link {
+  color: #ccc;
+  /* Change disabled item color */
+}
+
+/* Arrow link styles */
+.custom-pagination .pagination .page-link[aria-label="Previous"],
+.custom-pagination .pagination .page-link[aria-label="Next"] {
+  color: #c15f6f;
+  /* Change arrow color */
+  border: 1px solid #c15f6f;
+  /* Change arrow border color */
+}
+
+/* Hover state for arrows */
+.custom-pagination .pagination .page-link[aria-label="Previous"]:hover,
+.custom-pagination .pagination .page-link[aria-label="Next"]:hover {
+  background-color: rgba(255, 0, 43, 0.1);
+  /* Change hover background for arrows */
+}
+
+/* Arrow color for pseudo-elements */
+.custom-pagination .pagination .page-link:before,
+.custom-pagination .pagination .page-link:after {
+  color: #c15f6f;
+  /* Change arrow color */
+}
+
+/* Ensure arrow color for specific arrows */
+.custom-pagination .pagination .page-link[aria-label="Previous"]::before,
+.custom-pagination .pagination .page-link[aria-label="Next"]::after {
+  color: #c15f6f;
+  /* Change the color of the Previous and Next arrows */
+}
+
+
+
+
+
+/* Button styling to match pagination */
+.cancel-button {
+  color: #fdfdfd;
+  /* Text color */
+  background-color: transparent;
+  /* Background color */
+  border: 1px solid #e9dfe1;
+  /* Border color */
+  padding: 0.5rem 1rem;
+  /* Padding for button */
+  border-radius: 4px;
+  /* Rounded corners */
+  cursor: pointer;
+  /* Pointer cursor on hover */
+  transition: background-color 0.3s, color 0.3s;
+  /* Smooth transition for hover effects */
+}
+
+/* Hover state for cancel button */
+.cancel-button:hover {
+  background-color: rgba(218, 200, 203, 0.1);
+  /* Hover background color */
+  color: #c15f6f;
+  /* Change text color on hover */
+}
+
+/* Active and disabled state */
+.cancel-button:disabled {
+  color: #ccc;
+  /* Disabled text color */
+  border-color: #ccc;
+  /* Disabled border color */
+  cursor: not-allowed;
+  /* Not allowed cursor */
+}
+
+
+/* Media Queries for Responsive Design */
+@media (max-width: 600px) {
+  .profile-container {
+    padding: 10px;
+    /* Reduce padding for small screens */
+  }
+
+  .profile-table th,
+  .profile-table td {
+    font-size: 14px;
+    /* Smaller font size for mobile */
+    padding: 8px;
+    /* Reduce padding */
+  }
+
+  .profile-section {
+    margin-bottom: 15px;
+    /* Reduce margin for sections */
+  }
+
+  .pagination button {
+    padding: 4px 8px;
+    /* Smaller padding for buttons */
+    font-size: 12px;
+    /* Smaller font size for buttons */
+    margin-bottom: 50px;
+  }
+
+}
