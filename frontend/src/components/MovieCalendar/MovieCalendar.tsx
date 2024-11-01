@@ -18,13 +18,37 @@ function MovieCalendar() {
   const [activeWeekIndex, setActiveWeekIndex] = useState(0); // State för att hålla koll på aktiv vecka
 
   console.log(data);
+  const weeks = [
+    { title: "Vecka 40", startDate: "2024-10-01" },
+    { title: "Vecka 41", startDate: "2024-10-08" },
+    { title: "Vecka 42", startDate: "2024-10-15" },
+    { title: "Vecka 43", startDate: "2024-10-22" },
+  ];
 
+  const daysData = [
+    // Vecka 40
+    [
+      {
+        day: "Måndag - September 30",
+        movies: [
+          {
+            title: "Pippi Långstrump (1970)",
+            genre: "Barnlitteratur",
+            age: "8+",
+            time: "17:00",
+            poster: Pippi,
+          },
+        ],
+      },
+    ],
+  ];
   return (
     <section className="Movie-Calendar">
       <div className="Movie-Text">
         <h3>Bio Kalendern</h3>
         <p>Se vilka filmer som går de kommande veckorna.</p>
       </div>
+      <div className="test"></div>
       <div className="Weeks">
         <Carousel
           slide={false}
