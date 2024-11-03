@@ -87,7 +87,13 @@ const MinProfil = () => {
 
   // UI conditions for loading, error, and no bookings
   if (isLoading) return <div>Laddar bokningar...</div>;
-  if (error) return <div>Fel vid hämtning av bokningar: {(error as Error).message}</div>;
+  if (error) {
+  const errorMessage = (error as Error).message;
+  if (errorMessage.includes("404")) {
+    return <div>Inga bokningar hittades.</div>;
+  }
+  return <div>Fel vid hämtning av bokningar: {errorMessage}</div>;
+}
 
   return (
     <div className="profile-container">
