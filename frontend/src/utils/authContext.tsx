@@ -24,13 +24,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return sessionStorage.getItem('firstName');
   });
 
-  const login = (email: string, firstName: string) => {
+  const login = async (email: string, firstName: string) => {
     setIsAuthenticated(true);
     setUserEmail(email);
     setFirstName(firstName);
     sessionStorage.setItem('isAuthenticated', 'true');
     sessionStorage.setItem('userEmail', email);
     sessionStorage.setItem('firstName', firstName);
+    await fetchUserData(); // Fetch user data after logging in
   };
 
   const fetchUserData = async () => {

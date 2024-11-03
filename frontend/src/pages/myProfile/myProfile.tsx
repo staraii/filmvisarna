@@ -13,8 +13,10 @@ interface Booking {
   screeningId: number; // ID of the screening
   screeningTime: string; // Screening date and time (ISO 8601 format)
   movieTitle: string; // Name of the movie
-  seats: string[]; // Array of seat numbers
+  seats: string; // Array of seat numbers
   bookingDate: string; // The date when the booking was made
+  ticketTypes: string;
+  totalPrice: string;
 }
 
 const MinProfil = () => {
@@ -244,7 +246,9 @@ const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
   const formattedBookingDate = new Date(booking.bookingDate).toLocaleString('sv-SE'); // Format booking date
 
   // Check if seats is an array and provide a fallback if not
-  const seatsDisplay = Array.isArray(booking.seats) ? booking.seats.join(', ') : 'Inga platser valda';
+  const seatsDisplay = typeof booking.seats === 'string' 
+    ? booking.seats.split(',').map(seat => seat.trim()).join(', ') 
+    : 'Inga platser valda';
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -257,6 +261,8 @@ const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
           <p><strong>Platser:</strong> {seatsDisplay}</p>
           <p><strong>Bokningsnummer:</strong> {booking.bookingNumber}</p>
           <p><strong>Bokningsdatum:</strong> {formattedBookingDate}</p>
+          <p><strong>Biljettyp:</strong> {booking.ticketTypes}</p>
+          <p><strong>Totalt pris:</strong> {booking.totalPrice}</p>
         </div>
         <button className="close-modal-button" onClick={onClose}>Stäng</button>
       </div>
