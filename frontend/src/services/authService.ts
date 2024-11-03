@@ -34,14 +34,51 @@ export const login = async (email: string, password: string) => {
 };
 
 
-// Signup function
 export const register = async (formData: FormData) => {
   const { email, password, firstName, lastName, phoneNumber } = formData;
 
+  // Check if any field is empty
   if (!firstName || !lastName || !email || !password || !phoneNumber) {
-    throw new Error('All fields must be filled out.');
+    throw new Error('Alla fält måste fyllas i.');
   }
 
+  // Email format validation
+  if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+    throw new Error('Ogiltigt e-postformat.');
+  }
+
+  // Password validation requirements
+  const passwordRequirements = {
+    minLength: 8,
+    uppercase: /[A-Z]/,          // At least one uppercase letter
+    lowercase: /[a-z]/,          // At least one lowercase letter
+    digit: /\d/,                 // At least one digit
+    specialChar: /[!@#$%^&*.,-]/ // At least one special character
+  };
+
+  // Password validation with Swedish error messages
+  if (password.length < passwordRequirements.minLength) {
+    throw new Error(`Lösenordet måste vara minst ${passwordRequirements.minLength} tecken långt.`);
+  }
+  if (!passwordRequirements.uppercase.test(password)) {
+    throw new Error('Lösenordet måste innehålla minst en versal (stort) bokstav.');
+  }
+  if (!passwordRequirements.lowercase.test(password)) {
+    throw new Error('Lösenordet måste innehålla minst en gemen (liten) bokstav.');
+  }
+  if (!passwordRequirements.digit.test(password)) {
+    throw new Error('Lösenordet måste innehålla minst en siffra.');
+  }
+  if (!passwordRequirements.specialChar.test(password)) {
+    throw new Error('Lösenordet måste innehålla minst ett specialtecken (t.ex. !, @, #, $, %, ^, &, *, ., eller -).');
+  }
+
+  // Phone number validation (assuming 10 digits)
+  if (!/^\d{10}$/.test(phoneNumber)) {
+    throw new Error('Telefonnumret måste vara 10 siffror långt.');
+  }
+
+  // Prepare data for API
   const requestData = {
     email,
     password,
@@ -50,8 +87,9 @@ export const register = async (formData: FormData) => {
     phone: phoneNumber
   };
 
-  console.log('Submitting registration data:', requestData);
+  console.log('Skickar registreringsdata:', requestData);
 
+  // API request to register
   const response = await fetch('/api/register', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -61,14 +99,15 @@ export const register = async (formData: FormData) => {
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.error('Error response:', errorData);
-    throw new Error(errorData.message || 'Registration failed');
+    console.error('Felmeddelande från servern:', errorData);
+    throw new Error(errorData.message || 'Registrering misslyckades');
   }
 
   // Auto-login after successful registration
   const data = await login(email, password);
   return data; // This should include `{ email, firstName }`
 };
+
 
 // Logout function
 export const logout = async () => {
