@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../utils/authContext";
-import { fetchUserBookings, cancelBooking } from "../../utils/queryService";
+import { fetchUserBookings } from "../../utils/queryService";
 import Pagination from 'react-bootstrap/Pagination'; // Import Bootstrap pagination
-
 import "./myProfile.css";
+import { cancelBooking } from "../../services/authService";
 
 // Define a Booking interface according to the fetched data structure
 interface Booking {
@@ -18,7 +18,7 @@ interface Booking {
 }
 
 const MinProfil = () => {
- const { userEmail, firstName, fetchUserData } = useAuth();
+  const { userEmail, firstName, fetchUserData } = useAuth();
   console.log("User Email:", userEmail);
   console.log("User Name:", firstName);
 
@@ -40,7 +40,7 @@ const MinProfil = () => {
 
   const itemsPerPage = 5; // Items to display per page
 
-    useEffect(() => {
+  useEffect(() => {
     // Fetch user data when component mounts
     fetchUserData();
   }, [fetchUserData]);
@@ -57,9 +57,12 @@ const MinProfil = () => {
   }, [bookings]);
 
   // Cancel booking and refetch data
-  const handleCancelBooking = async (bookingId: number) => {
+  const handleCancelBooking = async (bookingId: number, bookingNumber: string) => {
     try {
-      await cancelBooking(bookingId, userEmail!); // Ensure userEmail is not null or undefined
+      if (!userEmail) {
+        throw new Error("User email is not defined.");
+      }
+      await cancelBooking(bookingId, userEmail, bookingNumber); // Ensure userEmail is not null or undefined
       refetch(); // Refresh bookings after cancellation
     } catch (error) {
       console.error("Fel vid avbokning:", error);
@@ -87,7 +90,7 @@ const MinProfil = () => {
   return (
     <div className="profile-container">
       <div className="profile-section">
-          <p>Välkommen, {firstName || userEmail}</p>
+        <p>Välkommen, {firstName || userEmail}</p>
       </div>
       <hr />
 
@@ -150,7 +153,7 @@ const MinProfil = () => {
 interface BookingTableProps {
   bookings: Booking[];
   onBookingClick: (booking: Booking) => void;
-  onCancelBooking?: (bookingId: number) => void; // Optional prop
+  onCancelBooking?: (bookingId: number, bookingNumber: string) => void; // Updated to include bookingNumber
 }
 
 const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, onCancelBooking }) => (
@@ -172,19 +175,20 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, o
             <td>{new Date(booking.screeningTime).toLocaleDateString('sv-SE')}</td> {/* Swedish Date Format */}
             <td>{new Date(booking.screeningTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td> {/* Time Display */}
             <td>{booking.bookingNumber}</td>
-           {onCancelBooking && (
-  <td>
-    <button
-      className="cancel-button" // Use the new cancel button styles
-      onClick={(e) => {
-        e.stopPropagation();
-        onCancelBooking(booking.bookingId); // No need to convert to string
-      }}
-    >
-      Avboka
-    </button>
-  </td>
-)}
+            {onCancelBooking && (
+              <td>
+                <button
+                  className="cancel-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Pass both bookingId and bookingNumber to onCancelBooking
+                    onCancelBooking(booking.bookingId, booking.bookingNumber);
+                  }}
+                >
+                  Avboka
+                </button>
+              </td>
+            )}
           </tr>
         ))}
       </tbody>
@@ -227,7 +231,6 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
   </div>
 );
 
-
 // Booking Modal component
 interface BookingModalProps {
   booking: Booking;
@@ -262,6 +265,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
 };
 
 export default MinProfil;
+
 
 
 

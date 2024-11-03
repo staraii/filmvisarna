@@ -214,40 +214,18 @@ export const fetchUserBookings = async (email: string) => {
   }
 };
 
-// Function to cancel a booking by ID and email
+// Cancel booking
 export const cancelBooking = async (bookingId: number, email: string) => {
-  if (bookingId === undefined || !email) {
-    throw new Error("Booking ID and email are required to cancel a booking.");
+  const response = await fetch(`/api/bookings/${bookingId}`, {
+    method: 'DELETE', // Use DELETE for removing a booking
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', // Important for session management
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json(); // Get error details from response
+    throw new Error(errorData.message || 'Failed to cancel booking');
   }
 
-  try {
-    const response = await fetch(
-      `/api/bookings/cancelBooking?bookingId=${encodeURIComponent(
-        bookingId
-      )}&email=${encodeURIComponent(email)}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        `Error: ${response.status} ${response.statusText} - ${
-          errorData.message || "No additional error information."
-        }`
-      );
-    }
-
-    const data = await response.json();
-    console.log("Successfully cancelled booking:", data);
-    return data; // Optional: return response data if needed
-  } catch (error) {
-    console.error("Cancel booking error:", error);
-    throw error; // Re-throw to handle in your UI component
-  }
+  return response.json(); // Return response data if successful
 };

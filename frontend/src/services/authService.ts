@@ -14,7 +14,7 @@ export const login = async (email: string, password: string) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
-    credentials: 'include'
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -22,12 +22,14 @@ export const login = async (email: string, password: string) => {
     throw new Error(errorData.message || 'Login failed');
   }
 
-  // Expect response to include `firstName` if login is successful
+  // Get the full response data
   const data = await response.json();
-  console.log("Login response data:", data); // Verify data structure in console
-   return {
-    email: data.user.email,
-    firstName: data.user.firstName, // Capture firstName here
+  console.log("Login response data:", data); // Log the entire response
+
+  // Extract email and firstName if available
+  return {
+    email: data.email,  // Directly access email from the response
+    firstName: data.firstName || '',  // Handle the case where firstName might not be present
   };
 };
 
@@ -70,8 +72,8 @@ export const register = async (formData: FormData) => {
 
 // Logout function
 export const logout = async () => {
-  const response = await fetch('/api/logout', { // Ensure this endpoint is correct
-    method: 'POST',
+  const response = await fetch('/api/login', { // Ensure this endpoint is correct
+    method: 'DELETE',
     credentials: 'include'
   });
 
@@ -101,3 +103,19 @@ export const getMe = async () => {
   };
 };
 
+
+// Cancel booking
+export const cancelBooking = async (bookingId: number, email: string, bookingNumber: string) => {
+  const response = await fetch(`/api/bookings/${bookingId}?bookingNumber=${bookingNumber}&email=${email}`, {
+    method: 'DELETE', // Use DELETE for removing a booking
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', // Important for session management
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json(); // Get error details from response
+    throw new Error(errorData.message || 'Failed to cancel booking');
+  }
+
+  return response.json(); // Return response data if successful
+};
