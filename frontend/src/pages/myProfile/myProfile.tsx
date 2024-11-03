@@ -18,8 +18,9 @@ interface Booking {
 }
 
 const MinProfil = () => {
-  const { userEmail } = useAuth(); // Get user email from context
-  console.log("Användarens e-post:", userEmail);
+ const { userEmail, firstName, fetchUserData } = useAuth();
+  console.log("User Email:", userEmail);
+  console.log("User Name:", firstName);
 
   // Fetch user bookings with React Query
   const { data: bookings, isLoading, error, refetch } = useQuery({
@@ -38,6 +39,11 @@ const MinProfil = () => {
   const [pastBookingPage, setPastBookingPage] = useState(1);
 
   const itemsPerPage = 5; // Items to display per page
+
+    useEffect(() => {
+    // Fetch user data when component mounts
+    fetchUserData();
+  }, [fetchUserData]);
 
   // Separate bookings into current and past based on the screening time
   useEffect(() => {
@@ -81,7 +87,7 @@ const MinProfil = () => {
   return (
     <div className="profile-container">
       <div className="profile-section">
-        <p>Välkommen, {userEmail}</p>
+          <p>Välkommen, {firstName || userEmail}</p>
       </div>
       <hr />
 
