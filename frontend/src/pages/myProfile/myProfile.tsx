@@ -85,15 +85,15 @@ const MinProfil = () => {
     return bookings.slice(indexOfFirst, indexOfLast); // Return the sliced bookings for pagination
   };
 
-  // UI conditions for loading, error, and no bookings
-  if (isLoading) return <div>Laddar bokningar...</div>;
-  if (error) {
-  const errorMessage = (error as Error).message;
-  if (errorMessage.includes("404")) {
-    return <div>Inga bokningar hittades.</div>;
-  }
-  return <div>Fel vid hämtning av bokningar: {errorMessage}</div>;
-}
+//   // UI conditions for loading, error, and no bookings
+//   if (isLoading) return <div>Laddar bokningar...</div>;
+//   if (error) {
+//   const errorMessage = (error as Error).message;
+//   if (errorMessage.includes("404")) {
+//     return <div>Inga bokningar hittades.</div>;
+//   }
+//   return <div>Fel vid hämtning av bokningar: {errorMessage}</div>;
+// }
 
   return (
     <div className="profile-container">
@@ -106,7 +106,7 @@ const MinProfil = () => {
       <div className="profile-section">
         <h2>Aktuella Bokningar</h2>
         {currentBookings.length === 0 ? (
-          <p>Inga aktuella bokningar hittades.</p>
+          <p>Du har inga aktuella bokningar.</p>
         ) : (
           <>
             <BookingTable
@@ -131,7 +131,7 @@ const MinProfil = () => {
       <div className="profile-section">
         <h2>Bokningshistorik</h2>
         {pastBookings.length === 0 ? (
-          <p>Inga tidigare bokningar hittades.</p>
+          <p>Du har inga tidigare bokningar.</p>
         ) : (
           <>
             <BookingTable
