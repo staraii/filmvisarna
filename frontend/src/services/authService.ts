@@ -47,6 +47,10 @@ export const register = async (formData: FormData) => {
     throw new Error('Ogiltigt e-postformat.');
   }
 
+  // Capitalize the first letter of firstName and lastName
+  const formattedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+  const formattedLastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+
   // Password validation requirements
   const passwordRequirements = {
     minLength: 8,
@@ -78,12 +82,12 @@ export const register = async (formData: FormData) => {
     throw new Error('Telefonnumret måste vara 10 siffror långt.');
   }
 
-  // Prepare data for API
+  // Prepare data for API, using formatted firstName and lastName
   const requestData = {
     email,
     password,
-    firstName,
-    lastName,
+    firstName: formattedFirstName,
+    lastName: formattedLastName,
     phone: phoneNumber
   };
 
@@ -107,6 +111,7 @@ export const register = async (formData: FormData) => {
   const data = await login(email, password);
   return data; // This should include `{ email, firstName }`
 };
+
 
 
 // Logout function
