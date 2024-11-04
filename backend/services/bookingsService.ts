@@ -17,8 +17,8 @@ const createNewBooking = async (userId: number | null, email: string, screeningI
   try {
     await connection.beginTransaction();
     const [bookingResult] = await connection.execute<ResultSetHeader>(
-      "INSERT INTO `bookings` (`userId`, `screeningId`, `email`, `bookingNumber`) VALUES (?, ?, ?, ?)",
-      [userId, screeningId, email, bookingNumber]
+      "INSERT INTO `bookings` (`userId`, `screeningId`, `email`, `bookingNumber`, `bookingDate`) VALUES (?, ?, ?, ?, ?)",
+      [userId, screeningId, email, bookingNumber, new Date().toLocaleString("sv-SE")]
     );
     bookingId = bookingResult.insertId;
     console.log("bookingId1: " + bookingId)
