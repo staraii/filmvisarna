@@ -3,15 +3,18 @@ import axios from "axios";
 
 interface InfiniteQueryOptions {
   queryKey: string[];
-  urlPrefix: string;
+  url: string;
   pageSize: number;
-  queryFilters: boolean;
 }
 
-const useGetInfinite = ({queryKey, urlPrefix, pageSize, queryFilters}: InfiniteQueryOptions) => {
+const useGetInfinite = ({queryKey, url, pageSize}: InfiniteQueryOptions) => {
 
   const getInfinite = async (pageParam: number) => {
-    const { data } = await axios.get(`${urlPrefix}${queryFilters ? "&" : "?"}offset=${pageParam * pageSize}&limit=${pageSize}`);
+    const { data } = await axios.get(
+      `${url}&offset=${
+          pageParam * pageSize
+        }&limit=${pageSize}`
+      );
     return data;
   };
   
