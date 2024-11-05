@@ -69,7 +69,7 @@ const router = createBrowserRouter([
       {
         path: "bio-kalender",
         element: <MovieCalendar />,
-        loader: loader(queryClient, "/api/screenings", "screenings"),
+        loader: loader(queryClient, "/api/screenings/all", "screenings"),
         errorElement: <ErrorPage />,
       },
       {
