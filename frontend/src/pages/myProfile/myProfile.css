@@ -2,7 +2,7 @@
 
 .profile-container {
   padding: 20px;
-  max-width: 800px;
+  max-width: 100%;
 
   /* Limit the width for larger screens */
   margin: auto;
@@ -216,32 +216,219 @@ hr {
 }
 
 
-/* Media Queries for Responsive Design */
 @media (max-width: 600px) {
   .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    margin: auto;
+  }
+
+    hr {
+      display: none;
+      /* Hide the hr element on mobile view */
+    }
+
+  .profile-table {
+    display: block;
+    width: auto;
+    max-width: 90%;
+    margin: 0 auto;
+    overflow-x: hidden;
+  }
+
+  .profile-table thead {
+    display: none;
+  }
+
+  .profile-table tr {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
     padding: 10px;
-    /* Reduce padding for small screens */
+    background-color: #0b0815;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
   }
 
-  .profile-table th,
   .profile-table td {
-    font-size: 14px;
-    /* Smaller font size for mobile */
-    padding: 8px;
-    /* Reduce padding */
+    display: flex;
+    justify-content: center;
+    border: none;
+    padding: 5px 0;
+    color: #e7dede;
+    width: auto;
+    word-wrap: break-word;
   }
 
-  .profile-section {
-    margin-bottom: 15px;
-    /* Reduce margin for sections */
+  .profile-table td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #c15f6f;
+    margin-right: 10px;
+    text-align: center;
   }
 
-  .pagination button {
-    padding: 4px 8px;
-    /* Smaller padding for buttons */
-    font-size: 12px;
-    /* Smaller font size for buttons */
-    margin-bottom: 50px;
+  .cancel-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #c15f6f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
   }
 
-}
+  .cancel-button:hover {
+    background-color: #551a3a;
+  }
+
+  /* Centering the History Booking section */
+  .history-booking {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 90%;
+    text-align: center;
+  }
+
+  /* History booking item styles */
+  .history-booking-item {
+    margin-bottom: 10px;
+    background-color: #0b0815;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+  }
+
+  /* History booking cancel button styles */
+  .history-booking .cancel-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #c15f6f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+  }
+
+  .history-booking .cancel-button:hover {
+    background-color: #551a3a;
+  }
+
+  /* Adjust the size of h2 headings */
+  .history-booking h2 {
+    font-size: 1.6rem;
+    /* Change this to your desired size */
+    margin: 0;
+    /* Remove default margin */
+  }
+
+  /* Adjust the size of other h2 headings in general */
+  h2 {
+    font-size: 1.6rem;
+    /* Set a smaller font size for other h2 headings */
+  }
+
+
+    .modal-content {
+      background-color: #0b0815;
+      /* Dark background color for the modal */
+      border-radius: 8px;
+      /* Rounded corners */
+      padding: 20px;
+      /* Padding for the content */
+      width: 90%;
+      /* Full width for small screens */
+      max-width: 500px;
+      /* Set a maximum width */
+      margin: auto;
+      /* Center the modal */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      /* Subtle shadow */
+    }
+  
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+      text-align: center;
+      /* Center text in header, body, and footer */
+    }
+  
+    .modal-title {
+      font-size: 20px;
+      /* Adjust font size for the title */
+      color: #c15f6f;
+      /* Title color */
+    }
+  
+    .modal-body {
+      font-size: 16px;
+      /* Adjust font size for body text */
+      color: #e7dede;
+      /* Body text color */
+      margin-bottom: 20px;
+      /* Spacing below body */
+    }
+  
+    .modal-footer {
+      display: flex;
+      /* Use flexbox for footer buttons */
+      flex-direction: column;
+      /* Stack buttons vertically */
+      align-items: center;
+      /* Center buttons */
+    }
+  
+    .modal-footer .btn {
+      width: 80%;
+      /* Make buttons full width */
+      max-width: 300px;
+      /* Limit button width */
+      margin: 5px 0;
+      /* Space between buttons */
+      border-radius: 5px;
+      /* Rounded corners */
+    }
+  
+    .modal-footer .btn-secondary {
+      background-color: transparent;
+      /* Transparent background for cancel button */
+      border: 1px solid #c15f6f;
+      /* Border for cancel button */
+      color: #c15f6f;
+      /* Text color for cancel button */
+    }
+  
+    .modal-footer .btn-secondary:hover {
+      background-color: rgba(206, 76, 97, 0.1);
+      /* Light background on hover */
+    }
+  
+    .modal-footer .btn-danger {
+      background-color: #c15f6f;
+      /* Background color for confirm button */
+      color: white;
+      /* Text color for confirm button */
+    }
+  
+    .modal-footer .btn-danger:hover {
+      background-color: #551a3a;
+      /* Darker shade on hover */
+    }
+    }
+
