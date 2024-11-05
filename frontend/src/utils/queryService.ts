@@ -214,18 +214,3 @@ export const fetchUserBookings = async (email: string) => {
   }
 };
 
-// Cancel booking
-export const cancelBooking = async (bookingId: number, email: string) => {
-  const response = await fetch(`/api/bookings/${bookingId}`, {
-    method: 'DELETE', // Use DELETE for removing a booking
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include', // Important for session management
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json(); // Get error details from response
-    throw new Error(errorData.message || 'Failed to cancel booking');
-  }
-
-  return response.json(); // Return response data if successful
-};
