@@ -4,6 +4,7 @@ import ScreeningsController from "../controller/screeningsController.js";
 const router = express.Router();
 
 router.get("/", ScreeningsController.handleGetScreenings);
+router.get("/all", ScreeningsController.getAllScreenings);
 router.get("/:screeningId", ScreeningsController.handleGetScreeningById);
 router.get("/:title", ScreeningsController.handleGetScreeningsByTitle);
 router.get(
