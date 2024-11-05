@@ -148,6 +148,8 @@ export const getMe = async () => {
 };
 
 
+
+
 // Cancel booking
 export const cancelBooking = async (bookingId: number, email: string, bookingNumber: string) => {
   const response = await fetch(`/api/bookings/${bookingId}?bookingNumber=${bookingNumber}&email=${email}`, {

@@ -5,73 +5,92 @@ import { fetchUserBookings } from "../../utils/queryService";
 import Pagination from 'react-bootstrap/Pagination'; // Import Bootstrap pagination
 import "./myProfile.css";
 import { cancelBooking } from "../../services/authService";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
-// Define a Booking interface according to the fetched data structure
+
+// Define types for bookings and modal props
+interface CancelConfirmationModalProps {
+  onConfirm: () => void;
+  onClose: () => void;
+  bookingNumber: string;
+}
+
+const CancelConfirmationModal: React.FC<CancelConfirmationModalProps> = ({ onConfirm, onClose, bookingNumber }) => (
+  <Modal show onHide={onClose}>
+    <Modal.Header closeButton>
+      <Modal.Title>Bekräfta Avbokning</Modal.Title>
+    </Modal.Header>
+    <Modal.Body>Är du säker på att du vill avboka bokningsnummer {bookingNumber}?</Modal.Body>
+    <Modal.Footer>
+      <Button variant="secondary" onClick={onClose}>Avbryt</Button>
+      <Button variant="danger" onClick={onConfirm}>Ja, Avboka</Button>
+    </Modal.Footer>
+  </Modal>
+);
+
 interface Booking {
-  bookingId: number; // Unique ID for the booking
-  bookingNumber: string; // Booking reference number
-  screeningId: number; // ID of the screening
-  screeningTime: string; // Screening date and time (ISO 8601 format)
-  movieTitle: string; // Name of the movie
-  seats: string; // Array of seat numbers
-  bookingDate: string; // The date when the booking was made
+  bookingId: number;
+  bookingNumber: string;
+  screeningId: number;
+  screeningTime: string;
+  movieTitle: string;
+  seats: string;
+  bookingDate: string;
   ticketTypes: string;
   totalPrice: string;
 }
 
 const MinProfil = () => {
   const { userEmail, firstName, fetchUserData } = useAuth();
-  console.log("User Email:", userEmail);
-  console.log("User Name:", firstName);
-
-  // Fetch user bookings with React Query
+  
   const { data: bookings, isLoading, error, refetch } = useQuery({
     queryKey: ["userBookings", userEmail],
     queryFn: () => fetchUserBookings(userEmail!),
-    enabled: !!userEmail, // Only run the query if userEmail exists
+    enabled: !!userEmail,
     retry: 1,
   });
 
-  // States for current and past bookings
   const [currentBookings, setCurrentBookings] = useState<Booking[]>([]);
   const [pastBookings, setPastBookings] = useState<Booking[]>([]);
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [bookingToCancel, setBookingToCancel] = useState<{ id: number; number: string } | null>(null);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [currentBookingPage, setCurrentBookingPage] = useState(1);
   const [pastBookingPage, setPastBookingPage] = useState(1);
-
-  const itemsPerPage = 5; // Items to display per page
+  const itemsPerPage = 5;
 
   useEffect(() => {
-    // Fetch user data when component mounts
     fetchUserData();
   }, [fetchUserData]);
 
-  // Separate bookings into current and past based on the screening time
   useEffect(() => {
     if (bookings) {
       const now = new Date();
-      const current = bookings.filter((booking: Booking) => new Date(booking.screeningTime) >= now);
-      const past = bookings.filter((booking: Booking) => new Date(booking.screeningTime) < now);
-      setCurrentBookings(current);
-      setPastBookings(past);
+      setCurrentBookings(bookings.filter((b: Booking) => new Date(b.screeningTime) >= now));
+      setPastBookings(bookings.filter((b: Booking) => new Date(b.screeningTime) < now));
     }
   }, [bookings]);
 
-  // Cancel booking and refetch data
-  const handleCancelBooking = async (bookingId: number, bookingNumber: string) => {
+  const openCancelModal = (bookingId: number, bookingNumber: string) => {
+    setBookingToCancel({ id: bookingId, number: bookingNumber });
+    setShowConfirmationModal(true);
+  };
+
+  const confirmCancelBooking = async () => {
+    if (!bookingToCancel || !userEmail) return;
     try {
-      if (!userEmail) {
-        throw new Error("User email is not defined.");
-      }
-      await cancelBooking(bookingId, userEmail, bookingNumber); // Ensure userEmail is not null or undefined
-      refetch(); // Refresh bookings after cancellation
+      await cancelBooking(bookingToCancel.id, userEmail, bookingToCancel.number);
+      refetch();
     } catch (error) {
-      console.error("Fel vid avbokning:", error);
+      console.error("Error while canceling:", error);
+    } finally {
+      setShowConfirmationModal(false);
+      setBookingToCancel(null);
     }
   };
 
-  // Handle modal display for booking details
   const handleBookingClick = (booking: Booking) => {
     setSelectedBooking(booking);
     setShowModal(true);
@@ -82,18 +101,8 @@ const MinProfil = () => {
   const paginate = (bookings: Booking[], page: number) => {
     const indexOfLast = page * itemsPerPage;
     const indexOfFirst = indexOfLast - itemsPerPage;
-    return bookings.slice(indexOfFirst, indexOfLast); // Return the sliced bookings for pagination
+    return bookings.slice(indexOfFirst, indexOfLast);
   };
-
-//   // UI conditions for loading, error, and no bookings
-//   if (isLoading) return <div>Laddar bokningar...</div>;
-//   if (error) {
-//   const errorMessage = (error as Error).message;
-//   if (errorMessage.includes("404")) {
-//     return <div>Inga bokningar hittades.</div>;
-//   }
-//   return <div>Fel vid hämtning av bokningar: {errorMessage}</div>;
-// }
 
   return (
     <div className="profile-container">
@@ -102,7 +111,13 @@ const MinProfil = () => {
       </div>
       <hr />
 
-      {/* Current Bookings Section */}
+      {showConfirmationModal && bookingToCancel && (
+        <CancelConfirmationModal
+          bookingNumber={bookingToCancel.number}
+          onConfirm={confirmCancelBooking}
+          onClose={() => setShowConfirmationModal(false)}
+        />
+      )}
       <div className="profile-section">
         <h2>Aktuella Bokningar</h2>
         {currentBookings.length === 0 ? (
@@ -112,9 +127,8 @@ const MinProfil = () => {
             <BookingTable
               bookings={paginate(currentBookings, currentBookingPage)}
               onBookingClick={handleBookingClick}
-              onCancelBooking={handleCancelBooking}
+              openCancelModal={openCancelModal}
             />
-            {/* Show pagination only if there are more than itemsPerPage bookings */}
             {currentBookings.length > itemsPerPage && (
               <CustomPagination
                 totalPages={Math.ceil(currentBookings.length / itemsPerPage)}
@@ -127,7 +141,6 @@ const MinProfil = () => {
       </div>
       <hr />
 
-      {/* Past Bookings Section */}
       <div className="profile-section">
         <h2>Bokningshistorik</h2>
         {pastBookings.length === 0 ? (
@@ -138,7 +151,6 @@ const MinProfil = () => {
               bookings={paginate(pastBookings, pastBookingPage)}
               onBookingClick={handleBookingClick}
             />
-            {/* Show pagination only if there are more than itemsPerPage bookings */}
             {pastBookings.length > itemsPerPage && (
               <CustomPagination
                 totalPages={Math.ceil(pastBookings.length / itemsPerPage)}
@@ -150,7 +162,6 @@ const MinProfil = () => {
         )}
       </div>
 
-      {/* Booking Details Modal */}
       {showModal && selectedBooking && (
         <BookingModal booking={selectedBooking} onClose={handleCloseModal} />
       )}
@@ -161,10 +172,10 @@ const MinProfil = () => {
 interface BookingTableProps {
   bookings: Booking[];
   onBookingClick: (booking: Booking) => void;
-  onCancelBooking?: (bookingId: number, bookingNumber: string) => void; // Updated to include bookingNumber
+  openCancelModal?: (bookingId: number, bookingNumber: string) => void;
 }
 
-const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, onCancelBooking }) => (
+const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, openCancelModal }) => (
   <div className="content">
     <table className="profile-table">
       <thead>
@@ -173,24 +184,23 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, o
           <th>Visningsdatum</th>
           <th>Visningstid</th>
           <th>Bokningsnummer</th>
-          {onCancelBooking && <th>Avboka</th>}
+          {openCancelModal && <th>Avboka</th>}
         </tr>
       </thead>
       <tbody>
         {bookings.map((booking) => (
           <tr key={booking.bookingId} onClick={() => onBookingClick(booking)}>
             <td>{booking.movieTitle}</td>
-            <td>{new Date(booking.screeningTime).toLocaleDateString('sv-SE')}</td> {/* Swedish Date Format */}
-            <td>{new Date(booking.screeningTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td> {/* Time Display */}
+            <td>{new Date(booking.screeningTime).toLocaleDateString('sv-SE')}</td>
+            <td>{new Date(booking.screeningTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
             <td>{booking.bookingNumber}</td>
-            {onCancelBooking && (
+            {openCancelModal && (
               <td>
                 <button
                   className="cancel-button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    // Pass both bookingId and bookingNumber to onCancelBooking
-                    onCancelBooking(booking.bookingId, booking.bookingNumber);
+                    openCancelModal(booking.bookingId, booking.bookingNumber);
                   }}
                 >
                   Avboka
@@ -204,24 +214,16 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, o
   </div>
 );
 
-// Updated Pagination component using Bootstrap Pagination
 interface CustomPaginationProps {
   totalPages: number;
   currentPage: number;
-  setPage: (page: number) => void; // Function to set the page
+  setPage: (page: number) => void;
 }
 
-const CustomPagination: React.FC<CustomPaginationProps> = ({
-  totalPages,
-  currentPage,
-  setPage,
-}) => (
+const CustomPagination: React.FC<CustomPaginationProps> = ({ totalPages, currentPage, setPage }) => (
   <div className="custom-pagination">
     <Pagination className="d-flex justify-content-center mt-3">
-      <Pagination.Prev
-        onClick={() => currentPage > 1 && setPage(currentPage - 1)}
-        disabled={currentPage === 1}
-      />
+      <Pagination.Prev onClick={() => currentPage > 1 && setPage(currentPage - 1)} disabled={currentPage === 1} />
       {[...Array(totalPages)].map((_, pageNum) => (
         <Pagination.Item 
           key={pageNum} 
@@ -231,10 +233,7 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({
           {pageNum + 1}
         </Pagination.Item>
       ))}
-      <Pagination.Next 
-        onClick={() => currentPage < totalPages && setPage(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      />
+      <Pagination.Next onClick={() => currentPage < totalPages && setPage(currentPage + 1)} disabled={currentPage === totalPages} />
     </Pagination>
   </div>
 );
