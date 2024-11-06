@@ -106,9 +106,12 @@ const MinProfil = () => {
 
   return (
     <div className="profile-container">
-      <div className="profile-section">
-        <p>Välkommen, {firstName || userEmail}</p>
-      </div>
+      <p>
+        Välkommen,{" "}
+        {firstName
+          ? firstName.charAt(0).toUpperCase() + firstName.slice(1)
+          : userEmail}
+      </p>
       <hr />
 
       {showConfirmationModal && bookingToCancel && (

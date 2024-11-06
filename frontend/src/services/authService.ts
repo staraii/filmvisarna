@@ -39,17 +39,13 @@ export const register = async (formData: FormData) => {
 
   // Check if any field is empty
   if (!firstName || !lastName || !email || !password || !phoneNumber) {
-    throw new Error('Alla fält måste fyllas i.');
+    throw new Error("Alla fält måste fyllas i.");
   }
 
   // Email format validation
   if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
-    throw new Error('Ogiltigt e-postformat.');
+    throw new Error("Ogiltigt e-postformat.");
   }
-
-  // Capitalize the first letter of firstName and lastName
-  const formattedFirstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
-  const formattedLastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
 
   // Password validation requirements
   const passwordRequirements = {
@@ -65,46 +61,48 @@ export const register = async (formData: FormData) => {
     throw new Error(`Lösenordet måste vara minst ${passwordRequirements.minLength} tecken långt.`);
   }
   if (!passwordRequirements.uppercase.test(password)) {
-    throw new Error('Lösenordet måste innehålla minst en versal (stort) bokstav.');
+    throw new Error("Lösenordet måste innehålla minst en versal (stort) bokstav.");
   }
   if (!passwordRequirements.lowercase.test(password)) {
-    throw new Error('Lösenordet måste innehålla minst en gemen (liten) bokstav.');
+    throw new Error("Lösenordet måste innehålla minst en gemen (liten) bokstav.");
   }
   if (!passwordRequirements.digit.test(password)) {
-    throw new Error('Lösenordet måste innehålla minst en siffra.');
+    throw new Error("Lösenordet måste innehålla minst en siffra.");
   }
   if (!passwordRequirements.specialChar.test(password)) {
-    throw new Error('Lösenordet måste innehålla minst ett specialtecken (t.ex. !, @, #, $, %, ^, &, *, ., eller -).');
+    throw new Error(
+      "Lösenordet måste innehålla minst ett specialtecken (t.ex. !, @, #, $, %, ^, &, *, ., eller -)."
+    );
   }
 
   // Phone number validation (assuming 10 digits)
   if (!/^\d{10}$/.test(phoneNumber)) {
-    throw new Error('Telefonnumret måste vara 10 siffror långt.');
+    throw new Error("Telefonnumret måste vara 10 siffror långt.");
   }
 
-  // Prepare data for API, using formatted firstName and lastName
+  // Prepare data for API without capitalizing firstName and lastName
   const requestData = {
     email,
     password,
-    firstName: formattedFirstName,
-    lastName: formattedLastName,
-    phone: phoneNumber
+    firstName, // Use as provided, without capitalization
+    lastName,  // Use as provided, without capitalization
+    phone: phoneNumber,
   };
 
-  console.log('Skickar registreringsdata:', requestData);
+  console.log("Skickar registreringsdata:", requestData);
 
   // API request to register
-  const response = await fetch('/api/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  const response = await fetch("/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(requestData),
-    credentials: 'include'
+    credentials: "include",
   });
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.error('Felmeddelande från servern:', errorData);
-    throw new Error(errorData.message || 'Registrering misslyckades');
+    console.error("Felmeddelande från servern:", errorData);
+    throw new Error(errorData.message || "Registrering misslyckades");
   }
 
   // Auto-login after successful registration
