@@ -68,32 +68,6 @@ function MovieDetailsPage() {
       console.error("Kunde inte parsa reviews:", error);
     }
   }
-  //const [movie, setMovieData] = useState<ApiResponse | null>(null);
-
-  //Get data from database
-//  useEffect(() => {
-//    const fetchMovieDetails = async () => {
-//      try {
-//        const response = await fetch('/api/moviesDetails/2');
-//        
-//        if (!response.ok) {
-//          throw new Error('Något gick fel vid hämtning av filmdata.');
-//        }
-//        
-//        const data = await response.json(); // JSON
-//
-//        data.movie[0].reviews = JSON.parse(`[${data.movie[0].reviews}]`);
-//
-//        setMovieData(data);
-//        console.log(data);
-//      } catch (error) {
-//        console.error('Fel vid hämtning av filmdata:', error);
-//      }
-//    };
-//
-//    fetchMovieDetails();
-//  }, []);
-//  //-------------------------------------------------------
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); 
   const toggleDescriptionText = () => {
@@ -109,6 +83,7 @@ function MovieDetailsPage() {
   const [selectedTime, setSelectedTime,] = useState<string | null>("välj visning");
   const [selectedTheatreId, setSelectedTheatreId] = useState<string | null>(null);
   const [selectedScreeningId, setSelectedScreeningId] = useState<string | null>(null);
+  const [showWarning, setShowWarning] = useState(false);
 
   const handleSelectTime = (eventKey: string | null) => {
     if (eventKey) {
@@ -123,8 +98,16 @@ function MovieDetailsPage() {
       console.log('theatre', theatreId);
       console.log('time',time);
     }
-  };  
-
+  };
+  
+    const handleBookingClick = () => {
+    if (selectedScreeningId) {
+      navigate(`/boka/${selectedScreeningId}`);
+      setShowWarning(false);
+    } else {
+      setShowWarning(true);
+    }
+  };
 
   //
   if (!movie) { 
@@ -142,10 +125,16 @@ function MovieDetailsPage() {
     }, 200);
   };
 
-    const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
-    const date = format(new Date(screening.dateTime), 'yyyy-MM-dd');
-    if (!acc[date]) acc[date] = [];
-    acc[date].push(screening);
+  const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
+    const screeningDate = new Date(screening.dateTime);
+    const today = new Date();
+
+    // no old screenings
+    if (screeningDate > today) {
+      const date = format(screeningDate, 'yyyy-MM-dd');
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(screening);
+    }
     return acc;
   }, {});
 
@@ -294,7 +283,8 @@ function MovieDetailsPage() {
         <Row className="d-flex justify-content-center mt-3 mb-3">
           <Col xs="auto">
             <Col className='seats-left mt-2' >Salong {selectedTheatreId || "(välj visning)"}</Col> 
-            <Button onClick={() => navigate(`/boka/${selectedScreeningId}`)} className=' mt-3'>Boka platser</Button>
+            <Button onClick={handleBookingClick} className=' mt-3'>Boka platser</Button>
+            {showWarning && <div className="text-danger mt-2">Vänligen välj en visning först.</div>}
           </Col>
         </Row>
 
@@ -327,7 +317,39 @@ function MovieDetailsPage() {
             ))}
           </Carousel>
         </Container>
+        
+        <Container className="calendar-containerKAL mt-5">
+          <div className="calendar-grid">
+            {/* Rendera veckodagar */}
+            {['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'].map((day, index) => (
+              <div key={index} className="calendar-day-header">
+                <h5>{day}</h5>
+              </div>
+            ))}
 
+            {/* Rendera screenings för varje dag */}
+            {Object.entries(groupedScreenings).map(([date, screenings]: [string, any]) => {
+              const dayOfWeek = format(new Date(date), 'EEEE', { locale: sv }); // Hämta veckodag från datum
+            
+              return (
+                <div key={date} className={`calendar-day ${dayOfWeek.toLowerCase()}-column`}>
+                  {screenings.map((screening: any) => (
+                    <Card
+                      key={screening.id}
+                      onClick={() => navigate(`/boka/${screening.id}`)}
+                      className="calendar-screening-card"
+                    >
+                      <Card.Body className="bg-primary">
+                        <Card.Title>{format(new Date(screening.dateTime), 'dd/MM HH:mm')}</Card.Title>
+                        <Card.Text>Salong {screening.theatreId}</Card.Text>
+                      </Card.Body>
+                    </Card>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        </Container>
 
 {/* karusell ------------------------------------------------------------------- */}
       
