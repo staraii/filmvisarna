@@ -241,6 +241,33 @@ const CustomPagination: React.FC<CustomPaginationProps> = ({ totalPages, current
   </div>
 );
 
+// translate ticket type to swedish
+const ticketTypeTranslations: { [key: string]: string } = {
+  Adult: "Vuxen",
+  Child: "Barn",
+  Senior: "Senior",
+  Student: "Student",
+};
+
+// Utility function to parse and format ticket types
+const formatTicketTypes = (ticketTypes: string): string => {
+  const typeCounts: { [type: string]: number } = {};
+
+  ticketTypes.split(",").forEach((type) => {
+    const trimmedType = type.trim();
+    if (typeCounts[trimmedType]) {
+      typeCounts[trimmedType]++;
+    } else {
+      typeCounts[trimmedType] = 1;
+    }
+  });
+
+  return Object.entries(typeCounts)
+    .map(([type, count]) => `${count} ${ticketTypeTranslations[type] || type}`)
+    .join(", ");
+};
+
+
 // Booking Modal component
 interface BookingModalProps {
   booking: Booking;
@@ -269,7 +296,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
           <p><strong>Platser:</strong> {seatsDisplay}</p>
           <p><strong>Bokningsnummer:</strong> {booking.bookingNumber}</p>
           <p><strong>Bokningsdatum:</strong> {formattedBookingDate}</p>
-          <p><strong>Biljettyp:</strong> {booking.ticketTypes}</p>
+           <p><strong>Biljettyp:</strong> {formatTicketTypes(booking.ticketTypes)}</p>
           <p><strong>Totalt pris:</strong> {booking.totalPrice}</p>
         </div>
         <button className="close-modal-button" onClick={onClose}>Stäng</button>
