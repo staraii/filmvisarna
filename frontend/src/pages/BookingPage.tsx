@@ -1,5 +1,6 @@
 import "./bookingPage.css";
-import { Row, Col, Container, Stack, Button } from "react-bootstrap";
+import { Row, Col, Container, Stack, Button, FormGroup } from "react-bootstrap";
+import InputForm from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import {
   useNavigate,
@@ -42,15 +43,53 @@ export default function BookingPage() {
   const screeningData = data["success"][0];
   const actionData = useActionData() as BookingActionData;
   const navigate = useNavigate();
+
+  const [seatData, setData] = useState<string[]>([]);
+
+  useEffect(() => {
+    const evtSource = new EventSource(
+      `http://localhost:5173/api/events/${screeningData.screeningId}`
+    );
+    evtSource.onmessage = (event) => {
+      if (event.data) {
+        const parsedData = JSON.parse(event.data) as Array<{
+          seats: string | null;
+        }>;
+
+        const updatedOccupiedSeats = parsedData
+          .filter((seatEntry) => seatEntry.seats !== null)
+          .flatMap((seatEntry) =>
+            seatEntry.seats!.split(",").map((seat) => seat.trim())
+          );
+
+        setData(updatedOccupiedSeats);
+      }
+    };
+    evtSource.onerror = () => {
+      console.error("Failed to connect to SSE");
+      evtSource.close();
+    };
+    return () => {
+      evtSource.close();
+    };
+  }, []);
+
+  //nullchecks
   if (screeningData.occupiedSeats === null) screeningData.occupiedSeats = "0";
 
-  const occupiedSeatArray = screeningData.occupiedSeats
-    .split(",")
-    .map((seat: string) => seat.trim());
+  if (seatData?.length) {
+    for (let i = 0; i < seatData.length, i++; ) {
+      if (seatData[i] === null) seatData[i] = [];
+    }
+  }
+  //nullchecks
+
+  const occupiedSeatArray = seatData.map((seat) => seat.trim());
 
   // useEffect(() => {
   //   console.log(screeningData);
   // }, []);
+
   useEffect(() => {
     window.scrollTo({
       top: 180,
@@ -93,20 +132,6 @@ export default function BookingPage() {
   }, [screeningData]);
 
   // nog skriva om SSE för att passa bättre här, gör detta för sprint 5
-  const [seatData, setData] = useState<{ num: number } | null>();
-  useEffect(() => {
-    const evtSource = new EventSource(
-      `http://localhost:5173/api/events/${screeningData.screeningId}`
-    );
-    evtSource.onmessage = (event) => {
-      if (event.data) {
-        setData(JSON.parse(event.data));
-      }
-    };
-    return () => {
-      evtSource.close();
-    };
-  }, []);
 
   useEffect(() => {
     setTickets(ticketAdult + ticketSenior + ticketChild);
@@ -287,15 +312,19 @@ export default function BookingPage() {
               name="screeningId"
               value={screeningData.screeningId}
             />
-            <input
-              className="m-2"
-              type="text"
-              name="email"
-              value={email}
-              id=""
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="E-post"
-            />
+            {/* Får dubbelkolla hur jag ska göra med bootstrap react x router forms
+            <InputForm>
+              <FormGroup className="mb-3" controlId="exampleForm.ControlInput1">
+                <InputForm.Control
+                  type="email"
+                  placeholder="E-post"
+                  value={email}
+                  id=""
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </FormGroup>
+            </InputForm>
+          */}
             <input
               type="hidden"
               name="seats"
