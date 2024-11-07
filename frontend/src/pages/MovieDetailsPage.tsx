@@ -303,33 +303,33 @@ function MovieDetailsPage() {
 
         {/* karusell ------------------------------------------------------------------- */}
 
-<Container className="calendar-container mt-5">
-  <Row className="calendar-grid">
-    {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]: [string, any]) => (
-      <Col key={date} className="calendar-col">
-        <Card className="calendar-card">
-          <Card.Header>
-            <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
-          </Card.Header>
-          <Card.Body>
-            {screenings.map((screening: any) => (
-              <Card
-                key={screening.id}
-                onClick={() => navigate(`/boka/${screening.id}`)}
-                className="mb-3 square-card"
-              >
-                <Card.Body className="bg-primary">
-                  <Card.Title>{format(new Date(screening.dateTime), 'HH:mm')}</Card.Title>
-                  <Card.Text>Salong {screening.theatreId}</Card.Text>
-                </Card.Body>
-              </Card>
+        <Container className="calendar-container mt-5">
+          <Row className="calendar-grid">
+            {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]: [string, any]) => (
+              <Col key={date} className="calendar-col">
+                <Card className="calendar-card">
+                  <Card.Header>
+                    <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
+                  </Card.Header>
+                  <Card.Body>
+                    {screenings.map((screening: any) => (
+                      <Card
+                        key={screening.id}
+                        onClick={() => navigate(`/boka/${screening.id}`)}
+                        className="mb-3 square-card"
+                      >
+                        <Card.Body className="bg-primary">
+                          <Card.Title>{format(new Date(screening.dateTime), 'HH:mm')}</Card.Title>
+                          <Card.Text>Salong {screening.theatreId}</Card.Text>
+                        </Card.Body>
+                      </Card>
+                    ))}
+                  </Card.Body>
+                </Card>
+              </Col>
             ))}
-          </Card.Body>
-        </Card>
-      </Col>
-    ))}
-  </Row>
-</Container>
+          </Row>
+        </Container>
         <Col>
           {Object.keys(groupedScreenings).length > visibleCount && (
           <Button onClick={handleShowMore} className="mt-3" style={{ marginRight: '10px' }}>

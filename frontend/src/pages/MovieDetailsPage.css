@@ -1,5 +1,5 @@
 .page{
-  margin-bottom: 150px;
+  margin-bottom: 0 0 150px 0;
 }
 
 h1{
@@ -104,12 +104,12 @@ h1{
 }
 
 .custom-review-carousel .carousel-control-prev {
-  left: -10%;
+  left: -4%;
   /* Justera positionen för vänster pil */
 }
 
 .custom-review-carousel .carousel-control-next {
-  right: -10%;
+  right: -4%;
   /* Justera positionen för höger pil */
 }
 
