@@ -48,9 +48,14 @@ interface Movie {
 interface ApiResponse {
   success: boolean;
   movie: Movie[];
-  screenings: { dateTime: string; id: number; movieId: number; theatreId: number }[];
+  screenings: Screening[];
 }
-
+interface Screening {
+  dateTime: string;
+  id: number;
+  movieId: number;
+  theatreId: number;
+}
 
 function MovieDetailsPage() {
   const navigate = useNavigate();
@@ -94,7 +99,7 @@ function MovieDetailsPage() {
   };
   //show less visnigar
   const handleShowLess = () => {
-  setVisibleCount((prevCount) => Math.max(prevCount - 2, initialCount));
+  setVisibleCount((prevCount) => Math.max(prevCount - 5, initialCount));
 };
 
   const handleSelectTime = (eventKey: string | null) => {
