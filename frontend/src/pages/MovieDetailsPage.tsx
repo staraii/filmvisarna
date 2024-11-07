@@ -1,6 +1,6 @@
 import { useState, useRef,} from 'react';
 import './MovieDetailsPage.css'
-import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
+import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
 import { sv } from 'date-fns/locale';
@@ -80,10 +80,22 @@ function MovieDetailsPage() {
   };
   
 
+
   const [selectedTime, setSelectedTime,] = useState<string | null>("välj visning");
   const [selectedTheatreId, setSelectedTheatreId] = useState<string | null>(null);
   const [selectedScreeningId, setSelectedScreeningId] = useState<string | null>(null);
   const [showWarning, setShowWarning] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(8); // start with * visningar
+  const initialCount = 8;
+
+  // show more visningar
+  const handleShowMore = () => {
+    setVisibleCount((prevCount) => prevCount + 5);
+  };
+  //show less visnigar
+  const handleShowLess = () => {
+  setVisibleCount((prevCount) => Math.max(prevCount - 2, initialCount));
+};
 
   const handleSelectTime = (eventKey: string | null) => {
     if (eventKey) {
@@ -138,9 +150,10 @@ function MovieDetailsPage() {
     return acc;
   }, {});
 
+
   return (
     <>
-      <Container>
+      <Container className='page'>
         <Container className="d-flex flex-column align-items-center">
           <Row className="d-flex flex-column flex-md-row ">
             <Col xs={12} md={12} lg={6} xl={6} xxl={6} className='movie-trailer-container'>
@@ -290,44 +303,56 @@ function MovieDetailsPage() {
 
         {/* karusell ------------------------------------------------------------------- */}
 
-        <Container className="calendar-container mt-5">
-          <Carousel interval={null} indicators={false} controls={true} className="calendar-carousel">
-            {Object.entries(groupedScreenings).map(([date, screenings]: [string, any]) => (
-              <CarouselItem key={date} className="calendar-item">
-                <Card className="calendar-card">
-                  <Card.Header>
-                    <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
-                  </Card.Header>
-                  <Card.Body>
-                    {screenings.map((screening: any) => (
-                      <Card
-                        key={screening.id}
-                        onClick={() => navigate(`/boka/${screening.id}`)}
-                        className="mb-3 square-card"
-                      >
-                        <Card.Body className="bg-primary">
-                          <Card.Title>{format(new Date(screening.dateTime), 'HH:mm')}</Card.Title>
-                          <Card.Text>Salong {screening.theatreId}</Card.Text>
-                        </Card.Body>
-                      </Card>
-                    ))}
-                  </Card.Body>
-                </Card>
-              </CarouselItem>
+<Container className="calendar-container mt-5">
+  <Row className="calendar-grid">
+    {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]: [string, any]) => (
+      <Col key={date} className="calendar-col">
+        <Card className="calendar-card">
+          <Card.Header>
+            <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
+          </Card.Header>
+          <Card.Body>
+            {screenings.map((screening: any) => (
+              <Card
+                key={screening.id}
+                onClick={() => navigate(`/boka/${screening.id}`)}
+                className="mb-3 square-card"
+              >
+                <Card.Body className="bg-primary">
+                  <Card.Title>{format(new Date(screening.dateTime), 'HH:mm')}</Card.Title>
+                  <Card.Text>Salong {screening.theatreId}</Card.Text>
+                </Card.Body>
+              </Card>
             ))}
-          </Carousel>
-        </Container>
-        
+          </Card.Body>
+        </Card>
+      </Col>
+    ))}
+  </Row>
+</Container>
+        <Col>
+          {Object.keys(groupedScreenings).length > visibleCount && (
+          <Button onClick={handleShowMore} className="mt-3" style={{ marginRight: '10px' }}>
+            Hämta fler visningar
+          </Button>
+          )}
+
+          {visibleCount > initialCount && (
+            <Button onClick={handleShowLess} className="mt-3">
+              Visa färre visningar
+            </Button>
+          )}
+        </Col>
+        {/*
         <Container className="calendar-containerKAL mt-5">
           <div className="calendar-grid">
-            {/* Rendera veckodagar */}
+
             {['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'].map((day, index) => (
               <div key={index} className="calendar-day-header">
                 <h5>{day}</h5>
               </div>
             ))}
 
-            {/* Rendera screenings för varje dag */}
             {Object.entries(groupedScreenings).map(([date, screenings]: [string, any]) => {
               const dayOfWeek = format(new Date(date), 'EEEE', { locale: sv }); // Hämta veckodag från datum
             
