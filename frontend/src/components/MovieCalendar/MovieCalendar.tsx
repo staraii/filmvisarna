@@ -7,8 +7,33 @@ import Card from "react-bootstrap/Card";
 import Pippi from "../../../public/pippi_poster.jpg";
 import Sleepers from "../../../public/sleepers_poster.jpg";
 import Titanic from "../../../public/titanic_poster.jpg";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { loaderQuery } from "../../utils/queryService";
+import { useLoaderData } from "react-router-dom";
+import { QueryParams } from "../../utils/queryService";
+
+
+type FullScreening = {
+  screeningId: number;
+  movieTitle: string;
+  dateTime: string;
+  dayName: string;
+  day: number;
+  month: number;
+  week: number;
+  time: string;
+  theatreName: string;
+  numberOfSeats: number;
+  numberOfOccupiedSeats: number;
+  occupiedSeats: string;
+  occupiedPercent: number;
+};
+
 
 function MovieCalendar() {
+  const queryParams = useLoaderData() as QueryParams;
+  const { data } = useSuspenseQuery(loaderQuery(queryParams));
+  const screenings: FullScreening[] = data;
   const [activeWeekIndex, setActiveWeekIndex] = useState(0); // State för att hålla koll på aktiv vecka
 
   const weeks = [

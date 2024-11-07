@@ -24,7 +24,6 @@ export default function ScreeningCard({
   const navigate = useNavigate();
 
   const age = ageRatingUtil(ageRating.toString());
-
   return (
     <Col xs={12}>
       <Card border="border-dark rounded" className="screening-card shadow-lg">
@@ -85,7 +84,7 @@ export default function ScreeningCard({
           <Row>
             <Col xs={6}>
               <Card.Text className="fw-lighter text-start lang-sub-font">
-                {spokenLanguage}, {subtitles}
+                {spokenLanguage}{subtitles === "null" ? "" : `, ${subtitles}`}
               </Card.Text>
             </Col>
             <Col xs={6}>

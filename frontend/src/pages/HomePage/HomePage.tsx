@@ -37,7 +37,7 @@ export default function HomePage() {
     age: "ALL",
     theatre: [],
     urlPrefix: queryParamsTwo.query,
-    filteredQuery: queryParamsTwo.query,
+    filteredQuery: `${queryParamsTwo.query}?dateTime>=${new Date().toLocaleString("sv-SE")}`,
     limit: "12",
   });
 
@@ -58,9 +58,8 @@ export default function HomePage() {
     hasNextPage,
   } = useGetInfinite({
     queryKey: ["homePageScreenings", filters.filteredQuery],
-    urlPrefix: filters.filteredQuery,
+    url: filters.filteredQuery,
     pageSize: 12,
-    queryFilters: filters.urlPrefix === filters.filteredQuery ? false : true,
   });
 
 
@@ -74,15 +73,12 @@ export default function HomePage() {
     const getParsedFilterQuery = () => {
       const filtersList = [];
       let filterQuery = filters.urlPrefix;
+      filterQuery += newFilters.date === "ALL" ? `?dateTime>=${new Date().toLocaleString("sv-SE")}` : `?date=${newFilters.date}`;
       if (
-        newFilters.date === "ALL" &&
         newFilters.age === "ALL" &&
         newFilters.theatre.length === 0
       ) {
-        return filterQuery;
-      }
-      if (newFilters.date !== "ALL") {
-        filtersList.push(`date=${newFilters.date}`);
+        return filterQuery
       }
       if (newFilters.age !== "ALL") {
         filtersList.push(`ageRating<=${newFilters.age}`);
@@ -96,12 +92,13 @@ export default function HomePage() {
       }
       if (filtersList.length > 0) {
         filterQuery +=
-          "?" +
+          "&" +
           `${filtersList.length > 1 ? filtersList.join("&") : filtersList[0]}`;
       }
       return filterQuery;
     };
     const newFilterQuery = getParsedFilterQuery();
+    console.log(newFilterQuery)
     newFilters = { ...newFilters, filteredQuery: newFilterQuery };
     setFilters(newFilters);
     //refetch();

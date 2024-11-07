@@ -11,6 +11,7 @@ import {
 import { loaderQuery, QueryParams } from "../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getWeekday } from "../utils/dateTimeUtils";
+import { useAuth } from ".././utils/authContext"; // Added for booking with authentication 
 
 interface RowSeats {
   seats: number;
@@ -28,6 +29,7 @@ interface BookingActionData {
   error?: string;
 }
 export default function BookingPage() {
+  const { userEmail, isAuthenticated } = useAuth();  // Added for booking with authentication 
   const [ticketAdult, setticketAdult] = useState<number>(2);
   const [ticketChild, setTicketChild] = useState<number>(0);
   const [ticketSenior, setTicketSenior] = useState<number>(0);
@@ -312,6 +314,7 @@ export default function BookingPage() {
               name="screeningId"
               value={screeningData.screeningId}
             />
+
             {/* Får dubbelkolla hur jag ska göra med bootstrap react x router forms
             <InputForm>
               <FormGroup className="mb-3" controlId="exampleForm.ControlInput1">
@@ -325,6 +328,21 @@ export default function BookingPage() {
               </FormGroup>
             </InputForm>
           */}
+
+            {/* Conditionally render the email input based on authentication// // Added for booking with authentication  */}  
+            {!isAuthenticated ? (
+              <input
+                className="m-2"
+                type="text"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="E-post"
+              />
+            ) : (
+              <input type="hidden" name="email" value={userEmail} />
+            )}
+
             <input
               type="hidden"
               name="seats"
