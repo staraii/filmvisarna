@@ -1,6 +1,6 @@
 import { useState, useRef,} from 'react';
 import './MovieDetailsPage.css'
-import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
+import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
 import { sv } from 'date-fns/locale';
@@ -48,9 +48,14 @@ interface Movie {
 interface ApiResponse {
   success: boolean;
   movie: Movie[];
-  screenings: { dateTime: string; id: number; movieId: number; theatreId: number }[];
+  screenings: Screening[];
 }
-
+interface Screening {
+  dateTime: string;
+  id: number;
+  movieId: number;
+  theatreId: number;
+}
 
 function MovieDetailsPage() {
   const navigate = useNavigate();
@@ -68,32 +73,6 @@ function MovieDetailsPage() {
       console.error("Kunde inte parsa reviews:", error);
     }
   }
-  //const [movie, setMovieData] = useState<ApiResponse | null>(null);
-
-  //Get data from database
-//  useEffect(() => {
-//    const fetchMovieDetails = async () => {
-//      try {
-//        const response = await fetch('/api/moviesDetails/2');
-//        
-//        if (!response.ok) {
-//          throw new Error('Något gick fel vid hämtning av filmdata.');
-//        }
-//        
-//        const data = await response.json(); // JSON
-//
-//        data.movie[0].reviews = JSON.parse(`[${data.movie[0].reviews}]`);
-//
-//        setMovieData(data);
-//        console.log(data);
-//      } catch (error) {
-//        console.error('Fel vid hämtning av filmdata:', error);
-//      }
-//    };
-//
-//    fetchMovieDetails();
-//  }, []);
-//  //-------------------------------------------------------
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); 
   const toggleDescriptionText = () => {
@@ -106,9 +85,22 @@ function MovieDetailsPage() {
   };
   
 
+
   const [selectedTime, setSelectedTime,] = useState<string | null>("välj visning");
   const [selectedTheatreId, setSelectedTheatreId] = useState<string | null>(null);
   const [selectedScreeningId, setSelectedScreeningId] = useState<string | null>(null);
+  const [showWarning, setShowWarning] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(8); // start with * visningar
+  const initialCount = 8;
+
+  // show more visningar
+  const handleShowMore = () => {
+    setVisibleCount((prevCount) => prevCount + 5);
+  };
+  //show less visnigar
+  const handleShowLess = () => {
+  setVisibleCount((prevCount) => Math.max(prevCount - 5, initialCount));
+};
 
   const handleSelectTime = (eventKey: string | null) => {
     if (eventKey) {
@@ -123,8 +115,16 @@ function MovieDetailsPage() {
       console.log('theatre', theatreId);
       console.log('time',time);
     }
-  };  
-
+  };
+  
+    const handleBookingClick = () => {
+    if (selectedScreeningId) {
+      navigate(`/boka/${selectedScreeningId}`);
+      setShowWarning(false);
+    } else {
+      setShowWarning(true);
+    }
+  };
 
   //
   if (!movie) { 
@@ -142,16 +142,23 @@ function MovieDetailsPage() {
     }, 200);
   };
 
-    const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
-    const date = format(new Date(screening.dateTime), 'yyyy-MM-dd');
-    if (!acc[date]) acc[date] = [];
-    acc[date].push(screening);
+  const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
+    const screeningDate = new Date(screening.dateTime);
+    const today = new Date();
+
+    // no old screenings
+    if (screeningDate > today) {
+      const date = format(screeningDate, 'yyyy-MM-dd');
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(screening);
+    }
     return acc;
   }, {});
 
+
   return (
     <>
-      <Container>
+      <Container className='page'>
         <Container className="d-flex flex-column align-items-center">
           <Row className="d-flex flex-column flex-md-row ">
             <Col xs={12} md={12} lg={6} xl={6} xxl={6} className='movie-trailer-container'>
@@ -294,18 +301,19 @@ function MovieDetailsPage() {
         <Row className="d-flex justify-content-center mt-3 mb-3">
           <Col xs="auto">
             <Col className='seats-left mt-2' >Salong {selectedTheatreId || "(välj visning)"}</Col> 
-            <Button onClick={() => navigate(`/boka/${selectedScreeningId}`)} className=' mt-3'>Boka platser</Button>
+            <Button onClick={handleBookingClick} className=' mt-3'>Boka platser</Button>
+            {showWarning && <div className="text-danger mt-2">Vänligen välj en visning först.</div>}
           </Col>
         </Row>
 
         {/* karusell ------------------------------------------------------------------- */}
 
         <Container className="calendar-container mt-5">
-          <Carousel interval={null} indicators={false} controls={true} className="calendar-carousel">
-            {Object.entries(groupedScreenings).map(([date, screenings]: [string, any]) => (
-              <CarouselItem key={date} className="calendar-item">
+          <Row className="calendar-grid">
+            {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]: [string, any]) => (
+              <Col key={date} className="calendar-col">
                 <Card className="calendar-card">
-                  <Card.Header>
+                  <Card.Header className="card-header">
                     <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
                   </Card.Header>
                   <Card.Body>
@@ -323,11 +331,55 @@ function MovieDetailsPage() {
                     ))}
                   </Card.Body>
                 </Card>
-              </CarouselItem>
+              </Col>
             ))}
-          </Carousel>
+          </Row>
         </Container>
+        <Col>
+          {Object.keys(groupedScreenings).length > visibleCount && (
+          <Button onClick={handleShowMore} className="mt-3" style={{ marginRight: '10px' }}>
+            Hämta fler visningar
+          </Button>
+          )}
 
+          {visibleCount > initialCount && (
+            <Button onClick={handleShowLess} className="mt-3">
+              Visa färre visningar
+            </Button>
+          )}
+        </Col>
+        {/*
+        <Container className="calendar-containerKAL mt-5">
+          <div className="calendar-grid">
+
+            {['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'].map((day, index) => (
+              <div key={index} className="calendar-day-header">
+                <h5>{day}</h5>
+              </div>
+            ))}
+
+            {Object.entries(groupedScreenings).map(([date, screenings]: [string, any]) => {
+              const dayOfWeek = format(new Date(date), 'EEEE', { locale: sv }); // Hämta veckodag från datum
+            
+              return (
+                <div key={date} className={`calendar-day ${dayOfWeek.toLowerCase()}-column`}>
+                  {screenings.map((screening: any) => (
+                    <Card
+                      key={screening.id}
+                      onClick={() => navigate(`/boka/${screening.id}`)}
+                      className="calendar-screening-card"
+                    >
+                      <Card.Body className="bg-primary">
+                        <Card.Title>{format(new Date(screening.dateTime), 'dd/MM HH:mm')}</Card.Title>
+                        <Card.Text>Salong {screening.theatreId}</Card.Text>
+                      </Card.Body>
+                    </Card>
+                  ))}
+                </div>
+              );
+            })}
+          </div>
+        </Container>
 
 {/* karusell ------------------------------------------------------------------- */}
       
