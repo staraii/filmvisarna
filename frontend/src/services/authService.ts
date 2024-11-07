@@ -1,23 +1,5 @@
+// AuthService with updates and comments
 
-
-// Login
-export const login = async (email: string, password: string) => {
-  const response = await fetch('/api/login', { // Ensure the URL is correct
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }), // Use email instead of username
-    credentials: 'include' // Important to include cookies in the request
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json(); // Get the error details
-    throw new Error(errorData.message || 'Login failed'); // Throw an error with a message
-  }
-
-  return response.json(); // Return the response data if successful
-};
-
-// Signup
 export interface FormData {
   email: string;
   password: string;
@@ -26,60 +8,124 @@ export interface FormData {
   phoneNumber: string;
 }
 
-export const register = async (formData: FormData) => {
-  const { email, password, firstName, lastName, phoneNumber } = formData;
-
-  // Ensure all required fields are present
-  if (!firstName || !lastName || !email || !password || !phoneNumber) {
-    throw new Error('All fields must be filled out.');
-  }
-
-  // Prepare the request data
-  const requestData = {
-    email, 
-    password,
-    firstName,  // Ensure these match your backend expectations
-    lastName,   
-    phone: phoneNumber // Ensure this matches your backend field
-  };
-
-  console.log('Submitting registration data:', requestData); // Log request data
-
-  // Send the POST request to the backend
-  const response = await fetch('/api/register', {
+// Login function
+export const login = async (email: string, password: string) => {
+  const response = await fetch('/api/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestData), // Send JSON body
-    credentials: 'include' // Important for including cookies/session
+    body: JSON.stringify({ email, password }),
+    credentials: 'include',
   });
 
-  // Handle the response
   if (!response.ok) {
-    const errorData = await response.json(); // Get error details from response
-    console.error('Error response:', errorData); // Log error for debugging
-    throw new Error(errorData.message || 'Registration failed'); // Throw error with message
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Login failed');
   }
-  // After successful registration, auto-login the user
-  // Reuse the existing login logic with the newly registered email and password
-  return await login(email, password);
+
+  // Get the full response data
+  const data = await response.json();
+  console.log("Login response data:", data); // Log the entire response
+
+  // Extract email and firstName if available
+  return {
+    email: data.email,  // Directly access email from the response
+    firstName: data.firstName || '',  // Handle the case where firstName might not be present
+  };
 };
 
 
-// Logout
+export const register = async (formData: FormData) => {
+  const { email, password, firstName, lastName, phoneNumber } = formData;
+
+  // Check if any field is empty
+  if (!firstName || !lastName || !email || !password || !phoneNumber) {
+    throw new Error("Alla fält måste fyllas i.");
+  }
+
+  // Email format validation
+  if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+    throw new Error("Ogiltigt e-postformat.");
+  }
+
+  // Password validation requirements
+  const passwordRequirements = {
+    minLength: 8,
+    uppercase: /[A-Z]/,          // At least one uppercase letter
+    lowercase: /[a-z]/,          // At least one lowercase letter
+    digit: /\d/,                 // At least one digit
+    specialChar: /[!@#$%^&*.,-]/ // At least one special character
+  };
+
+  // Password validation with Swedish error messages
+  if (password.length < passwordRequirements.minLength) {
+    throw new Error(`Lösenordet måste vara minst ${passwordRequirements.minLength} tecken långt.`);
+  }
+  if (!passwordRequirements.uppercase.test(password)) {
+    throw new Error("Lösenordet måste innehålla minst en versal (stort) bokstav.");
+  }
+  if (!passwordRequirements.lowercase.test(password)) {
+    throw new Error("Lösenordet måste innehålla minst en gemen (liten) bokstav.");
+  }
+  if (!passwordRequirements.digit.test(password)) {
+    throw new Error("Lösenordet måste innehålla minst en siffra.");
+  }
+  if (!passwordRequirements.specialChar.test(password)) {
+    throw new Error(
+      "Lösenordet måste innehålla minst ett specialtecken (t.ex. !, @, #, $, %, ^, &, *, ., eller -)."
+    );
+  }
+
+  // Phone number validation (assuming 10 digits)
+  if (!/^\d{10}$/.test(phoneNumber)) {
+    throw new Error("Telefonnumret måste vara 10 siffror långt.");
+  }
+
+  // Prepare data for API without capitalizing firstName and lastName
+  const requestData = {
+    email,
+    password,
+    firstName, // Use as provided, without capitalization
+    lastName,  // Use as provided, without capitalization
+    phone: phoneNumber,
+  };
+
+  console.log("Skickar registreringsdata:", requestData);
+
+  // API request to register
+  const response = await fetch("/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(requestData),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.error("Felmeddelande från servern:", errorData);
+    throw new Error(errorData.message || "Registrering misslyckades");
+  }
+
+  // Auto-login after successful registration
+  const data = await login(email, password);
+  return data; // This should include `{ email, firstName }`
+};
+
+
+
+// Logout function
 export const logout = async () => {
-  const response = await fetch('/api/login', {
-    method: 'DELETE', // It's common to use POST for logout
+  const response = await fetch('/api/login', { // Ensure this endpoint is correct
+    method: 'DELETE',
     credentials: 'include'
   });
 
   if (!response.ok) {
-    const errorData = await response.json(); // Fetch error response
+    const errorData = await response.json();
     throw new Error(errorData.message || 'Logout failed');
   }
 
   return response.json();
 };
-
 
 // Check if authenticated
 export const getMe = async () => {
@@ -92,7 +138,28 @@ export const getMe = async () => {
     throw new Error('Not authenticated');
   }
 
-  return response.json();
+  const data = await response.json();
+  return {
+    email: data.user.email,
+    firstName: data.user.firstName, // Capture firstName from the response
+  };
 };
 
 
+
+
+// Cancel booking
+export const cancelBooking = async (bookingId: number, email: string, bookingNumber: string) => {
+  const response = await fetch(`/api/bookings/${bookingId}?bookingNumber=${bookingNumber}&email=${email}`, {
+    method: 'DELETE', // Use DELETE for removing a booking
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', // Important for session management
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json(); // Get error details from response
+    throw new Error(errorData.message || 'Failed to cancel booking');
+  }
+
+  return response.json(); // Return response data if successful
+};
