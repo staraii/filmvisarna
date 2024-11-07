@@ -308,7 +308,7 @@ function MovieDetailsPage() {
             {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]: [string, any]) => (
               <Col key={date} className="calendar-col">
                 <Card className="calendar-card">
-                  <Card.Header>
+                  <Card.Header className="card-header">
                     <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
                   </Card.Header>
                   <Card.Body>
