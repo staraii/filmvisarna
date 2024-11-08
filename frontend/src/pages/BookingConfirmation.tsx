@@ -4,6 +4,46 @@ import { getWeekday } from "../utils/dateTimeUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DualQueryParams, loaderQuery } from "../utils/queryService";
 import ErrorPage from "./ErrorPage/ErrorPage";
+import "./BookingConfirmation.css";
+
+// Function to format ticket types
+const ticketTypeTranslations: { [key: string]: string } = {
+  Adult: "Vuxen",
+  Child: "Barn",
+  Senior: "Senior",
+  Student: "Student",
+};
+
+const formatTicketTypes = (ticketTypes: string): string => {
+  const typeCounts: { [type: string]: number } = {};
+
+  ticketTypes.split(",").forEach((type) => {
+    const trimmedType = type.trim();
+    if (typeCounts[trimmedType]) {
+      typeCounts[trimmedType]++;
+    } else {
+      typeCounts[trimmedType] = 1;
+    }
+  });
+
+  return Object.entries(typeCounts)
+    .map(([type, count]) => `${count} ${ticketTypeTranslations[type] || type}`)
+    .join(", ");
+};
+
+// Helper function to check if the date is valid
+const isValidDate = (date: string) => {
+  const d = new Date(date);
+  return !isNaN(d.getTime());
+};
+
+// Format booking date
+const formatBookingDate = (bookingDate: string): string => {
+  const dateTime = new Date(bookingDate);
+  const formattedDate = dateTime.toLocaleDateString('sv-SE'); // Format the date in Swedish (YYYY-MM-DD)
+  const formattedTime = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format time (HH:mm)
+  return `${formattedDate} ${formattedTime}`; // Combine date and time
+};
 
 export default function BookingConfirmationPage() {
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
@@ -11,38 +51,68 @@ export default function BookingConfirmationPage() {
   const { data: bookingData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
 
   const booking = bookingData["success"][0];
-  const screening = screeningData["success"][0]; //den hämtar fortfarande alla visningar tror jag.
+  const screening = screeningData["success"][0];
+
+  // Check if screening.dateTime is valid, otherwise set it to a default value
+  const screeningDateTime = isValidDate(screening.dateTime)
+    ? new Date(screening.dateTime)
+    : new Date(); // Set to current date/time if invalid
+
+  const formattedDate = screeningDateTime.toLocaleDateString('sv-SE'); // Format date
+  const formattedTime = screeningDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format time
+
+  // Format the booking date
+  const formattedBookingDate = formatBookingDate(booking.bookingDate);
+
+  const seatsDisplay = typeof booking.seats === 'string' 
+    ? (booking.seats.split(',') as string[]).map((seat: string) => seat.trim()).join(', ') 
+    : 'Inga platser valda';
 
   return (
     <>
       <h2>Tack för din bokning!</h2>
-      <Container className="">
+      <Container className="booking-confirmation">
+        {/* Booking Details in mobile-like format */}
         <Row className="pt-4">
-          <Col className="">
-            <h4 className="m-3 mt-0">Film</h4>
-            <h4 className="m-3">Tid</h4>
-            <h4 className="m-3">Platser</h4>
-            <h4 className="m-3">Salong</h4>
-            <h4 className="m-3">BokningsId</h4>
-            <h4 className="m-3">Pris</h4>
+          <Col xs={12} className="detail-row">
+            <div className="label-item">Film:</div>
+            <div className="data-item">{screening.movieTitle}</div>
           </Col>
-          <Col>
-            <p className="lead mt-1">{screening.movieTitle}</p>
-            <p className="lead">
-              {getWeekday(screening.dayName) +
-                " " +
-                screening.dateTime.split("T")[0]}
-            </p>
-            <p className="lead">{booking.seats}</p>
-            <p className="lead">{screening.theatreName}</p>
 
-            <p className="lead">{booking.bookingNumber}</p>
-            <p className="lead">{booking.totalPrice} kr</p>
+          <Col xs={12} className="detail-row">
+            <div className="label-item">Visningstid:</div>
+            <div className="data-item">{getWeekday(screening.dayName) + " " + formattedDate} {formattedTime}</div>
           </Col>
-          <p className="pt-4 lead">
-            bokningsbekräftelse kommer strax på eposten
-          </p>
+
+          <Col xs={12} className="detail-row">
+            <div className="label-item">Platser:</div>
+            <div className="data-item">{seatsDisplay}</div>
+          </Col>
+
+          <Col xs={12} className="detail-row">
+            <div className="label-item">Bokningsnummer:</div>
+            <div className="data-item">{booking.bookingNumber}</div>
+          </Col>
+
+          <Col xs={12} className="detail-row">
+            <div className="label-item">Bokningsdatum:</div>
+            <div className="data-item">{formattedBookingDate}</div>
+          </Col>
+
+          <Col xs={12} className="detail-row">
+            <div className="label-item">Biljett:</div>
+            <div className="data-item">{formatTicketTypes(booking.ticketTypes)}</div>
+          </Col>
+
+          <Col xs={12} className="detail-row">
+            <div className="label-item">Totalt pris:</div>
+            <div className="data-item">{booking.totalPrice} kr</div>
+          </Col>
         </Row>
+
+        <p className="pt-4 lead">
+          Bokningsbekräftelse kommer strax på eposten.
+        </p>
       </Container>
     </>
   );
