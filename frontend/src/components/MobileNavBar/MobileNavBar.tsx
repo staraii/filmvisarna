@@ -9,15 +9,19 @@ import { useAuth } from "../../utils/authContext"; // Importing AuthContext for 
 import { logout as authLogout } from "../../services/authService"; // Import your logout function from authService
 import { useEffect } from "react";
 
+
 export default function MobileNavBar() {
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
+
+
   const handleNavigation = (path: string) => {
     setShowMenu(false);
     navigate(`${path}`);
   };
 
+  
 
     useEffect(() => {
     console.log("Authentication state changed:", isAuthenticated);
@@ -27,12 +31,12 @@ export default function MobileNavBar() {
     try {
       await authLogout(); // Call the logout function from your auth service
       logout(); // Call the context's logout function to update the state
-      navigate("/"); // Redirect to homepage after logout
+      navigate("/") // Redirect to homepage after logout
     } catch (error) {
       console.error("Logout failed:", error);
       // Optionally, show a user-friendly message here
     } finally {
-      setShowLogoutConfirmation(false); // Close the logout confirmation modal
+      setShowMenu(false); // Close the logout confirmation modal
     }
   };
 

@@ -1,0 +1,55 @@
+/* Base Styles */
+.booking-confirmation {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+
+/* Label and Data container */
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+/* Label styles */
+.label-item {
+  font-weight: bold;
+  color: #c15f6f;
+  width: 40%;
+  text-align: left;
+}
+
+/* Data styles */
+.data-item {
+  color: #ffffff;
+  width: 55%;
+  text-align: center;
+}
+
+/* Mobile view */
+@media (max-width: 768px) {
+  .detail-row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .data-item {
+    width: 100%;
+    font-size: 18px;
+    text-align: right;
+    margin-bottom: 5px;
+  }
+}
+
+/* Even smaller screens */
+@media (max-width: 480px) {
+
+  .label-item,
+  .data-item {
+    font-size: 18px;
+  }
+}
