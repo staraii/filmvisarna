@@ -4,32 +4,30 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { useNavigate } from "react-router-dom";
 import { HomePageScreenings } from "../../../utils/queryService";
-import { getWeekday } from "../../../utils/dateTimeUtils";
+import { getParsedDateTime } from "../../../utils/dateTimeUtils";
 import { ageRatingUtil } from "../../../utils/ageRatingUtil";
 
 export default function ScreeningCard({
   screeningId,
   movieId,
-  dayName,
-  day,
-  month,
-  time,
   occupiedPercent,
   ageRating,
   slideURL,
   posterURL,
   subtitles,
   spokenLanguage,
+  dateTime,
 }: HomePageScreenings) {
   const navigate = useNavigate();
-
+  const soldOut = occupiedPercent > 99 ? true : false;
+  const { month, date, dayName, time } = getParsedDateTime(dateTime);
   const age = ageRatingUtil(ageRating.toString());
   return (
     <Col xs={12}>
-      <Card border="border-dark rounded" className="screening-card shadow-lg">
+      <Card border="border-dark rounded" className={`screening-card shadow-lg ${soldOut ? "screening-card-sold-out" : ""}`}>
         <Card.Img
           src={`/images/${slideURL}?url`}
-          className="overlay-image rounded d-block"
+          className={`overlay-image rounded d-block ${soldOut ? "overlay-image-sold-out" : ""}`}
         />
         <Card.ImgOverlay className="rounded overlay-content">
           <Row className="d-inline-flex flex-row justify-content-between mb-0">
@@ -42,7 +40,7 @@ export default function ScreeningCard({
                 <Col xs={12} className="column-gap-2">
                   <img
                     src={`/images/${posterURL}?url`}
-                    className="w-100 rounded shadow-lg"
+                    className={`w-100 rounded shadow-lg ${soldOut ? "poster-sold-out" : ""}`}
                     style={{
                       border: "2px solid #0b0815",
                       aspectRatio: "2 / 3",
@@ -56,19 +54,20 @@ export default function ScreeningCard({
             <Col
               xs={6}
               sm={6}
-              className="h-100 d-flex flex-column justify-content-between p-0 pe-3 pb-2"
+              className={`h-100 d-flex flex-column justify-content-between p-0 pe-3 pb-2 ${soldOut ? "sold-out" : ""}`}
             >
               <Row>
                 <Col xs={12} className="pb-0">
                   <Card.Text as="h3" className="text-end date-time-font">
-                    {getWeekday(dayName)}
+                    {/* {getWeekday(dayName)} */}
+                    {dayName}
                   </Card.Text>
                 </Col>
               </Row>
               <Row>
                 <Col xs={12} className="pb-0">
                   <Card.Text as="h3" className="text-end date-time-font">
-                    {day}/{month}
+                    {date}/{month}
                   </Card.Text>
                 </Col>
               </Row>
@@ -102,7 +101,7 @@ export default function ScreeningCard({
                     : "green"
                 }`}
               >
-                {occupiedPercent > 80
+                {occupiedPercent > 99 ? "Slutsålt" : occupiedPercent > 80
                   ? "Nästan slutsålt"
                   : occupiedPercent > 50
                   ? "Färre platser kvar"
@@ -117,6 +116,7 @@ export default function ScreeningCard({
                 as="button"
                 className="w-100 book-button-screening-card"
                 onClick={() => navigate(`/boka/${screeningId}`)}
+                disabled={soldOut}
               >
                 Boka
               </Button>
