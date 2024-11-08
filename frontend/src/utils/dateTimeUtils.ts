@@ -66,5 +66,13 @@ export const getFilterDisplayDate = (inputDate: string) => {
   const date = newDate.getDate();
   const dayName = WEEKDAY_NAMES[newDate.getDay()];
   return `${dayName} ${date}/${month}`
+}
 
+export const getParsedDateTime = (dateTime: string) => {
+  const newDate = new Date(dateTime);
+  const time = newDate.toLocaleTimeString().slice(0, 5);
+  const month = MONTHS[newDate.getMonth()];
+  const date = newDate.getDate();
+  const dayName = WEEKDAY_NAMES[newDate.getDay()];
+  return { month, date: date < 10 ? `0${date}` : date, dayName, time};
 }
