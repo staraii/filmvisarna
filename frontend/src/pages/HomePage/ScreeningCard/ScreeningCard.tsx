@@ -17,7 +17,6 @@ export default function ScreeningCard({
   subtitles,
   spokenLanguage,
   dateTime,
-  movieTitle
 }: HomePageScreenings) {
   const navigate = useNavigate();
   const soldOut = occupiedPercent > 99 ? true : false;
