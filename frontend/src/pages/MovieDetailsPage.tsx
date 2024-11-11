@@ -142,7 +142,8 @@ function MovieDetailsPage() {
     }, 200);
   };
 
-  const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
+  //const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
+  const groupedScreenings: Record<string, Screening[]> = movie.screenings.reduce((acc: Record<string, Screening[]>, screening) => {
     const screeningDate = new Date(screening.dateTime);
     const today = new Date();
 
@@ -282,8 +283,8 @@ function MovieDetailsPage() {
                 rootCloseEvent="click"
               >
                 <Dropdown.Item eventKey="välj visning" as="button">välj visning</Dropdown.Item>
-                {Object.entries(groupedScreenings).flatMap(([, screenings]: [string, any]) =>
-                  screenings.map((screening: any) => (
+                {Object.entries(groupedScreenings).flatMap(([, screenings]) =>
+                  screenings.map((screening: Screening) => (
                     <Dropdown.Item 
                       key={screening.id} 
                       eventKey={`${screening.id}|${screening.theatreId}|${format(new Date(screening.dateTime), 'MM-dd HH:mm')}`} 
@@ -310,7 +311,7 @@ function MovieDetailsPage() {
 
         <Container className="calendar-container mt-5">
           <Row className="calendar-grid">
-            {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]: [string, any]) => (
+            {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]) => (
               <Col key={date} className="calendar-col">
                 <Card className="calendar-card">
                   <Card.Header className="card-header">
@@ -321,7 +322,7 @@ function MovieDetailsPage() {
                       </h4>
                   </Card.Header>
                   <Card.Body>
-                    {screenings.map((screening: any) => (
+                    {screenings.map((screening: Screening) => (
                       <Card
                         key={screening.id}
                         onClick={() => navigate(`/boka/${screening.id}`)}
@@ -352,41 +353,6 @@ function MovieDetailsPage() {
             </Button>
           )}
         </Col>
-        {/*
-        <Container className="calendar-containerKAL mt-5">
-          <div className="calendar-grid">
-
-            {['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'].map((day, index) => (
-              <div key={index} className="calendar-day-header">
-                <h5>{day}</h5>
-              </div>
-            ))}
-
-            {Object.entries(groupedScreenings).map(([date, screenings]: [string, any]) => {
-              const dayOfWeek = format(new Date(date), 'EEEE', { locale: sv }); // Hämta veckodag från datum
-            
-              return (
-                <div key={date} className={`calendar-day ${dayOfWeek.toLowerCase()}-column`}>
-                  {screenings.map((screening: any) => (
-                    <Card
-                      key={screening.id}
-                      onClick={() => navigate(`/boka/${screening.id}`)}
-                      className="calendar-screening-card"
-                    >
-                      <Card.Body className="bg-primary">
-                        <Card.Title>{format(new Date(screening.dateTime), 'dd/MM HH:mm')}</Card.Title>
-                        <Card.Text>Salong {screening.theatreId}</Card.Text>
-                      </Card.Body>
-                    </Card>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
-        </Container>
-
-{/* karusell ------------------------------------------------------------------- */}
-      
       </Container>
     </>
   )
