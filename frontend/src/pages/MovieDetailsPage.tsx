@@ -1,4 +1,4 @@
-import { useState, useRef,} from 'react';
+import { useState, useRef,useEffect } from 'react';
 import './MovieDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
@@ -59,6 +59,9 @@ interface Screening {
 
 function MovieDetailsPage() {
   const navigate = useNavigate();
+  useEffect(() => {
+  window.scrollTo(0, 0);
+  },[]);
   const  queryParams  = useLoaderData() as QueryParams;
   const { data } = useSuspenseQuery(loaderQuery(queryParams)); 
   
