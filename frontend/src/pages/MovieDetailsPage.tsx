@@ -314,7 +314,11 @@ function MovieDetailsPage() {
               <Col key={date} className="calendar-col">
                 <Card className="calendar-card">
                   <Card.Header className="card-header">
-                    <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
+                      <h4>
+                        {format(new Date(date), 'EEEE', { locale: sv })}
+                        <br />
+                        {format(new Date(date), 'dd/MM', { locale: sv })}
+                      </h4>
                   </Card.Header>
                   <Card.Body>
                     {screenings.map((screening: any) => (
