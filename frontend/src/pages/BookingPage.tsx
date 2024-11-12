@@ -11,7 +11,7 @@ import {
 import { loaderQuery, QueryParams } from "../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getWeekday } from "../utils/dateTimeUtils";
-import { useAuth } from ".././utils/authContext"; // Added for booking with authentication 
+import { useAuth } from ".././utils/authContext"; // Added for booking with authentication
 
 interface RowSeats {
   seats: number;
@@ -29,7 +29,7 @@ interface BookingActionData {
   error?: string;
 }
 export default function BookingPage() {
-  const { userEmail, isAuthenticated } = useAuth();  // Added for booking with authentication 
+  const { userEmail, isAuthenticated } = useAuth(); // Added for booking with authentication
   const [ticketAdult, setticketAdult] = useState<number>(2);
   const [ticketChild, setTicketChild] = useState<number>(0);
   const [ticketSenior, setTicketSenior] = useState<number>(0);
@@ -50,7 +50,8 @@ export default function BookingPage() {
 
   useEffect(() => {
     const evtSource = new EventSource(
-      `http://localhost:5173/api/events/${screeningData.screeningId}`
+      `/api/events/${screeningData.screeningId}`
+      //det blir problem här i koden i SSE för att alla enheter som inte är localhost inte kommer kunna fetcha här, går i produktion dock, behöver hjälp.
     );
     evtSource.onmessage = (event) => {
       if (event.data) {
@@ -68,7 +69,7 @@ export default function BookingPage() {
       }
     };
     evtSource.onerror = () => {
-      console.error("Failed to connect to SSE");
+      console.error(Error, "Failed to connect to SSE");
       evtSource.close();
     };
     return () => {
@@ -86,7 +87,11 @@ export default function BookingPage() {
   }
   //nullchecks
 
-  const occupiedSeatArray = seatData.map((seat) => seat.trim());
+  const occupiedSeatArray = seatData
+    ? seatData.map((seat) => seat.trim())
+    : screeningData.occupiedSeats;
+  console.log(screeningData.occupiedSeats);
+  console.log(occupiedSeatArray);
 
   // useEffect(() => {
   //   console.log(screeningData);
@@ -144,15 +149,9 @@ export default function BookingPage() {
 
     const rowData = seats[row];
     if (!rowData) return;
-    // console.log("rowData", rowData.start, rowData.end);
-    // console.log("index ", index);
-    // console.log("row ", row);
+
     let hoveredSeatIds: string[] = [];
-    //console.log("hoveredseats", hoveredSeats);
-    // console.log("seatcount", seatCount);
-    // console.log("index", index);
-    //index climbs for each seat but seatcount is set for each row, i need to limit the index per row
-    //
+
     for (let i = 0; i < tickets; i++) {
       const currentSeatIndex = index + i;
 
@@ -282,6 +281,12 @@ export default function BookingPage() {
                                 rowCumulativeIndex + index
                               )
                             }
+                            onTouchStart={() =>
+                              displaySeats(
+                                Number(row),
+                                rowCumulativeIndex + index
+                              )
+                            }
                             key={cumulativeIndex}
                             className={`seat ${
                               isPreBooked ? "booked-seat" : ""
@@ -315,30 +320,18 @@ export default function BookingPage() {
               value={screeningData.screeningId}
             />
 
-            {/* Får dubbelkolla hur jag ska göra med bootstrap react x router forms
-            <InputForm>
-              <FormGroup className="mb-3" controlId="exampleForm.ControlInput1">
+            {/* Conditionally render the email input based on authentication */}
+            {!isAuthenticated ? (
+              <FormGroup className="mb-3" controlId="formEmail">
                 <InputForm.Control
                   type="email"
                   placeholder="E-post"
                   value={email}
-                  id=""
+                  name="email"
                   onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </FormGroup>
-            </InputForm>
-          */}
-
-            {/* Conditionally render the email input based on authentication// // Added for booking with authentication  */}  
-            {!isAuthenticated ? (
-              <input
-                className="m-2"
-                type="text"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="E-post"
-              />
             ) : (
               <input type="hidden" name="email" value={userEmail} />
             )}
