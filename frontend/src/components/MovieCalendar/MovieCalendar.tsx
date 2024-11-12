@@ -9,15 +9,16 @@ import Sleepers from "../../../public/sleepers_poster.jpg";
 import Titanic from "../../../public/titanic_poster.jpg";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { loaderQuery } from "../../utils/queryService";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { QueryParams } from "../../utils/queryService";
 
 function MovieCalendar() {
   const queryParams = useLoaderData() as QueryParams;
   const { data } = useSuspenseQuery(loaderQuery(queryParams));
   const [activeWeekIndex, setActiveWeekIndex] = useState(0); // State för att hålla koll på aktiv vecka
-
+  const navigate = useNavigate();
   console.log(data);
+
   const weeks = [
     { title: "Vecka 40", startDate: "2024-10-01" },
     { title: "Vecka 41", startDate: "2024-10-08" },
@@ -42,13 +43,23 @@ function MovieCalendar() {
       },
     ],
   ];
+
+  function book(event) {
+    let form = event.target.closest("form");
+    let values = {};
+    for (let element of form.elements) {
+      values[element.name] = element.value;
+    }
+    console.log(values);
+  }
+
   return (
     <section className="Movie-Calendar">
       <div className="Movie-Text">
         <h3>Bio Kalendern</h3>
         <p>Se vilka filmer som går de kommande veckorna.</p>
       </div>
-      <div className="test"></div>
+
       <div className="Weeks">
         <Carousel
           slide={false}
@@ -76,33 +87,36 @@ function MovieCalendar() {
                 <div className="Poster-Container">
                   {dayData.movies.map((movie, index) => (
                     <div className="Poster-Description" key={index}>
-                      <Card style={{ width: "16rem" }}>
-                        <Card.Img variant="top" src={movie.poster} />
-                        <Card.Body>
-                          <Card.Title>{movie.title}</Card.Title>
-                          <div className="Genre-Age">
-                            <Card.Text className="Genre">
-                              {movie.genre}
-                            </Card.Text>
-                            <Card.Text className="Age Age-8">
-                              <p>{movie.age}</p>
-                            </Card.Text>
-                          </div>
+                      <form>
+                        {" "}
+                        <Card style={{ width: "16rem" }}>
+                          <Card.Img variant="top" src={movie.poster} />
+                          <Card.Body>
+                            <Card.Title>{movie.title}</Card.Title>
+                            <div className="Genre-Age">
+                              <Card.Text className="Genre">
+                                {movie.genre}
+                              </Card.Text>
+                              <Card.Text className="Age Age-8">
+                                <p>{movie.age}</p>
+                              </Card.Text>
+                            </div>
 
-                          <div className="Time-Button-Container">
-                            <Card.Text className="Movie-Time">
-                              <p>{movie.time}</p>
-                            </Card.Text>
-                            <Button
-                              className="Movie-Button"
-                              variant="outline-primary"
-                              href="/boka"
-                            >
-                              Boka nu
-                            </Button>
-                          </div>
-                        </Card.Body>
-                      </Card>
+                            <div className="Time-Button-Container">
+                              <Card.Text className="Movie-Time">
+                                <p>{movie.time}</p>
+                              </Card.Text>
+                              <Button
+                                className="Movie-Button"
+                                variant="outline-primary"
+                                onClick={() => navigate(´/boka/${movie.screeningId}´) }
+                              >
+                                Boka nu
+                              </Button>
+                            </div>
+                          </Card.Body>
+                        </Card>{" "}
+                      </form>
                     </div>
                   ))}
                 </div>
