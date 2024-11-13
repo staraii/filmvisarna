@@ -1,4 +1,4 @@
-import { useState, useRef,} from 'react';
+import { useState, useRef,useEffect } from 'react';
 import './MovieDetailsPage.css'
 import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
@@ -59,12 +59,15 @@ interface Screening {
 
 function MovieDetailsPage() {
   const navigate = useNavigate();
+  useEffect(() => {
+  window.scrollTo(0, 0);
+  },[]);
   const  queryParams  = useLoaderData() as QueryParams;
   const { data } = useSuspenseQuery(loaderQuery(queryParams)); 
   
 
   const movie = data as ApiResponse;
-  console.log(data);
+  //console.log(data);
 
     if (typeof movie.movie[0].reviews === "string") {
     try {
@@ -111,9 +114,9 @@ function MovieDetailsPage() {
       setSelectedScreeningId(screeningId);
 
       // Logga screening.id
-      console.log('screening', screeningId);
-      console.log('theatre', theatreId);
-      console.log('time',time);
+      //console.log('screening', screeningId);
+      //console.log('theatre', theatreId);
+      //console.log('time',time);
     }
   };
   
@@ -142,7 +145,8 @@ function MovieDetailsPage() {
     }, 200);
   };
 
-  const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
+  //const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
+  const groupedScreenings: Record<string, Screening[]> = movie.screenings.reduce((acc: Record<string, Screening[]>, screening) => {
     const screeningDate = new Date(screening.dateTime);
     const today = new Date();
 
@@ -197,12 +201,12 @@ function MovieDetailsPage() {
           <Row className="d-flex flex-column flex-md-row mt-5">
             <Col xs={{ span: 12 }} lg={{ span: 6, order: 'last' }}>
               <Carousel className='carouselMovieDetail' interval={null} indicators={false}>
-                {movie.movie[0].details.mediaURLs.posterURL.map((poster, index) => (
-                  <Carousel.Item key={index}>
+                {movie.movie[0].details.mediaURLs.posterURL.slice(1).map((poster, index) => (
+                  <Carousel.Item key={index+1}>
                     <img 
                       className='d-block w-100 poster-image'
                       src={`/images/${poster}`}
-                      alt={`Poster ${index + 1}`}
+                      alt={`Poster ${index + 2}`}
                     />
                   </Carousel.Item>
                 ))}
@@ -282,8 +286,8 @@ function MovieDetailsPage() {
                 rootCloseEvent="click"
               >
                 <Dropdown.Item eventKey="välj visning" as="button">välj visning</Dropdown.Item>
-                {Object.entries(groupedScreenings).flatMap(([, screenings]: [string, any]) =>
-                  screenings.map((screening: any) => (
+                {Object.entries(groupedScreenings).flatMap(([, screenings]) =>
+                  screenings.map((screening: Screening) => (
                     <Dropdown.Item 
                       key={screening.id} 
                       eventKey={`${screening.id}|${screening.theatreId}|${format(new Date(screening.dateTime), 'MM-dd HH:mm')}`} 
@@ -310,14 +314,18 @@ function MovieDetailsPage() {
 
         <Container className="calendar-container mt-5">
           <Row className="calendar-grid">
-            {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]: [string, any]) => (
+            {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]) => (
               <Col key={date} className="calendar-col">
                 <Card className="calendar-card">
                   <Card.Header className="card-header">
-                    <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
+                      <h4>
+                        {format(new Date(date), 'EEEE', { locale: sv })}
+                        <br />
+                        {format(new Date(date), 'dd/MM', { locale: sv })}
+                      </h4>
                   </Card.Header>
                   <Card.Body>
-                    {screenings.map((screening: any) => (
+                    {screenings.map((screening: Screening) => (
                       <Card
                         key={screening.id}
                         onClick={() => navigate(`/boka/${screening.id}`)}
@@ -348,41 +356,6 @@ function MovieDetailsPage() {
             </Button>
           )}
         </Col>
-        {/*
-        <Container className="calendar-containerKAL mt-5">
-          <div className="calendar-grid">
-
-            {['Måndag', 'Tisdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lördag', 'Söndag'].map((day, index) => (
-              <div key={index} className="calendar-day-header">
-                <h5>{day}</h5>
-              </div>
-            ))}
-
-            {Object.entries(groupedScreenings).map(([date, screenings]: [string, any]) => {
-              const dayOfWeek = format(new Date(date), 'EEEE', { locale: sv }); // Hämta veckodag från datum
-            
-              return (
-                <div key={date} className={`calendar-day ${dayOfWeek.toLowerCase()}-column`}>
-                  {screenings.map((screening: any) => (
-                    <Card
-                      key={screening.id}
-                      onClick={() => navigate(`/boka/${screening.id}`)}
-                      className="calendar-screening-card"
-                    >
-                      <Card.Body className="bg-primary">
-                        <Card.Title>{format(new Date(screening.dateTime), 'dd/MM HH:mm')}</Card.Title>
-                        <Card.Text>Salong {screening.theatreId}</Card.Text>
-                      </Card.Body>
-                    </Card>
-                  ))}
-                </div>
-              );
-            })}
-          </div>
-        </Container>
-
-{/* karusell ------------------------------------------------------------------- */}
-      
       </Container>
     </>
   )
