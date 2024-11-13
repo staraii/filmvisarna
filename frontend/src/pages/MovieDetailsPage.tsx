@@ -215,7 +215,7 @@ function MovieDetailsPage() {
             <Col className='d-flex flex-column film-details-rec'>
               <Card>
                 <Card.Body>
-                  <Card.Title>Film Detaljer</Card.Title>
+                  <Card.Title>FilmDetaljer</Card.Title>
                   <Card.Text className="mb-0 see-more-container" >
                     <strong>Regissör:</strong> {movie.movie[0].details.credits.directedBy.join(', ')}
                     <br />

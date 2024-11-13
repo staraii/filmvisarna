@@ -398,7 +398,7 @@ function MovieCalendar() {
   return (
     <section className="Movie-Calendar">
       <div className="Movie-Text">
-        <h3>Bio Kalendern</h3>
+        <h3>BioKalendern</h3>
         <p>Se vilka filmer som går de kommande veckorna.</p>
       </div>
       <div className="Weeks">

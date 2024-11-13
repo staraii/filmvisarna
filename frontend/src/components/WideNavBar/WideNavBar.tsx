@@ -54,7 +54,7 @@ const WideNavBar = () => {
           Filmer
         </Nav.Link>
         <Nav.Link as={Link} to="/bio-kalender" className="fw-medium">
-          Bio kalender
+          Biokalender
         </Nav.Link>
 
         {/* Conditionally show the "Avboka biljetter" link if not authenticated */}

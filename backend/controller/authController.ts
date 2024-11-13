@@ -65,7 +65,7 @@ export const login = async (req: Request, res: Response) => {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);// Check if provided password matches hashed password
     if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Ogiltiga användaruppgifter' });
     }
 
     // Save the user's ID in session
@@ -113,7 +113,7 @@ export const getLoggedInUser = async (req: Request, res: Response) => {
   }
 };
 
-
+// Session check 
 export const checkSession = async (req: Request, res: Response) => {
   if (req.session.userId) {
     // If user session is valid, respond with user details or a success message
