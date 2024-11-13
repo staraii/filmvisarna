@@ -53,7 +53,6 @@ export const register = async (formData: FormData) => {
     uppercase: /[A-Z]/,          // At least one uppercase letter
     lowercase: /[a-z]/,          // At least one lowercase letter
     digit: /\d/,                 // At least one digit
-    specialChar: /[!@#$%^&*.,-]/ // At least one special character
   };
 
   // Password validation with Swedish error messages
@@ -68,11 +67,7 @@ export const register = async (formData: FormData) => {
   }
   if (!passwordRequirements.digit.test(password)) {
     throw new Error("Lösenordet måste innehålla minst en siffra.");
-  }
-  if (!passwordRequirements.specialChar.test(password)) {
-    throw new Error(
-      "Lösenordet måste innehålla minst ett specialtecken (t.ex. !, @, #, $, %, ^, &, *, ., eller -)."
-    );
+
   }
 
   // Phone number validation (assuming 10 digits)
