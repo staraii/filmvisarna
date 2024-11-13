@@ -201,12 +201,12 @@ function MovieDetailsPage() {
           <Row className="d-flex flex-column flex-md-row mt-5">
             <Col xs={{ span: 12 }} lg={{ span: 6, order: 'last' }}>
               <Carousel className='carouselMovieDetail' interval={null} indicators={false}>
-                {movie.movie[0].details.mediaURLs.posterURL.map((poster, index) => (
-                  <Carousel.Item key={index}>
+                {movie.movie[0].details.mediaURLs.posterURL.slice(1).map((poster, index) => (
+                  <Carousel.Item key={index+1}>
                     <img 
                       className='d-block w-100 poster-image'
                       src={`/images/${poster}`}
-                      alt={`Poster ${index + 1}`}
+                      alt={`Poster ${index + 2}`}
                     />
                   </Carousel.Item>
                 ))}
