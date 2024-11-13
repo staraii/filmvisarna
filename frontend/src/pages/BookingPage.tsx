@@ -12,7 +12,7 @@ import { loaderQuery, QueryParams } from "../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getWeekday } from "../utils/dateTimeUtils";
 import { useAuth } from ".././utils/authContext"; // Added for booking with authentication 
-import { toast } from 'react-toastify';
+
 
 interface RowSeats {
   seats: number;
@@ -106,24 +106,8 @@ useEffect(() => {
     navigate(
       `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`
     );
-
-    // Display toast notification on successful booking
-    toast.success(
-      `Bokning lyckades! Logga in nästa gång för att få extra poäng och fördelar! ${
-        isAuthenticated ? "Eftersom du är inloggad får du extra poäng!" : ""
-      }`,
-      {
-        position: "top-center",
-        autoClose: 5000,          // Closes after 5 seconds
-        hideProgressBar: false,    // Shows the progress bar
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      }
-    );
   }
-}, [actionData, navigate, isAuthenticated]);
+}, [actionData, navigate]);
 
   useEffect(() => {
     if (screeningData) {
