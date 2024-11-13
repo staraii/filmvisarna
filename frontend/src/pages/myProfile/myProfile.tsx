@@ -278,7 +278,16 @@ const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
   const screeningDate = new Date(booking.screeningTime);
   const formattedDate = screeningDate.toLocaleDateString('sv-SE'); // Format date in Swedish
   const formattedTime = screeningDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format time
-  const formattedBookingDate = new Date(booking.bookingDate).toLocaleString('sv-SE'); // Format booking date
+ 
+   // Filtering out seconds in booking date 
+  const formatBookingDate = (bookingDate: string): string => {
+    const dateTime = new Date(bookingDate);
+    const formattedDate = dateTime.toLocaleDateString("sv-SE"); // YYYY-MM-DD
+    const formattedTime = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // HH:mm
+    return `${formattedDate} ${formattedTime}`; // Combine date and time
+  };
+  
+  const formattedBookingDate = formatBookingDate(booking.bookingDate); // Apply custom formatting
 
   // Check if seats is an array and provide a fallback if not
   const seatsDisplay = typeof booking.seats === 'string' 
@@ -290,13 +299,12 @@ const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>Bokningsdetaljer</h2>
         <div>
-          <p><strong>Film titel:</strong> {booking.movieTitle}</p>
-          <p><strong>Visningarsdatum:</strong> {formattedDate}</p>
-          <p><strong>Visningarstid:</strong> {formattedTime}</p>
+          <p><strong></strong> {booking.movieTitle}</p>
+          <p><strong>Visningstid:</strong> {formattedDate} {formattedTime}</p>
           <p><strong>Platser:</strong> {seatsDisplay}</p>
           <p><strong>Bokningsnummer:</strong> {booking.bookingNumber}</p>
           <p><strong>Bokningsdatum:</strong> {formattedBookingDate}</p>
-           <p><strong>Biljettyp:</strong> {formatTicketTypes(booking.ticketTypes)}</p>
+           <p><strong>Biljett:</strong> {formatTicketTypes(booking.ticketTypes)}</p>
           <p><strong>Totalt pris:</strong> {booking.totalPrice}</p>
         </div>
         <button className="close-modal-button" onClick={onClose}>Stäng</button>
