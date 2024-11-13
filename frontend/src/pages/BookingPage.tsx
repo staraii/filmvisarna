@@ -11,7 +11,7 @@ import {
 import { loaderQuery, QueryParams } from "../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getWeekday } from "../utils/dateTimeUtils";
-import { useAuth } from ".././utils/authContext"; // Added for booking with authentication 
+import { useAuth } from ".././utils/authContext"; // Added for booking with authentication
 
 
 interface RowSeats {
@@ -30,7 +30,7 @@ interface BookingActionData {
   error?: string;
 }
 export default function BookingPage() {
-  const { userEmail, isAuthenticated } = useAuth();  // Added for booking with authentication 
+  const { userEmail, isAuthenticated } = useAuth(); // Added for booking with authentication
   const [ticketAdult, setticketAdult] = useState<number>(2);
   const [ticketChild, setTicketChild] = useState<number>(0);
   const [ticketSenior, setTicketSenior] = useState<number>(0);
@@ -39,6 +39,7 @@ export default function BookingPage() {
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
   const [seats, setSeats] = useState<Seats>({});
   const [email, setEmail] = useState("");
+
   //react easier state add?
 
   const queryParams = useLoaderData() as QueryParams;
@@ -51,7 +52,7 @@ export default function BookingPage() {
 
   useEffect(() => {
     const evtSource = new EventSource(
-      `http://localhost:5173/api/events/${screeningData.screeningId}`
+      `/api/events/${screeningData.screeningId}`
     );
     evtSource.onmessage = (event) => {
       if (event.data) {
@@ -69,7 +70,7 @@ export default function BookingPage() {
       }
     };
     evtSource.onerror = () => {
-      console.error("Failed to connect to SSE");
+      console.error(Error, "Failed to connect to SSE");
       evtSource.close();
     };
     return () => {
@@ -87,11 +88,9 @@ export default function BookingPage() {
   }
   //nullchecks
 
-  const occupiedSeatArray = seatData.map((seat) => seat.trim());
-
-  // useEffect(() => {
-  //   console.log(screeningData);
-  // }, []);
+  const occupiedSeatArray = seatData
+    ? seatData.map((seat) => seat.trim())
+    : screeningData.occupiedSeats;
 
   useEffect(() => {
     window.scrollTo({
@@ -100,15 +99,18 @@ export default function BookingPage() {
       behavior: "instant",
     });
   }, []);
-useEffect(() => {
-  if (actionData?.bookingSuccess) {
-    // Navigate to confirmation page
-    navigate(
-      `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`
-    );
-  }
-}, [actionData, navigate]);
-
+  useEffect(() => {
+    if (actionData?.bookingSuccess) {
+      navigate(
+        `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`
+      );
+    } else if (actionData && !actionData.bookingSuccess) {
+      console.log("error boundary entered");
+      throw new Error(
+        `Något gick fel vid bokning. Meddelande ("${actionData.error})`
+      );
+    }
+  }, [actionData, navigate]);
   useEffect(() => {
     if (screeningData) {
       setSeats(
@@ -146,15 +148,9 @@ useEffect(() => {
 
     const rowData = seats[row];
     if (!rowData) return;
-    // console.log("rowData", rowData.start, rowData.end);
-    // console.log("index ", index);
-    // console.log("row ", row);
+
     let hoveredSeatIds: string[] = [];
-    //console.log("hoveredseats", hoveredSeats);
-    // console.log("seatcount", seatCount);
-    // console.log("index", index);
-    //index climbs for each seat but seatcount is set for each row, i need to limit the index per row
-    //
+
     for (let i = 0; i < tickets; i++) {
       const currentSeatIndex = index + i;
 
@@ -262,7 +258,10 @@ useEffect(() => {
             </Stack>
           </Stack>
 
-          <Stack className="seat-container pt-5 mx-auto justify-content-center align-items-center">
+          <Stack
+            gap={4}
+            className="seat-container pt-5 mx-auto justify-content-center align-items-center"
+          >
             {Object.entries(seats).map(([row, seatData]) => {
               const { seats: seatCount } = seatData as RowSeats;
               let rowCumulativeIndex = cumulativeIndex;
@@ -283,6 +282,12 @@ useEffect(() => {
                           <Button
                             onClick={() => handleSeatSelect()}
                             onMouseOver={() =>
+                              displaySeats(
+                                Number(row),
+                                rowCumulativeIndex + index
+                              )
+                            }
+                            onTouchStart={() =>
                               displaySeats(
                                 Number(row),
                                 rowCumulativeIndex + index
@@ -321,30 +326,27 @@ useEffect(() => {
               value={screeningData.screeningId}
             />
 
-            {/* Får dubbelkolla hur jag ska göra med bootstrap react x router forms
-            <InputForm>
-              <FormGroup className="mb-3" controlId="exampleForm.ControlInput1">
-                <InputForm.Control
-                  type="email"
-                  placeholder="E-post"
-                  value={email}
-                  id=""
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </FormGroup>
-            </InputForm>
-          */}
-
-            {/* Conditionally render the email input based on authentication// // Added for booking with authentication  */}  
+            {/* Conditionally render the email input based on authentication */}
             {!isAuthenticated ? (
-              <input
-                className="m-2"
-                type="text"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="E-post"
-              />
+              <Stack
+                direction="horizontal"
+                gap={3}
+                className="d-flex justify-content-center align-items-center mb-4"
+              >
+                <FormGroup className="mb-3" controlId="formEmail">
+                  <InputForm.Control
+                    type="email"
+                    placeholder="E-post"
+                    value={email}
+                    name="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <Button type="submit" className="booking-btn mb-3">
+                  <h5 className="m-1">Boka</h5>
+                </Button>
+              </Stack>
             ) : (
               <input type="hidden" name="email" value={userEmail} />
             )}
@@ -363,10 +365,6 @@ useEffect(() => {
                 ticket3: ticketChild,
               })}
             />
-
-            <Button type="submit" className="booking-btn">
-              <h5 className="m-1">Boka</h5>
-            </Button>
           </Form>
         </div>
       </footer>

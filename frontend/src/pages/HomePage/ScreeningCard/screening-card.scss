@@ -18,13 +18,19 @@ $card-filter-active: contrast(1) grayscale(0.2) opacity(0.20) sepia(0.9);
 .overlay-image {
   aspect-ratio: 16 / 9;
   width: auto;
-  //filter: contrast(1) grayscale(0.2) opacity(0.20) sepia(0.9);
   filter: $card-filter;
   object-fit: cover;
-
-
+}
+.overlay-image-sold-out{
+  filter: contrast(3) grayscale(1) opacity(0.1);
 }
 
+.sold-out {
+  filter: opacity(0.45);
+}
+.poster-sold-out {
+  filter: opacity(0.65);
+}
 .screening-card {
   container-name: screening-card;
   container-type: inline-size;
@@ -55,6 +61,13 @@ $card-filter-active: contrast(1) grayscale(0.2) opacity(0.20) sepia(0.9);
   }
   &.green::after {
     @include statuscolor($green);
+  }
+}
+.ticket-status-sold-out {
+  color: $red;
+  opacity: 0.9;
+  &::after {
+    content: "X";
   }
 }
 .date-time-font { 
@@ -154,11 +167,3 @@ $card-filter-active: contrast(1) grayscale(0.2) opacity(0.20) sepia(0.9);
     font-size: 3.2rem;
   }
 }
-
-
-
-
-
-
-
-
