@@ -13,6 +13,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { getWeekday } from "../utils/dateTimeUtils";
 import { useAuth } from ".././utils/authContext"; // Added for booking with authentication
 
+
 interface RowSeats {
   seats: number;
   start: number;
@@ -98,7 +99,6 @@ export default function BookingPage() {
       behavior: "instant",
     });
   }, []);
-
   useEffect(() => {
     if (actionData?.bookingSuccess) {
       navigate(
@@ -111,7 +111,6 @@ export default function BookingPage() {
       );
     }
   }, [actionData, navigate]);
-
   useEffect(() => {
     if (screeningData) {
       setSeats(
@@ -168,6 +167,10 @@ export default function BookingPage() {
   }
 
   let cumulativeIndex = 1;
+
+
+
+
 
   function handleSeatSelect() {
     setSelectedSeat(hoveredSeats);

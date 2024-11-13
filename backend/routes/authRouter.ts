@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import { login, logout, getLoggedInUser, register } from '../controller/authController.js';
 import { checkAcl } from '../middleware/checkAcl.js'; // Import the checkAcl middleware
+import { checkSession } from '../controller/authController.js';
 
 const router = Router();
 
@@ -17,6 +18,9 @@ router.get('/api/login', checkAcl, getLoggedInUser); // Use checkAcl if you want
 
 // DELETE: Logout
 router.delete('/api/login', logout); // Use checkAcl to restrict logout to logged-in users
+
+// Route to check if session is active
+router.get('/api/auth/check-session', checkSession);
 
 export default router;
 

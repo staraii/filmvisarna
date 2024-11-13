@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { createUser, findUserByEmail, findUserById } from '../services/userService.js';
 import { RegisterUser, LoginUser } from '../types/userTypes.js';
 
+
 // Registration function
 
 export const register = async (req: Request, res: Response) => {
@@ -69,6 +70,7 @@ export const login = async (req: Request, res: Response) => {
 
     // Save the user's ID in session
     req.session.userId = user.id;
+    req.session.userEmail = user.email; 
     req.session.userRole = user.role;
     
 
@@ -108,6 +110,24 @@ export const getLoggedInUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error fetching logged-in user:', error);
     res.status(500).json({ message: 'Error fetching logged-in user' });
+  }
+};
+
+
+export const checkSession = async (req: Request, res: Response) => {
+  if (req.session.userId) {
+    // If user session is valid, respond with user details or a success message
+    res.json({
+      isAuthenticated: true,
+      user: {
+        id: req.session.userId,
+        email: req.session.userEmail,  // Use the stored email in the session
+        role: req.session.userRole,
+      },
+    });
+  } else {
+    // If session is not valid or has expired, respond with unauthenticated status
+    res.json({ isAuthenticated: false });
   }
 };
 
