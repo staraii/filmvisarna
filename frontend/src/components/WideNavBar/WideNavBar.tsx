@@ -7,6 +7,7 @@ import { logout as authLogout } from "../../services/authService"; // Import you
 import { Modal, Button } from "react-bootstrap"; // Import Modal and Button for confirmation
 import "./wide-navbar.css";
 
+
 const WideNavBar = () => {
   const { isAuthenticated, logout } = useAuth(); // Access authentication state and logout function
   const navigate = useNavigate();

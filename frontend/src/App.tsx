@@ -1,30 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import MobileNavBar from "./components/MobileNavBar/MobileNavBar";
-import WideNavBar from "./components/WideNavBar/WideNavBar";
-import { checkSession } from "./services/authService";  // Assuming authService.ts contains checkSession
+import WideNavBar from "./components/WideNavBar/WideNavBar"; // Just use WideNavBar directly
+import { checkSession } from "./services/authService"; // Assuming authService.ts contains checkSession
+
 import "./App.css";
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<any>(null);  // Store user data if logged in
-
+ 
   useEffect(() => {
-    // Check session on mount
     const fetchSession = async () => {
       try {
         const data = await checkSession();
         if (data.isAuthenticated) {
-          setIsAuthenticated(true);
-          setUser(data.user); // Store user data if authenticated
+          // Set authentication state if you want to manage the session here too
         } else {
-          setIsAuthenticated(false);
-          setUser(null);  // Clear user data if not authenticated
+          // Handle session expiration here if necessary
         }
       } catch (error) {
         console.error("Error checking session:", error);
-        setIsAuthenticated(false);
-        setUser(null);
       }
     };
 
@@ -33,12 +27,13 @@ export default function App() {
 
   return (
     <section className="app-section">
-      <WideNavBar isAuthenticated={isAuthenticated} user={user} />
+      <WideNavBar />
       <div className="content-container">
         <Outlet />
       </div>
-      <MobileNavBar isAuthenticated={isAuthenticated} user={user} />
+      <MobileNavBar />
     </section>
   );
 }
+
 
