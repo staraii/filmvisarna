@@ -38,6 +38,7 @@ export default function BookingPage() {
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
   const [seats, setSeats] = useState<Seats>({});
   const [email, setEmail] = useState("");
+
   //react easier state add?
 
   const queryParams = useLoaderData() as QueryParams;
@@ -97,10 +98,16 @@ export default function BookingPage() {
       behavior: "instant",
     });
   }, []);
+
   useEffect(() => {
     if (actionData?.bookingSuccess) {
       navigate(
         `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`
+      );
+    } else if (actionData && !actionData.bookingSuccess) {
+      console.log("error boundary entered");
+      throw new Error(
+        `Något gick fel vid bokning. Meddelande ("${actionData.error})`
       );
     }
   }, [actionData, navigate]);
@@ -248,7 +255,10 @@ export default function BookingPage() {
             </Stack>
           </Stack>
 
-          <Stack gap={4} className="seat-container pt-5 mx-auto justify-content-center align-items-center">
+          <Stack
+            gap={4}
+            className="seat-container pt-5 mx-auto justify-content-center align-items-center"
+          >
             {Object.entries(seats).map(([row, seatData]) => {
               const { seats: seatCount } = seatData as RowSeats;
               let rowCumulativeIndex = cumulativeIndex;
