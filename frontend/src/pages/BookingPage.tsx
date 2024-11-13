@@ -51,7 +51,6 @@ export default function BookingPage() {
   useEffect(() => {
     const evtSource = new EventSource(
       `/api/events/${screeningData.screeningId}`
-      //det blir problem här i koden i SSE för att alla enheter som inte är localhost inte kommer kunna fetcha här, går i produktion dock, behöver hjälp.
     );
     evtSource.onmessage = (event) => {
       if (event.data) {
@@ -90,12 +89,6 @@ export default function BookingPage() {
   const occupiedSeatArray = seatData
     ? seatData.map((seat) => seat.trim())
     : screeningData.occupiedSeats;
-  console.log(screeningData.occupiedSeats);
-  console.log(occupiedSeatArray);
-
-  // useEffect(() => {
-  //   console.log(screeningData);
-  // }, []);
 
   useEffect(() => {
     window.scrollTo({
@@ -255,7 +248,7 @@ export default function BookingPage() {
             </Stack>
           </Stack>
 
-          <Stack className="seat-container pt-5 mx-auto justify-content-center align-items-center">
+          <Stack gap={4} className="seat-container pt-5 mx-auto justify-content-center align-items-center">
             {Object.entries(seats).map(([row, seatData]) => {
               const { seats: seatCount } = seatData as RowSeats;
               let rowCumulativeIndex = cumulativeIndex;
@@ -322,16 +315,25 @@ export default function BookingPage() {
 
             {/* Conditionally render the email input based on authentication */}
             {!isAuthenticated ? (
-              <FormGroup className="mb-3" controlId="formEmail">
-                <InputForm.Control
-                  type="email"
-                  placeholder="E-post"
-                  value={email}
-                  name="email"
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </FormGroup>
+              <Stack
+                direction="horizontal"
+                gap={3}
+                className="d-flex justify-content-center align-items-center mb-4"
+              >
+                <FormGroup className="mb-3" controlId="formEmail">
+                  <InputForm.Control
+                    type="email"
+                    placeholder="E-post"
+                    value={email}
+                    name="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </FormGroup>
+                <Button type="submit" className="booking-btn mb-3">
+                  <h5 className="m-1">Boka</h5>
+                </Button>
+              </Stack>
             ) : (
               <input type="hidden" name="email" value={userEmail} />
             )}
@@ -350,10 +352,6 @@ export default function BookingPage() {
                 ticket3: ticketChild,
               })}
             />
-
-            <Button type="submit" className="booking-btn">
-              <h5 className="m-1">Boka</h5>
-            </Button>
           </Form>
         </div>
       </footer>
