@@ -163,3 +163,22 @@ export const cancelBooking = async (bookingId: number, email: string, bookingNum
 
   return response.json(); // Return response data if successful
 };
+
+
+// CheckSession 
+export const checkSession = async () => {
+  const response = await fetch('/api/auth/check-session', {
+    method: 'GET',
+    credentials: 'include',  // Include credentials to send the session cookie
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.error('Error checking session:', errorData);  // Log error details
+    throw new Error('Failed to check session');
+  }
+
+  const data = await response.json();
+  console.log('Session data:', data);  // Log successful session check
+  return data.isAuthenticated ? data.user : null;  // Return user data if authenticated
+};

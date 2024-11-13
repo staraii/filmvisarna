@@ -8,29 +8,29 @@ interface AuthContextType {
   login: (email: string, firstName: string) => void;
   logout: () => void;
   register: (formData: AuthService.FormData) => Promise<void>;
-  fetchUserData: () => Promise<void>; // New method to fetch user data
+  fetchUserData: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return sessionStorage.getItem('isAuthenticated') === 'true';
+    return localStorage.getItem('isAuthenticated') === 'true';
   });
   const [userEmail, setUserEmail] = useState<string | null>(() => {
-    return sessionStorage.getItem('userEmail');
+    return localStorage.getItem('userEmail');
   });
   const [firstName, setFirstName] = useState<string | null>(() => {
-    return sessionStorage.getItem('firstName');
+    return localStorage.getItem('firstName');
   });
 
   const login = async (email: string, firstName: string) => {
     setIsAuthenticated(true);
     setUserEmail(email);
     setFirstName(firstName);
-    sessionStorage.setItem('isAuthenticated', 'true');
-    sessionStorage.setItem('userEmail', email);
-    sessionStorage.setItem('firstName', firstName);
+    localStorage.setItem('isAuthenticated', 'true');
+    localStorage.setItem('userEmail', email);
+    localStorage.setItem('firstName', firstName);
     await fetchUserData(); // Fetch user data after logging in
   };
 
@@ -40,6 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       login(userData.email, userData.firstName); // Store email and firstName in context
     } catch (error) {
       console.error('Failed to fetch user data:', error);
+      setIsAuthenticated(false); // Optionally log out user on failure
     }
   };
 
@@ -47,9 +48,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsAuthenticated(false);
     setUserEmail(null);
     setFirstName(null);
-    sessionStorage.removeItem('isAuthenticated');
-    sessionStorage.removeItem('userEmail');
-    sessionStorage.removeItem('firstName');
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('firstName');
   };
 
   const register = async (formData: AuthService.FormData) => {
@@ -63,9 +64,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    sessionStorage.setItem('isAuthenticated', isAuthenticated.toString());
-    if (userEmail) sessionStorage.setItem('userEmail', userEmail);
-    if (firstName) sessionStorage.setItem('firstName', firstName);
+    if (isAuthenticated) {
+      localStorage.setItem('isAuthenticated', 'true');
+      if (userEmail) localStorage.setItem('userEmail', userEmail);
+      if (firstName) localStorage.setItem('firstName', firstName);
+    } else {
+      localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('firstName');
+    }
   }, [isAuthenticated, userEmail, firstName]);
 
   return (
