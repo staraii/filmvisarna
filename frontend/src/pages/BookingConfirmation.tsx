@@ -9,8 +9,16 @@ export default function BookingConfirmationPage() {
   const { data: screeningData } = useSuspenseQuery(loaderQuery(queryParamsOne));
   const { data: bookingData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
 
-  const booking = bookingData["success"][0];
-  const screening = screeningData["success"][0]; //den hämtar fortfarande alla visningar tror jag.
+  if (
+    !screeningData?.success?.[0] ||
+    !bookingData?.success?.[0]?.seats ||
+    !bookingData?.success?.[0]?.bookingNumber
+  ) {
+    throw new Error("Åtkomst nekas: Bokningsdata saknas eller är ogiltig.");
+  }
+
+  const booking = bookingData.success[0];
+  const screening = screeningData.success[0];
 
   return (
     <>
