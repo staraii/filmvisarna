@@ -3,7 +3,6 @@ import { useLoaderData } from "react-router-dom";
 import { getWeekday } from "../utils/dateTimeUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DualQueryParams, loaderQuery } from "../utils/queryService";
-import ErrorPage from "./ErrorPage/ErrorPage";
 import "./BookingConfirmation.css";
 
 // Function to format ticket types
@@ -45,13 +44,23 @@ const formatBookingDate = (bookingDate: string): string => {
   return `${formattedDate} ${formattedTime}`; // Combine date and time
 };
 
+
 export default function BookingConfirmationPage() {
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
   const { data: screeningData } = useSuspenseQuery(loaderQuery(queryParamsOne));
   const { data: bookingData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
 
-  const booking = bookingData["success"][0];
-  const screening = screeningData["success"][0];
+
+  if (
+    !screeningData?.success?.[0] ||
+    !bookingData?.success?.[0]?.seats ||
+    !bookingData?.success?.[0]?.bookingNumber
+  ) {
+    throw new Error("Åtkomst nekas: Bokningsdata saknas eller är ogiltig.");
+  }
+
+  const booking = bookingData.success[0];
+  const screening = screeningData.success[0];
 
   // Check if screening.dateTime is valid, otherwise set it to a default value
   const screeningDateTime = isValidDate(screening.dateTime)
@@ -67,6 +76,7 @@ export default function BookingConfirmationPage() {
   const seatsDisplay = typeof booking.seats === 'string' 
     ? (booking.seats.split(',') as string[]).map((seat: string) => seat.trim()).join(', ') 
     : 'Inga platser valda';
+
 
   return (
     <>
