@@ -67,7 +67,7 @@ function MovieDetailsPage() {
   
 
   const movie = data as ApiResponse;
-  console.log(data);
+  //console.log(data);
 
     if (typeof movie.movie[0].reviews === "string") {
     try {
@@ -114,9 +114,9 @@ function MovieDetailsPage() {
       setSelectedScreeningId(screeningId);
 
       // Logga screening.id
-      console.log('screening', screeningId);
-      console.log('theatre', theatreId);
-      console.log('time',time);
+      //console.log('screening', screeningId);
+      //console.log('theatre', theatreId);
+      //console.log('time',time);
     }
   };
   
