@@ -125,7 +125,7 @@ export default function BookingConfirmationPage() {
         {/* Conditionally render message based on authentication status */}
         <p className="pt-4 lead">
           {isAuthenticated
-            ? "Tack för din bokning! Du kan nu se din bokning direkt på hemsidan."
+            ? "Tack för din bokning! Du kan nu hitta din bokning på din profil."
             : "Bokningsbekräftelse skickas strax via e-post. Bli medlem för att kunna se din bokning direkt på hemsidan."}
         </p>
       </Container>
