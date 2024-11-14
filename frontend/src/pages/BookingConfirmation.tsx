@@ -3,6 +3,7 @@ import { useLoaderData } from "react-router-dom";
 import { getWeekday } from "../utils/dateTimeUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DualQueryParams, loaderQuery } from "../utils/queryService";
+import { useAuth } from "../utils/authContext"; 
 import "./BookingConfirmation.css";
 
 // Function to format ticket types
@@ -49,6 +50,7 @@ export default function BookingConfirmationPage() {
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
   const { data: screeningData } = useSuspenseQuery(loaderQuery(queryParamsOne));
   const { data: bookingData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
+  const { isAuthenticated } = useAuth();
 
 
   if (
@@ -120,8 +122,11 @@ export default function BookingConfirmationPage() {
           </Col>
         </Row>
 
+        {/* Conditionally render message based on authentication status */}
         <p className="pt-4 lead">
-          Bokningsbekräftelse kommer strax på eposten.
+          {isAuthenticated
+            ? "Tack för din bokning! Du kan nu se din bokning direkt på hemsidan."
+            : "Bokningsbekräftelse skickas strax via e-post. Bli medlem för att kunna se din bokning direkt på hemsidan."}
         </p>
       </Container>
     </>
