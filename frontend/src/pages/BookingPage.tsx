@@ -343,9 +343,7 @@ export default function BookingPage() {
                     required
                   />
                 </FormGroup>
-                <Button type="submit" className="booking-btn mb-3">
-                  <h5 className="m-1">Boka</h5>
-                </Button>
+               
               </Stack>
             ) : (
               <input type="hidden" name="email" value={userEmail} />
@@ -365,6 +363,9 @@ export default function BookingPage() {
                 ticket3: ticketChild,
               })}
             />
+             <Button type="submit" className="booking-btn mb-3">
+                  <h5 className="m-1">Boka</h5>
+                </Button>
           </Form>
         </div>
       </footer>
