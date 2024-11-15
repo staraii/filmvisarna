@@ -188,7 +188,7 @@ function MovieDetailsPage() {
                   <Card.Text className='see-more-container'>
                     {isDescriptionExpanded ? fullText : shortText}
                     <Button variant="link" onClick={toggleDescriptionText} className="see-more-btn">
-                      {isDescriptionExpanded ? 'See mindre' : 'See mer'}
+                      {isDescriptionExpanded ? 'Se mindre' : 'Se mer'}
                     </Button>
                   </Card.Text>
                 </Container>
@@ -239,12 +239,12 @@ function MovieDetailsPage() {
                   </Card.Text>
                   <Card.Text className=" see-more-container">
                     <Button variant="link" onClick={toggleDetailsText} className="mt-1 see-more-btn">
-                      {isDetailsExpanded ? 'See mindre' : 'See mer'}
+                      {isDetailsExpanded ? 'Se mindre' : 'Se mer'}
                     </Button>
                   </Card.Text>
                 </Card.Body>
               </Card>
-              <Card>
+              <Card className='card-review' >
                 {movie.movie[0].reviews && Array.isArray(movie.movie[0].reviews) && (
                   <Carousel interval={null} className="custom-review-carousel">
                     {movie.movie[0].reviews.map((review, index) => (
@@ -332,7 +332,7 @@ function MovieDetailsPage() {
                         className="mb-3 square-card"
                       >
                         <Card.Body className="bg-primary">
-                          <Card.Title>{format(new Date(screening.dateTime), 'HH:mm')}</Card.Title>
+                          <Card.Text style={{ fontSize: '125%',marginBottom: '0'}} >{format(new Date(screening.dateTime), 'HH:mm')}</Card.Text>
                           <Card.Text>Salong {screening.theatreId}</Card.Text>
                         </Card.Body>
                       </Card>
@@ -346,13 +346,13 @@ function MovieDetailsPage() {
         <Col>
           {Object.keys(groupedScreenings).length > visibleCount && (
           <Button onClick={handleShowMore} className="mt-3" style={{ marginRight: '10px' }}>
-            Hämta fler visningar
+            Visa fler
           </Button>
           )}
 
           {visibleCount > initialCount && (
             <Button onClick={handleShowLess} className="mt-3">
-              Visa färre visningar
+              Visa färre
             </Button>
           )}
         </Col>
