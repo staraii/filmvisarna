@@ -13,7 +13,6 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { getWeekday } from "../utils/dateTimeUtils";
 import { useAuth } from ".././utils/authContext"; // Added for booking with authentication
 
-
 interface RowSeats {
   seats: number;
   start: number;
@@ -168,10 +167,6 @@ export default function BookingPage() {
 
   let cumulativeIndex = 1;
 
-
-
-
-
   function handleSeatSelect() {
     setSelectedSeat(hoveredSeats);
   }
@@ -183,18 +178,18 @@ export default function BookingPage() {
           <Row className="pt-4">
             <Col>
               {screeningData.movieTitle.length < 15 ? (
-                <h1 className="">{screeningData.movieTitle}</h1>
+                <h1 className="screeningheader">{screeningData.movieTitle}</h1>
               ) : (
-                <h3>{screeningData.movieTitle} </h3>
+                <h3 className="screeningheader">{screeningData.movieTitle} </h3>
               )}
             </Col>
             <Col className="pt-2">
-              <h5>
+              <h5 className="screeningheader">
                 {getWeekday(screeningData.dayName) +
                   " " +
                   screeningData.dateTime.split("T")[0]}
               </h5>
-              <h5 className="">{screeningData.time}</h5>
+              <h5 className="screeningheader">{screeningData.time}</h5>
             </Col>
             <Col className="pt-2">
               <p>(Sv.text) (Eng.tal)</p>
@@ -317,8 +312,9 @@ export default function BookingPage() {
           </Stack>
         </Stack>
       </Stack>
-      <footer className="d-flex justify-content-center align-items-center container booking-summary flex-row justify-content-around ">
-        <div>
+
+      <footer className="d-flex justify-content-center align-items-center container booking-summary flex-row justify-content-around">
+        <Row>
           <Form method="post">
             <input
               type="hidden"
@@ -327,28 +323,36 @@ export default function BookingPage() {
             />
 
             {/* Conditionally render the email input based on authentication */}
-            {!isAuthenticated ? (
-              <Stack
-                direction="horizontal"
-                gap={3}
-                className="d-flex justify-content-center align-items-center mb-4"
-              >
-                <FormGroup className="mb-3" controlId="formEmail">
-                  <InputForm.Control
-                    type="email"
-                    placeholder="E-post"
-                    value={email}
-                    name="email"
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </FormGroup>
-               
-              </Stack>
-            ) : (
-              <input type="hidden" name="email" value={userEmail} />
-            )}
-
+            <Row className="">
+              {!isAuthenticated ? (
+                <Col className="d-flex justify-content-center align-items-center w-100">
+                  <FormGroup className="mb-3" controlId="formEmail">
+                    <InputForm.Control
+                      type="email"
+                      placeholder="E-post"
+                      value={email}
+                      style={{ width: "250px", marginBottom: "2rem" }}
+                      name="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </FormGroup>
+                </Col>
+              ) : (
+                <Col>
+                  <input type="hidden" name="email" value={userEmail} />
+                </Col>
+              )}
+              <Col className="">
+                <Button
+                  type="submit"
+                  variant="outline-secondary"
+                  className="book-button-screening-card "
+                >
+                  Boka
+                </Button>
+              </Col>
+            </Row>
             <input
               type="hidden"
               name="seats"
@@ -363,11 +367,8 @@ export default function BookingPage() {
                 ticket3: ticketChild,
               })}
             />
-             <Button type="submit" className="booking-btn mb-3">
-                  <h5 className="m-1">Boka</h5>
-                </Button>
           </Form>
-        </div>
+        </Row>
       </footer>
     </>
   );
