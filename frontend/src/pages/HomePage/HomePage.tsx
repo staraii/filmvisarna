@@ -156,10 +156,10 @@ export default function HomePage() {
                     disabled={!hasNextPage || isFetchingNextPage}
                   >
                     {isFetchingNextPage
-                      ? "Hämtar fler..."
+                      ? "Laddar..."
                       : hasNextPage
-                      ? "Hämta fler visningar"
-                      : "Inget mer att hämta"}
+                      ? "Visa fler"
+                      : "Inge fler att visa"}
                   </Button>
                 )}
             </Col>
