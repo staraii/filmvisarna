@@ -76,3 +76,8 @@ export const getParsedDateTime = (dateTime: string) => {
   const dayName = WEEKDAY_NAMES[newDate.getDay()];
   return { month, date: date < 10 ? `0${date}` : date, dayName, time};
 }
+
+export const parseDateToStringYYYYMMDD = (dateString: string) => {
+  const newDate = new Date(dateString);
+  return `${newDate.getFullYear()}-${MONTHS[newDate.getMonth()]}-${newDate.getDate().toString().padStart(2, "0")}`;
+}

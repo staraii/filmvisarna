@@ -3,17 +3,9 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
+import { ageRatingUtil } from "../../utils/ageRatingUtil";
 
-// type MovieCardProps = {
-//   title: string;
-//   year: string;
-//   genres: string;
-//   lang: string;
-//   sub: string;
-//   age: string;
-//   poster: string;
-// }
-type HomePageMovie = {
+type MoviesPageMovie = {
   id: number;
   title: string;
   createdAt: string;
@@ -24,7 +16,7 @@ type HomePageMovie = {
   lang: string;
   sub: string;
 };
-export default function MovieCard({id, title, age, categories, posterURL, releaseYear,  lang, sub }: HomePageMovie) {
+export default function MovieCard({id, title, age, categories, posterURL, releaseYear,  lang, sub }: MoviesPageMovie) {
   
   return (
     <Col xs={12} sm={6}>
@@ -42,8 +34,8 @@ export default function MovieCard({id, title, age, categories, posterURL, releas
                 </Card.Text>
                 <Card.Text className="movie-card-lang-age d-flex flex-row justify-content-center gap-1">
                   <small>({lang})</small>
-                  <small>({sub})</small>
-                  <small>{age}</small>
+                  <small>{sub === "null" ? "" : `(${sub})`}</small>
+                  <small>{ageRatingUtil(age.toString())}</small>
                 </Card.Text>
                 <Link to={`/filmer/${id}`}>
                   <Button variant="outline-secondary" className="mt-1 mb-1">
