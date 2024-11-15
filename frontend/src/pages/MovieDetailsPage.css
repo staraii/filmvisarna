@@ -103,13 +103,17 @@ h1{
     }
 }
 
+.custom-review-carousel{
+  height: 180px;
+}
+
 .custom-review-carousel .carousel-control-prev {
-  left: -4%;
+  left: -6%;
   /* Justera positionen för vänster pil */
 }
 
 .custom-review-carousel .carousel-control-next {
-  right: -4%;
+  right: -5%;
   /* Justera positionen för höger pil */
 }
 
@@ -133,23 +137,8 @@ h1{
   justify-content: center;
 }
 
-.calendar-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  /* Mellanrum mellan korten */
-  justify-content: center;
-}
-
 .calendar-card {
   align-items: center;
-}
-
-.calendar-item{
-  width: 100%;
-  margin: 5px;
-  border: solid rgb(0, 0, 0) 1px;
-  text-align: center;
 }
 
 .square-card {
@@ -178,9 +167,8 @@ h1{
 .card-header h4{
   font-size: 165%;
 }
-.calendar-containerKAL {
-  padding: 20px;
-}
+
+
 
 .calendar-grid {
   display: grid;
@@ -199,30 +187,3 @@ h1{
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
-
-.calendar-day-header {
-  text-align: center;
-  font-weight: bold;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 10px;
-}
-
-.calendar-day {
-  min-height: 150px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 10px;
-}
-
-.calendar-screening-card {
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-.calendar-screening-card .card-body {
-  border-radius: 10px;
-}
-/* .calendar-screening-card .bg-primaryKAL {
-  background-color: #007bff;
-  color: white;
-} */
