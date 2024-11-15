@@ -20,7 +20,7 @@ export default function ScreeningCard({
   movieTitle,
 }: HomePageScreenings) {
   const navigate = useNavigate();
-  //occupiedPercent = 100;
+  occupiedPercent = 0;
   const soldOut = occupiedPercent > 99 ? true : false;
   const { month, date, dayName, time } = getParsedDateTime(dateTime);
   const age = ageRatingUtil(ageRating.toString());
