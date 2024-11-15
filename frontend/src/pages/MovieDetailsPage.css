@@ -137,23 +137,8 @@ h1{
   justify-content: center;
 }
 
-.calendar-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  /* Mellanrum mellan korten */
-  justify-content: center;
-}
-
 .calendar-card {
   align-items: center;
-}
-
-.calendar-item{
-  width: 100%;
-  margin: 5px;
-  border: solid rgb(0, 0, 0) 1px;
-  text-align: center;
 }
 
 .square-card {
@@ -182,6 +167,8 @@ h1{
 .card-header h4{
   font-size: 165%;
 }
+
+
 
 .calendar-grid {
   display: grid;
