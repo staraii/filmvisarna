@@ -2,6 +2,9 @@ import Modal from "react-bootstrap/Modal";
 import { QRCodeSVG } from "qrcode.react";
 import { useRef } from "react";
 import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 
 interface QrModalProps {
@@ -52,31 +55,43 @@ export default function QrModal({ show, hide, bookingNumber }: QrModalProps) {
         <Modal.Title
           id="qr-viewer-modal"
           as="p"
-          className="text-secondary"
         >
-          <small>Bokningsnummer: </small> {bookingNumber}
+          <small className="text-secondary">Bokningsnummer: </small>{" "}
+          {bookingNumber}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <QRCodeSVG
-          ref={svgRef}
-          value={bookingNumber}
-          title={"qr kod visare"}
-          size={225}
-          bgColor={"#ffffff"}
-          fgColor={"#000000"}
-          level={"L"}
-          imageSettings={{
-            src: "/images/favicon-16x16.png",
-            x: undefined,
-            y: undefined,
-            height: 24,
-            width: 24,
-            opacity: 1,
-            excavate: true,
-          }}
-        />
-        <Button variant="outline-secondary mt-5" onClick={downloadQrSVG}>Spara QR-kod</Button>
+        <Container className="d-flex flex-column justify-content-center align-items-center">
+          <Row>
+            <Col>
+              <QRCodeSVG
+                ref={svgRef}
+                value={bookingNumber}
+                title={"qr kod visare"}
+                size={225}
+                bgColor={"#ffffff"}
+                fgColor={"#000000"}
+                level={"L"}
+                imageSettings={{
+                  src: "/images/favicon-16x16.png",
+                  x: undefined,
+                  y: undefined,
+                  height: 24,
+                  width: 24,
+                  opacity: 1,
+                  excavate: true,
+                }}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Button variant="outline-secondary mt-5" onClick={downloadQrSVG}>
+                Spara QR-kod
+              </Button>
+            </Col>
+          </Row>
+        </Container>
       </Modal.Body>
     </Modal>
   );

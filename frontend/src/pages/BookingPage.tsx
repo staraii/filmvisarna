@@ -12,6 +12,7 @@ import { loaderQuery, QueryParams } from "../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getWeekday } from "../utils/dateTimeUtils";
 import { useAuth } from ".././utils/authContext"; // Added for booking with authentication
+import { getParsedYearDateTime } from "../utils/dateTimeUtils";
 
 interface RowSeats {
   seats: number;
@@ -28,6 +29,7 @@ interface BookingActionData {
   bookingNumber?: string;
   error?: string;
 }
+
 export default function BookingPage() {
   const { userEmail, isAuthenticated } = useAuth(); // Added for booking with authentication
   const [ticketAdult, setticketAdult] = useState<number>(2);
@@ -48,6 +50,32 @@ export default function BookingPage() {
   const navigate = useNavigate();
 
   const [seatData, setData] = useState<string[]>([]);
+
+  useEffect(() => {
+    const date = new Date().toLocaleString();
+    const currentTime = getParsedYearDateTime(date);
+    const screeningTime = getParsedYearDateTime(screeningData.dateTime);
+
+    const currentDateObj = new Date(
+      currentTime.year,
+      Number(currentTime.month) - 1,
+      Number(currentTime.date),
+      parseInt(currentTime.time.split(":")[0], 10),
+      parseInt(currentTime.time.split(":")[1], 10)
+    );
+
+    const screeningDateObj = new Date(
+      screeningTime.year,
+      Number(screeningTime.month) - 1,
+      Number(screeningTime.date),
+      parseInt(screeningTime.time.split(":")[0], 10),
+      parseInt(screeningTime.time.split(":")[1], 10)
+    );
+
+    if (currentDateObj > screeningDateObj) {
+      throw new Error("Åtkomst nekas");
+    }
+  }, []);
 
   useEffect(() => {
     const evtSource = new EventSource(
@@ -104,10 +132,8 @@ export default function BookingPage() {
         `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`
       );
     } else if (actionData && !actionData.bookingSuccess) {
-      console.log("error boundary entered");
-      throw new Error(
-        `Något gick fel vid bokning. Meddelande ("${actionData.error})`
-      );
+      //Släng upp en error modal eller något här istället och låt kunden försöka igen
+      //throw new Error(`Något gick fel vid bokning.`);
     }
   }, [actionData, navigate]);
   useEffect(() => {
@@ -198,7 +224,7 @@ export default function BookingPage() {
           </Row>
         </Stack>
 
-        <Stack className="w-100 h-100 border-end border-start p-3 d-flex flex-column">
+        <Stack className="w-100 h-100 p-3 d-flex flex-column">
           <h4>{screeningData.theatreName}</h4>
           <Stack className="p-1">
             <Stack direction="horizontal">
@@ -215,7 +241,7 @@ export default function BookingPage() {
               >
                 +
               </Button>
-              <p className="m-3">Standard: 140 kr</p>
+              <p className="m-2">Standard: 140 kr</p>
             </Stack>
             <Stack direction="horizontal">
               <Button
