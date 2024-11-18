@@ -215,7 +215,7 @@ export default function BookingPage() {
               >
                 +
               </Button>
-              <p className="m-3">Standard: 140 kr</p>
+              <p className="m-2">Standard: 140 kr</p>
             </Stack>
             <Stack direction="horizontal">
               <Button
