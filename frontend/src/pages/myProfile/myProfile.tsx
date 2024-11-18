@@ -326,7 +326,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
            <p><strong>Biljett:</strong> {formatTicketTypes(booking.ticketTypes)}</p>
           <p><strong>Totalt pris:</strong> {booking.totalPrice}</p>
         </div>
-        <button className="close-modal-button" onClick={onClose}>Stäng</button>
+        <Button variant="primary" onClick={onClose}>Stäng</Button>
       </div>
     </div>
   );
