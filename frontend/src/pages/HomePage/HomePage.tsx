@@ -13,6 +13,7 @@ import { DualQueryParams, loaderQuery, HomePageMovies, HomePageScreenings } from
 import ScreeningFilters from "./ScreeningFilters/ScreeningFilters";
 import useGetInfinite from "../../services/useGetInfinite";
 import { Fragment } from "react";
+import useLocationTitle from "../../utils/useLocationTitle";
 
 
 export type ScreeningFiltersState = {
@@ -27,6 +28,7 @@ export type ScreeningFiltersState = {
 
 
 export default function HomePage() {
+  useLocationTitle("Hem")
   // Get query parameters from route loader
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
 
