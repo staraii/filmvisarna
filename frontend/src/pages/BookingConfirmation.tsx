@@ -1,17 +1,18 @@
-import { Row, Col, Container } from "react-bootstrap";
+import { Row, Col, Container, Button, Stack } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
 import { getWeekday } from "../utils/dateTimeUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DualQueryParams, loaderQuery } from "../utils/queryService";
-import { useAuth } from "../utils/authContext"; 
+import { useAuth } from "../utils/authContext";
 import "./BookingConfirmation.css";
+import QrModal from "../components/QrModal/QrModal";
+import { useState } from "react";
 
 // Function to format ticket types
 const ticketTypeTranslations: { [key: string]: string } = {
   Adult: "Vuxen",
   Child: "Barn",
   Senior: "Senior",
-  Student: "Student",
 };
 
 const formatTicketTypes = (ticketTypes: string): string => {
@@ -40,11 +41,13 @@ const isValidDate = (date: string) => {
 // Format booking date
 const formatBookingDate = (bookingDate: string): string => {
   const dateTime = new Date(bookingDate);
-  const formattedDate = dateTime.toLocaleDateString('sv-SE'); // Format the date in Swedish (YYYY-MM-DD)
-  const formattedTime = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format time (HH:mm)
+  const formattedDate = dateTime.toLocaleDateString("sv-SE"); // Format the date in Swedish (YYYY-MM-DD)
+  const formattedTime = dateTime.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  }); // Format time (HH:mm)
   return `${formattedDate} ${formattedTime}`; // Combine date and time
 };
-
 
 export default function BookingConfirmationPage() {
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
@@ -52,6 +55,10 @@ export default function BookingConfirmationPage() {
   const { data: bookingData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
   const { isAuthenticated } = useAuth();
 
+  const [showQrViewer, setShowQrViewer] = useState<null | string>(null);
+  const handleShowQR = (bookingNumber: string) => {
+    setShowQrViewer(bookingNumber);
+  };
 
   if (
     !screeningData?.success?.[0] ||
@@ -64,21 +71,27 @@ export default function BookingConfirmationPage() {
   const booking = bookingData.success[0];
   const screening = screeningData.success[0];
 
-  // Check if screening.dateTime is valid, otherwise set it to a default value
   const screeningDateTime = isValidDate(screening.dateTime)
     ? new Date(screening.dateTime)
-    : new Date(); // Set to current date/time if invalid
+    : new Date();
 
-  const formattedDate = screeningDateTime.toLocaleDateString('sv-SE'); // Format date
-  const formattedTime = screeningDateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); // Format time
+  const formattedDate = screeningDateTime.toLocaleDateString("sv-SE");
+  const formattedTime = screeningDateTime.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   // Format the booking date
-  const formattedBookingDate = formatBookingDate(booking.bookingDate);
+  const formattedBookingDate = formatBookingDate(booking.bookingDate).split(
+    "A"
+  )[0];
 
-  const seatsDisplay = typeof booking.seats === 'string' 
-    ? (booking.seats.split(',') as string[]).map((seat: string) => seat.trim()).join(', ') 
-    : 'Inga platser valda';
-
+  const seatsDisplay =
+    typeof booking.seats === "string"
+      ? (booking.seats.split(",") as string[])
+          .map((seat: string) => seat.trim())
+          .join(", ")
+      : "Inga platser valda";
 
   return (
     <>
@@ -93,7 +106,10 @@ export default function BookingConfirmationPage() {
 
           <Col xs={12} className="detail-row">
             <div className="label-item">Visningstid:</div>
-            <div className="data-item">{getWeekday(screening.dayName) + " " + formattedDate} {formattedTime}</div>
+            <div className="data-item">
+              {getWeekday(screening.dayName) + " " + formattedDate}{" "}
+              {formattedTime}
+            </div>
           </Col>
 
           <Col xs={12} className="detail-row">
@@ -113,12 +129,31 @@ export default function BookingConfirmationPage() {
 
           <Col xs={12} className="detail-row">
             <div className="label-item">Biljett:</div>
-            <div className="data-item">{formatTicketTypes(booking.ticketTypes)}</div>
+            <div className="data-item">
+              {formatTicketTypes(booking.ticketTypes)}
+            </div>
           </Col>
 
           <Col xs={12} className="detail-row">
             <div className="label-item">Totalt pris:</div>
             <div className="data-item">{booking.totalPrice} kr</div>
+          </Col>
+          <Col>
+            <Button
+              variant="outline-secondary"
+              onClick={() => handleShowQR(booking.bookingNumber)}
+            >
+              Qr Code viewer
+            </Button>
+            {showQrViewer && (
+              <Col className="qr-code">
+                <QrModal
+                  show={showQrViewer ? true : false}
+                  hide={() => setShowQrViewer(null)}
+                  bookingNumber={booking.bookingNumber}
+                />
+              </Col>
+            )}
           </Col>
         </Row>
 
