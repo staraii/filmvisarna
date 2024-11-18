@@ -27,6 +27,14 @@ import MinProfil from "./pages/myProfile/myProfile.tsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.tsx";
 import { AuthProvider } from "./utils/authContext.tsx";
 
+import Admin from "./pages/Admin/Admin.tsx";
+import AdminMain from "./pages/Admin/components/AdminMain/AdminMain.tsx";
+import AdminMovies from "./pages/Admin/components/AdminMovies/AdminMovies.tsx";
+import EditMovie from "./pages/Admin/components/EditMovie/EditMovie.tsx";
+import NewMovie from "./pages/Admin/components/NewMovie/NewMovie.tsx";
+import Tickets from "./pages/Admin/components/Tickets/Tickets.tsx";
+import BookingStatus from "./pages/Admin/components/BookingStatus/BookingStatus.tsx";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -34,6 +42,7 @@ const queryClient = new QueryClient({
     },
   },
 });
+
 
 const router = createBrowserRouter([
   {
@@ -45,7 +54,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-
         loader: doubleLoader(
           queryClient,
           ["/api/bookings/homePageMovies", "/api/bookings/homePageScreenings"],
@@ -134,6 +142,46 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
 
+        errorElement: <ErrorPage />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <Admin />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <AdminMain />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "filmer",
+        loader: loader(queryClient, "/api/bookings/moviesList", "movies"),
+        element: <AdminMovies />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "film/:id",
+        loader: loader(queryClient, "/api/bookings/fullMovies?id=", "movie", "id"),
+        element: <EditMovie />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "film/ny",
+        element: <NewMovie />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "biljetter",
+        element: <Tickets />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "bokningar/:bookingNumber",
+        loader: loader(queryClient, "/api/bookings/fullBookings?bookingNumber=", "bookings", "bookingNumber"),
+        element: <BookingStatus />,
         errorElement: <ErrorPage />,
       },
     ],

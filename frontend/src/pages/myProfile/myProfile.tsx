@@ -9,6 +9,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
 
+
 // Define types for bookings and modal props
 interface CancelConfirmationModalProps {
   onConfirm: () => void;
@@ -24,7 +25,7 @@ const CancelConfirmationModal: React.FC<CancelConfirmationModalProps> = ({ onCon
     <Modal.Body>Är du säker på att du vill avboka bokningsnummer {bookingNumber}?</Modal.Body>
     <Modal.Footer>
       <Button variant="secondary" onClick={onClose}>Avbryt</Button>
-      <Button variant="danger" onClick={onConfirm}>Ja, Avboka</Button>
+      <Button variant="primary" onClick={onConfirm}>Ja, Avboka</Button>
     </Modal.Footer>
   </Modal>
 );
@@ -65,6 +66,7 @@ const MinProfil = () => {
     fetchUserData();
   }, [fetchUserData]);
 
+   // Split bookings into current and past
   useEffect(() => {
     if (bookings) {
       const now = new Date();
@@ -72,6 +74,17 @@ const MinProfil = () => {
       setPastBookings(bookings.filter((b: Booking) => new Date(b.screeningTime) < now));
     }
   }, [bookings]);
+
+  // Adjust pagination if no bookings exist on the current page
+  useEffect(() => {
+    if (currentBookings.length <= (currentBookingPage - 1) * itemsPerPage && currentBookingPage > 1) {
+      setCurrentBookingPage(currentBookingPage - 1);
+    }
+
+    if (pastBookings.length <= (pastBookingPage - 1) * itemsPerPage && pastBookingPage > 1) {
+      setPastBookingPage(pastBookingPage - 1);
+    }
+  }, [currentBookings, pastBookings, currentBookingPage, pastBookingPage]);
 
   const openCancelModal = (bookingId: number, bookingNumber: string) => {
     setBookingToCancel({ id: bookingId, number: bookingNumber });
@@ -199,15 +212,15 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, o
             <td>{booking.bookingNumber}</td>
             {openCancelModal && (
               <td>
-                <button
-                  className="cancel-button"
+                <Button
+                  variant="primary"
                   onClick={(e) => {
                     e.stopPropagation();
                     openCancelModal(booking.bookingId, booking.bookingNumber);
                   }}
                 >
                   Avboka
-                </button>
+                </Button>
               </td>
             )}
           </tr>
@@ -226,17 +239,23 @@ interface CustomPaginationProps {
 const CustomPagination: React.FC<CustomPaginationProps> = ({ totalPages, currentPage, setPage }) => (
   <div className="custom-pagination">
     <Pagination className="d-flex justify-content-center mt-3">
-      <Pagination.Prev onClick={() => currentPage > 1 && setPage(currentPage - 1)} disabled={currentPage === 1} />
+      <Pagination.Prev
+        onClick={() => currentPage > 1 && setPage(currentPage - 1)}
+        disabled={currentPage === 1}
+      />
       {[...Array(totalPages)].map((_, pageNum) => (
-        <Pagination.Item 
-          key={pageNum} 
+        <Pagination.Item
+          key={pageNum}
           active={currentPage === pageNum + 1}
           onClick={() => setPage(pageNum + 1)}
         >
           {pageNum + 1}
         </Pagination.Item>
       ))}
-      <Pagination.Next onClick={() => currentPage < totalPages && setPage(currentPage + 1)} disabled={currentPage === totalPages} />
+      <Pagination.Next
+        onClick={() => currentPage < totalPages && setPage(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      />
     </Pagination>
   </div>
 );
@@ -307,7 +326,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ booking, onClose }) => {
            <p><strong>Biljett:</strong> {formatTicketTypes(booking.ticketTypes)}</p>
           <p><strong>Totalt pris:</strong> {booking.totalPrice}</p>
         </div>
-        <button className="close-modal-button" onClick={onClose}>Stäng</button>
+        <Button variant="primary" onClick={onClose}>Stäng</Button>
       </div>
     </div>
   );

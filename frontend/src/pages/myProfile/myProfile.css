@@ -23,7 +23,7 @@
 .profile-table th,
 .profile-table td {
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid#ccc;
   text-align: left;
 }
 
@@ -178,14 +178,13 @@ hr {
 
 
 
-
 /* Button styling to match pagination */
 .cancel-button {
   color: #fdfdfd;
   /* Text color */
-  background-color: transparent;
+  background-color: #551a3a;
   /* Background color */
-  border: 1px solid #e9dfe1;
+  /*border: 1px solid #e9dfe1;
   /* Border color */
   padding: 0.5rem 1rem;
   /* Padding for button */
@@ -193,21 +192,22 @@ hr {
   /* Rounded corners */
   cursor: pointer;
   /* Pointer cursor on hover */
-  transition: background-color 0.3s, color 0.3s;
+  /*transition: background-color 0.3s, color 0.3s;
   /* Smooth transition for hover effects */
 }
 
 /* Hover state for cancel button */
 .cancel-button:hover {
-  background-color: rgba(218, 200, 203, 0.1);
+  background-color: #551a3a;
   /* Hover background color */
-  color: #c15f6f;
+  color: #fff;
   /* Change text color on hover */
+  border-color: #551a3a;
 }
 
 /* Active and disabled state */
 .cancel-button:disabled {
-  color: #ccc;
+  color: #0b0815;
   /* Disabled text color */
   border-color: #ccc;
   /* Disabled border color */
@@ -282,7 +282,7 @@ hr {
   .cancel-button {
     margin-top: 10px;
     padding: 8px 12px;
-    background-color: #c15f6f;
+    background-color: #702c53;
     color: white;
     border: none;
     border-radius: 5px;
