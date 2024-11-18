@@ -8,6 +8,7 @@ import {
 import { loaderQuery } from "../../utils/queryService";
 import { useLoaderData } from "react-router-dom";
 import { QueryParams } from "../../utils/queryService";
+import useLocationTitle from "../../utils/useLocationTitle";
 
 
 type MoviesPageMovie = {
@@ -22,6 +23,7 @@ type MoviesPageMovie = {
   sub: string;
 }
 export default function Movies() {
+  useLocationTitle("Filmer")
   const queryParams = useLoaderData() as QueryParams;
   const { data } = useSuspenseQuery(loaderQuery(queryParams));
   const movies: MoviesPageMovie[] = data;
