@@ -7,6 +7,7 @@ import "./myProfile.css";
 import { cancelBooking } from "../../services/authService";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import QrModal from "../../components/QrModal/QrModal";
 
 
 
@@ -58,6 +59,9 @@ const MinProfil = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [bookingToCancel, setBookingToCancel] = useState<{ id: number; number: string } | null>(null);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [showQrModal, setShowQrModal] = useState(false);
+  const [bookingNumberForQr, setBookingNumberForQr] = useState<string | null>(null);
+  
   const [currentBookingPage, setCurrentBookingPage] = useState(1);
   const [pastBookingPage, setPastBookingPage] = useState(1);
   const itemsPerPage = 5;
@@ -117,6 +121,17 @@ const MinProfil = () => {
     return bookings.slice(indexOfFirst, indexOfLast);
   };
 
+  // Function to open QR modal
+  const openQrModal = (bookingNumber: string) => {
+    setBookingNumberForQr(bookingNumber);
+    setShowQrModal(true);
+  };
+
+  const closeQrModal = () => {
+    setShowQrModal(false);
+    setBookingNumberForQr(null);
+  };
+
   return (
     <div className="profile-container">
       <p>
@@ -143,7 +158,8 @@ const MinProfil = () => {
             <BookingTable
               bookings={paginate(currentBookings, currentBookingPage)}
               onBookingClick={handleBookingClick}
-              openCancelModal={openCancelModal}
+                openCancelModal={openCancelModal}
+                openQrModal={openQrModal} // Pass QR modal open function
             />
             {currentBookings.length > itemsPerPage && (
               <CustomPagination
@@ -165,13 +181,15 @@ const MinProfil = () => {
           <>
             <BookingTable
               bookings={paginate(pastBookings, pastBookingPage)}
-              onBookingClick={handleBookingClick}
+                onBookingClick={handleBookingClick}
+                 openQrModal={openQrModal} //
             />
             {pastBookings.length > itemsPerPage && (
               <CustomPagination
                 totalPages={Math.ceil(pastBookings.length / itemsPerPage)}
                 currentPage={pastBookingPage}
-                setPage={setPastBookingPage}
+                  setPage={setPastBookingPage}
+                   
               />
             )}
           </>
@@ -181,6 +199,15 @@ const MinProfil = () => {
       {showModal && selectedBooking && (
         <BookingModal booking={selectedBooking} onClose={handleCloseModal} />
       )}
+
+     {/* QR Modal to show the QR code */}
+      {bookingNumberForQr && (
+        <QrModal
+          show={showQrModal}
+          hide={closeQrModal}
+          bookingNumber={bookingNumberForQr}
+        />
+      )}
     </div>
   );
 };
@@ -189,9 +216,10 @@ interface BookingTableProps {
   bookings: Booking[];
   onBookingClick: (booking: Booking) => void;
   openCancelModal?: (bookingId: number, bookingNumber: string) => void;
+   openQrModal?: (bookingNumber: string) => void;
 }
 
-const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, openCancelModal }) => (
+const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, openCancelModal,openQrModal  }) => (
   <div className="content">
     <table className="profile-table">
       <thead>
@@ -201,6 +229,7 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, o
           <th>Visningstid</th>
           <th>Bokningsnummer</th>
           {openCancelModal && <th>Avboka</th>}
+             {openQrModal && <th>QR Kod</th>}
         </tr>
       </thead>
       <tbody>
@@ -220,6 +249,19 @@ const BookingTable: React.FC<BookingTableProps> = ({ bookings, onBookingClick, o
                   }}
                 >
                   Avboka
+                </Button>
+              </td>
+            )}
+           {openQrModal && (
+              <td>
+                <Button
+                  variant="primary"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openQrModal(booking.bookingNumber); // Open the QR modal
+                  }}
+                >
+                  Visa QR Kod
                 </Button>
               </td>
             )}
