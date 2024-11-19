@@ -19,7 +19,6 @@ import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 import BookingPage from "./pages/BookingPage";
 import Register from "./pages/Register/Register";
 import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
-import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin";
 import LoginPage from "./components/Login-pop-up/LoginPage.tsx";
 import PasswordReset from "./components/Login-pop-up/passwordReset";
 import BookingConfirmationPage from "./pages/BookingConfirmation.tsx";
@@ -107,13 +106,6 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
-        errorElement: <ErrorPage />,
-      },
-      {
-        path: "avboka-loggedin",
-        element: <CancelTicketsLogin />,
-        //loader: userLoader(queryClient),
-        //action: userAction(queryClient),
         errorElement: <ErrorPage />,
       },
       {

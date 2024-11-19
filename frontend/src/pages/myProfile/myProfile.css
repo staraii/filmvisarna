@@ -176,46 +176,6 @@ hr {
 }
 
 
-
-
-/* Button styling to match pagination */
-.cancel-button {
-  color: #fdfdfd;
-  /* Text color */
-  background-color: #551a3a;
-  /* Background color */
-  /*border: 1px solid #e9dfe1;
-  /* Border color */
-  padding: 0.5rem 1rem;
-  /* Padding for button */
-  border-radius: 4px;
-  /* Rounded corners */
-  cursor: pointer;
-  /* Pointer cursor on hover */
-  /*transition: background-color 0.3s, color 0.3s;
-  /* Smooth transition for hover effects */
-}
-
-/* Hover state for cancel button */
-.cancel-button:hover {
-  background-color: #551a3a;
-  /* Hover background color */
-  color: #fff;
-  /* Change text color on hover */
-  border-color: #551a3a;
-}
-
-/* Active and disabled state */
-.cancel-button:disabled {
-  color: #0b0815;
-  /* Disabled text color */
-  border-color: #ccc;
-  /* Disabled border color */
-  cursor: not-allowed;
-  /* Not allowed cursor */
-}
-
-
 @media (max-width: 600px) {
   /* Profile container */
   .profile-container {
@@ -278,24 +238,6 @@ hr {
     text-align: center;
   }
 
-  /* Cancel Button for mobile */
-  .cancel-button {
-    margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #702c53;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 80%;
-    max-width: 300px;
-    text-align: center;
-  }
-
-  .cancel-button:hover {
-    background-color: #551a3a;
-  }
 
   /* History Booking Section */
   .history-booking {

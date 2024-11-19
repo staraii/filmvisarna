@@ -31,9 +31,9 @@ const LoginPage = () => {
     try {
         // Call the login function and expect to get the email in response
         const response = await login(email, password);
-        const userEmail = response.email; // Extract email from response
+        const { email: userEmail, firstName } = response;
         console.log("User Email:", userEmail); // Check the email here
-        authLogin(userEmail);
+        authLogin(userEmail, firstName);
         setShowSuccessModal(true); // Show modal after successful login
     } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
