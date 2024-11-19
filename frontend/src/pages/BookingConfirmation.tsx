@@ -1,4 +1,4 @@
-import { Row, Col, Container, Button, Stack } from "react-bootstrap";
+import { Row, Col, Container, Button } from "react-bootstrap";
 import { useLoaderData } from "react-router-dom";
 import { getWeekday } from "../utils/dateTimeUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
@@ -8,7 +8,6 @@ import "./BookingConfirmation.css";
 import QrModal from "../components/QrModal/QrModal";
 import { useState } from "react";
 
-// Function to format ticket types
 const ticketTypeTranslations: { [key: string]: string } = {
   Adult: "Vuxen",
   Child: "Barn",
@@ -32,21 +31,19 @@ const formatTicketTypes = (ticketTypes: string): string => {
     .join(", ");
 };
 
-// Helper function to check if the date is valid
 const isValidDate = (date: string) => {
   const d = new Date(date);
   return !isNaN(d.getTime());
 };
 
-// Format booking date
 const formatBookingDate = (bookingDate: string): string => {
   const dateTime = new Date(bookingDate);
-  const formattedDate = dateTime.toLocaleDateString("sv-SE"); // Format the date in Swedish (YYYY-MM-DD)
+  const formattedDate = dateTime.toLocaleDateString("sv-SE");
   const formattedTime = dateTime.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
-  }); // Format time (HH:mm)
-  return `${formattedDate} ${formattedTime}`; // Combine date and time
+  });
+  return `${formattedDate} ${formattedTime}`;
 };
 
 export default function BookingConfirmationPage() {
@@ -81,7 +78,6 @@ export default function BookingConfirmationPage() {
     minute: "2-digit",
   });
 
-  // Format the booking date
   const formattedBookingDate = formatBookingDate(booking.bookingDate).split(
     "A"
   )[0];
@@ -97,7 +93,6 @@ export default function BookingConfirmationPage() {
     <>
       <h2>Tack för din bokning!</h2>
       <Container className="booking-confirmation">
-        {/* Booking Details in mobile-like format */}
         <Row className="pt-4">
           <Col xs={12} className="detail-row">
             <div className="label-item">Film:</div>
@@ -156,8 +151,6 @@ export default function BookingConfirmationPage() {
             )}
           </Col>
         </Row>
-
-        {/* Conditionally render message based on authentication status */}
         <p className="pt-4 lead">
           {isAuthenticated
             ? "Tack för din bokning! Du kan nu hitta din bokning på din profil."
