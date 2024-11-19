@@ -1,10 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "../sass/main.scss";
 import App from "./App.tsx";
@@ -41,7 +38,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
 
 const router = createBrowserRouter([
   {
@@ -156,7 +152,12 @@ const router = createBrowserRouter([
       },
       {
         path: "film/:id",
-        loader: loader(queryClient, "/api/bookings/fullMovies?id=", "movie", "id"),
+        loader: loader(
+          queryClient,
+          "/api/bookings/fullMovies?id=",
+          "movie",
+          "id"
+        ),
         element: <EditMovie />,
         errorElement: <ErrorPage />,
       },
@@ -172,7 +173,12 @@ const router = createBrowserRouter([
       },
       {
         path: "bokningar/:bookingNumber",
-        loader: loader(queryClient, "/api/bookings/fullBookings?bookingNumber=", "bookings", "bookingNumber"),
+        loader: loader(
+          queryClient,
+          "/api/bookings/fullBookings?bookingNumber=",
+          "bookings",
+          "bookingNumber"
+        ),
         element: <BookingStatus />,
         errorElement: <ErrorPage />,
       },

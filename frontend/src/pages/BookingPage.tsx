@@ -1,5 +1,5 @@
 import "./bookingPage.css";
-import { Row, Col, Container, Stack, Button, FormGroup } from "react-bootstrap";
+import { Row, Col, Stack, Button, FormGroup } from "react-bootstrap";
 import InputForm from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import {
@@ -110,7 +110,7 @@ export default function BookingPage() {
 
   if (seatData?.length) {
     for (let i = 0; i < seatData.length, i++; ) {
-      if (seatData[i] === null) seatData[i] = [];
+      if (seatData[i] === null) seatData[i] = "";
     }
   }
   //nullchecks
@@ -366,7 +366,7 @@ export default function BookingPage() {
                 </Col>
               ) : (
                 <Col>
-                  <input type="hidden" name="email" value={userEmail} />
+                  <input type="hidden" name="email" value={userEmail ?? ""} />
                 </Col>
               )}
               <Col className="">
