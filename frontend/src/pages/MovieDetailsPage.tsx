@@ -93,6 +93,7 @@ function MovieDetailsPage() {
   const [selectedTheatreId, setSelectedTheatreId] = useState<string | null>(null);
   const [selectedScreeningId, setSelectedScreeningId] = useState<string | null>(null);
   const [showWarning, setShowWarning] = useState(false);
+
   const [visibleCount, setVisibleCount] = useState(8); // start with * visningar
   const initialCount = 8;
 
@@ -106,17 +107,17 @@ function MovieDetailsPage() {
 };
 
   const handleSelectTime = (eventKey: string | null) => {
-    if (eventKey) {
-      
+    if (eventKey && eventKey !== "välj visning") {
       const [screeningId,theatreId, time] = eventKey.split('|');
       setSelectedTime(time);
       setSelectedTheatreId(theatreId);
       setSelectedScreeningId(screeningId);
-
-      // Logga screening.id
+      setShowWarning(false);
       //console.log('screening', screeningId);
       //console.log('theatre', theatreId);
       //console.log('time',time);
+    }else {
+    setShowWarning(true);
     }
   };
   
@@ -285,7 +286,7 @@ function MovieDetailsPage() {
                 flip={false}
                 rootCloseEvent="click"
               >
-                <Dropdown.Item eventKey="välj visning" as="button">välj visning</Dropdown.Item>
+                {/* <Dropdown.Item eventKey="välj visning" as="button">välj visning</Dropdown.Item> */}
                 {Object.entries(groupedScreenings).flatMap(([, screenings]) =>
                   screenings.map((screening: Screening) => (
                     <Dropdown.Item 
