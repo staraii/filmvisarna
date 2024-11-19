@@ -46,7 +46,7 @@ interface Booking {
 const MinProfil = () => {
   const { userEmail, firstName, fetchUserData } = useAuth();
   
-  const { data: bookings, isLoading, error, refetch } = useQuery({
+  const { data: bookings, refetch } = useQuery({
     queryKey: ["userBookings", userEmail],
     queryFn: () => fetchUserBookings(userEmail!),
     enabled: !!userEmail,

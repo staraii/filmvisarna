@@ -43,7 +43,7 @@ function CancelTickets() {
             <Form.Label>Mailadress</Form.Label>
             <Form.Control
               type="email"
-              placeholder="name@example.com"
+              placeholder="Ange din e-postadress"
               value={email}
               onChange={handleEmailChange}
               className="Custom-Input"
