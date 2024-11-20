@@ -1,12 +1,12 @@
 import { Row, Col, Container, Button } from "react-bootstrap";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useLocation } from "react-router-dom";
 import { getWeekday } from "../utils/dateTimeUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { DualQueryParams, loaderQuery } from "../utils/queryService";
 import { useAuth } from "../utils/authContext";
 import "./BookingConfirmation.css";
 import QrModal from "../components/QrModal/QrModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ticketTypeTranslations: { [key: string]: string } = {
   Adult: "Vuxen",
@@ -50,12 +50,10 @@ export default function BookingConfirmationPage() {
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
   const { data: screeningData } = useSuspenseQuery(loaderQuery(queryParamsOne));
   const { data: bookingData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
-  const { isAuthenticated } = useAuth();
-
-  const [showQrViewer, setShowQrViewer] = useState<null | string>(null);
-  const handleShowQR = (bookingNumber: string) => {
-    setShowQrViewer(bookingNumber);
-  };
+  const { userEmail, isAuthenticated } = useAuth();
+  const location = useLocation();
+  const booking = bookingData.success[0];
+  const screening = screeningData.success[0];
 
   if (
     !screeningData?.success?.[0] ||
@@ -65,8 +63,19 @@ export default function BookingConfirmationPage() {
     throw new Error("Åtkomst nekas: Bokningsdata saknas eller är ogiltig.");
   }
 
-  const booking = bookingData.success[0];
-  const screening = screeningData.success[0];
+  useEffect(() => {
+    const mail = isAuthenticated ? userEmail : location.state?.email;
+
+    if (mail !== booking.email) {
+      throw new Error("Åtkomst nekas.");
+    }
+  }),
+    [];
+
+  const [showQrViewer, setShowQrViewer] = useState<null | string>(null);
+  const handleShowQR = (bookingNumber: string) => {
+    setShowQrViewer(bookingNumber);
+  };
 
   const screeningDateTime = isValidDate(screening.dateTime)
     ? new Date(screening.dateTime)

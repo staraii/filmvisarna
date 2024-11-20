@@ -11,7 +11,7 @@ import {
 import { loaderQuery, QueryParams } from "../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getWeekday } from "../utils/dateTimeUtils";
-import { useAuth } from ".././utils/authContext"; // Added for booking with authentication
+import { useAuth } from ".././utils/authContext";
 import { getParsedYearDateTime } from "../utils/dateTimeUtils";
 
 interface RowSeats {
@@ -31,7 +31,7 @@ interface BookingActionData {
 }
 
 export default function BookingPage() {
-  const { userEmail, isAuthenticated } = useAuth(); // Added for booking with authentication
+  const { userEmail, isAuthenticated } = useAuth();
   const [ticketAdult, setticketAdult] = useState<number>(2);
   const [ticketChild, setTicketChild] = useState<number>(0);
   const [ticketSenior, setTicketSenior] = useState<number>(0);
@@ -126,16 +126,20 @@ export default function BookingPage() {
       behavior: "instant",
     });
   }, []);
+
   useEffect(() => {
     if (actionData?.bookingSuccess) {
       navigate(
-        `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`
+        `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`,
+        { state: { email } }
       );
     } else if (actionData && !actionData.bookingSuccess) {
-      //Släng upp en error modal eller något här istället och låt kunden försöka igen
-      //throw new Error(`Något gick fel vid bokning.`);
+      alert("Bokning misslyckades");
+      setSelectedSeat([]);
+      setHoveredSeats([]);
     }
   }, [actionData, navigate]);
+
   useEffect(() => {
     if (screeningData) {
       setSeats(
