@@ -5,6 +5,7 @@ import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { useAuth } from '../../utils/authContext'; // Import useAuth to get access to register
 import './Register.css';
 
+
 interface FormData {
   firstName: string;
   lastName: string;
@@ -18,7 +19,7 @@ interface FormData {
 const Register = () => {
   const { register } = useAuth(); // Access register from AuthContext
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -46,10 +47,6 @@ const Register = () => {
     e.preventDefault();
     setError(null);
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Lösenord och bekräfta lösenord matchar inte.');
-      return;
-    }
 
     try {
       // Use the register function from AuthContext to handle registration and authentication
@@ -77,7 +74,7 @@ const Register = () => {
           {/* Error Alert */}
           {error && <div className="alert alert-danger">{error}</div>}
 
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} noValidate>
             {/* First and Last Name Fields */}
             <Row className="mb-3">
               <Col xs={6}>
@@ -89,7 +86,7 @@ const Register = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    required
+                   
                   />
                 </Form.Group>
               </Col>
@@ -102,7 +99,7 @@ const Register = () => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    required
+                    
                   />
                 </Form.Group>
               </Col>
@@ -117,7 +114,7 @@ const Register = () => {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                required
+                
               />
             </Form.Group>
 
@@ -132,7 +129,7 @@ const Register = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    required
+                    
                   />
                   <span
                     className="password-toggle-icon"
@@ -152,7 +149,7 @@ const Register = () => {
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
-                    required
+                    
                   />
                   <span
                     className="password-toggle-icon"
@@ -174,7 +171,7 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                required
+                
               />
             </Form.Group>
 
@@ -190,7 +187,7 @@ const Register = () => {
                     </Link>
                   </>
                 }
-                required
+                
               />
               <Form.Check
                 type="checkbox"

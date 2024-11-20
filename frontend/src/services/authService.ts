@@ -1,4 +1,4 @@
-// AuthService with updates and comments
+// AuthService with custom validation
 
 export interface FormData {
   email: string;
@@ -8,8 +8,69 @@ export interface FormData {
   phoneNumber: string;
 }
 
-// Login function
+// Validation for Registration Input Fields
+const validateRegistrationInput = (formData: FormData): string | null => {
+  const { email, password, firstName, lastName, phoneNumber } = formData;
+
+  // Empty field check
+  if (!firstName || !lastName || !email || !password || !phoneNumber) {
+    return "Alla fält måste fyllas i.";
+  }
+
+  // Email format validation
+  if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+    return "Ogiltigt e-postformat.";
+  }
+
+  // Password validation
+  const passwordRequirements = {
+    minLength: 8,
+    uppercase: /[A-Z]/,
+    lowercase: /[a-z]/,
+    digit: /\d/,
+  };
+
+  if (password.length < passwordRequirements.minLength) {
+    return `Lösenordet måste vara minst ${passwordRequirements.minLength} tecken långt.`;
+  }
+  if (!passwordRequirements.uppercase.test(password)) {
+    return "Lösenordet måste innehålla minst en versal (stort) bokstav.";
+  }
+  if (!passwordRequirements.lowercase.test(password)) {
+    return "Lösenordet måste innehålla minst en gemen (liten) bokstav.";
+  }
+  if (!passwordRequirements.digit.test(password)) {
+    return "Lösenordet måste innehålla minst en siffra.";
+  }
+
+  // Phone number validation (assuming 10 digits)
+  if (!/^\d{10}$/.test(phoneNumber)) {
+    return "Telefonnumret måste vara 10 siffror långt.";
+  }
+
+  return null; // No errors
+};
+
+// Validation for Login Input Fields
+const validateLoginInput = (email: string, password: string): string | null => {
+  if (!email || !password) {
+    return "E-post och lösenord måste fyllas i.";
+  }
+
+  if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
+    return "Ogiltigt e-postformat.";
+  }
+
+  return null; // No errors
+};
+
+// Login function with validation
 export const login = async (email: string, password: string) => {
+  const validationError = validateLoginInput(email, password);
+  if (validationError) {
+    throw new Error(validationError); // Throw validation error immediately
+  }
+
   const response = await fetch('/api/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -22,71 +83,34 @@ export const login = async (email: string, password: string) => {
     throw new Error(errorData.message || 'Login failed');
   }
 
-  // Get the full response data
   const data = await response.json();
-  console.log("Login response data:", data); // Log the entire response
+  console.log("Login response data:", data);
 
-  // Extract email and firstName if available
   return {
-    email: data.email,  // Directly access email from the response
-    firstName: data.firstName || '',  // Handle the case where firstName might not be present
+    email: data.email,
+    firstName: data.firstName || '',
   };
 };
 
-
+// Registration function with validation
 export const register = async (formData: FormData) => {
+  const validationError = validateRegistrationInput(formData);
+  if (validationError) {
+    throw new Error(validationError); // Throw validation error immediately
+  }
+
   const { email, password, firstName, lastName, phoneNumber } = formData;
 
-  // Check if any field is empty
-  if (!firstName || !lastName || !email || !password || !phoneNumber) {
-    throw new Error("Alla fält måste fyllas i.");
-  }
-
-  // Email format validation
-  if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(email)) {
-    throw new Error("Ogiltigt e-postformat.");
-  }
-
-  // Password validation requirements
-  const passwordRequirements = {
-    minLength: 8,
-    uppercase: /[A-Z]/,          // At least one uppercase letter
-    lowercase: /[a-z]/,          // At least one lowercase letter
-    digit: /\d/,                 // At least one digit
-  };
-
-  // Password validation with Swedish error messages
-  if (password.length < passwordRequirements.minLength) {
-    throw new Error(`Lösenordet måste vara minst ${passwordRequirements.minLength} tecken långt.`);
-  }
-  if (!passwordRequirements.uppercase.test(password)) {
-    throw new Error("Lösenordet måste innehålla minst en versal (stort) bokstav.");
-  }
-  if (!passwordRequirements.lowercase.test(password)) {
-    throw new Error("Lösenordet måste innehålla minst en gemen (liten) bokstav.");
-  }
-  if (!passwordRequirements.digit.test(password)) {
-    throw new Error("Lösenordet måste innehålla minst en siffra.");
-
-  }
-
-  // Phone number validation (assuming 10 digits)
-  if (!/^\d{10}$/.test(phoneNumber)) {
-    throw new Error("Telefonnumret måste vara 10 siffror långt.");
-  }
-
-  // Prepare data for API without capitalizing firstName and lastName
   const requestData = {
     email,
     password,
-    firstName, // Use as provided, without capitalization
-    lastName,  // Use as provided, without capitalization
+    firstName,
+    lastName,
     phone: phoneNumber,
   };
 
   console.log("Skickar registreringsdata:", requestData);
 
-  // API request to register
   const response = await fetch("/api/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -100,16 +124,13 @@ export const register = async (formData: FormData) => {
     throw new Error(errorData.message || "Registrering misslyckades");
   }
 
-  // Auto-login after successful registration
   const data = await login(email, password);
   return data; // This should include `{ email, firstName }`
 };
 
-
-
-// Logout function
+// Logout function (unchanged)
 export const logout = async () => {
-  const response = await fetch('/api/login', { // Ensure this endpoint is correct
+  const response = await fetch('/api/login', {
     method: 'DELETE',
     credentials: 'include'
   });
@@ -122,7 +143,7 @@ export const logout = async () => {
   return response.json();
 };
 
-// Check if authenticated
+// Check if authenticated (unchanged)
 export const getMe = async () => {
   const response = await fetch('/api/login', {
     method: 'GET',
@@ -136,44 +157,40 @@ export const getMe = async () => {
   const data = await response.json();
   return {
     email: data.user.email,
-    firstName: data.user.firstName, // Capture firstName from the response
+    firstName: data.user.firstName,
   };
 };
 
-
-
-
-// Cancel booking
+// Cancel booking (unchanged)
 export const cancelBooking = async (bookingId: number, email: string, bookingNumber: string) => {
   const response = await fetch(`/api/bookings/${bookingId}?bookingNumber=${bookingNumber}&email=${email}`, {
-    method: 'DELETE', // Use DELETE for removing a booking
+    method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
-    credentials: 'include', // Important for session management
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json(); // Get error details from response
-    throw new Error(errorData.message || 'Failed to cancel booking');
-  }
-
-  return response.json(); // Return response data if successful
-};
-
-
-// CheckSession 
-export const checkSession = async () => {
-  const response = await fetch('/api/auth/check-session', {
-    method: 'GET',
-    credentials: 'include',  // Include credentials to send the session cookie
+    credentials: 'include',
   });
 
   if (!response.ok) {
     const errorData = await response.json();
-    console.error('Error checking session:', errorData);  // Log error details
+    throw new Error(errorData.message || 'Failed to cancel booking');
+  }
+
+  return response.json();
+};
+
+// CheckSession (unchanged)
+export const checkSession = async () => {
+  const response = await fetch('/api/auth/check-session', {
+    method: 'GET',
+    credentials: 'include',
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.error('Error checking session:', errorData);
     throw new Error('Failed to check session');
   }
 
   const data = await response.json();
-  console.log('Session data:', data);  // Log successful session check
-  return data.isAuthenticated ? data.user : null;  // Return user data if authenticated
+  console.log('Session data:', data);
+  return data.isAuthenticated ? data.user : null;
 };
