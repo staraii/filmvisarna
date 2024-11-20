@@ -27,11 +27,6 @@ export type HomePageScreenings = {
   movieId: number;
   movieTitle: string;
   dateTime: string;
-  dayName: string;
-  day: number;
-  month: number;
-  week: number;
-  time: string;
   theatreName: string;
   occupiedPercent: number;
   ageRating: string;
@@ -39,6 +34,8 @@ export type HomePageScreenings = {
   posterURL: string[];
   subtitles: string;
   spokenLanguage: string;
+  posterPreview?: string;
+  slidePreview?: string;
 };
 
 export async function getQueryData(query: string) {
