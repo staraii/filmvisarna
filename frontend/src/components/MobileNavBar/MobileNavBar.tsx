@@ -24,7 +24,7 @@ export default function MobileNavBar() {
   
 
     useEffect(() => {
-    console.log("Authentication state changed:", isAuthenticated);
+   
     }, [isAuthenticated]); // Re-render the navbar when `isAuthenticated` changes
   
     const handleLogout = async () => {

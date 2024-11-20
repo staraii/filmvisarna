@@ -84,7 +84,7 @@ export const login = async (email: string, password: string) => {
   }
 
   const data = await response.json();
-  console.log("Login response data:", data);
+
 
   return {
     email: data.email,
@@ -109,7 +109,7 @@ export const register = async (formData: FormData) => {
     phone: phoneNumber,
   };
 
-  console.log("Skickar registreringsdata:", requestData);
+
 
   const response = await fetch("/api/register", {
     method: "POST",
@@ -191,6 +191,6 @@ export const checkSession = async () => {
   }
 
   const data = await response.json();
-  console.log('Session data:', data);
+
   return data.isAuthenticated ? data.user : null;
 };

@@ -14,7 +14,7 @@ const WideNavBar = () => {
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); // State for logout confirmation modal
 
   useEffect(() => {
-    console.log("Authentication state changed:", isAuthenticated);
+   
   }, [isAuthenticated]); // Re-render the navbar when `isAuthenticated` changes
 
   const handleLogoutConfirmation = () => {

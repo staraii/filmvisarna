@@ -32,7 +32,7 @@ const LoginPage = () => {
         // Call the login function and expect to get the email in response
         const response = await login(email, password);
         const { email: userEmail, firstName } = response;
-        console.log("User Email:", userEmail); // Check the email here
+        
         authLogin(userEmail, firstName);
         setShowSuccessModal(true); // Show modal after successful login
     } catch (err: unknown) {
