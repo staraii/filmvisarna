@@ -143,10 +143,10 @@ export default function ImageUpload({ handleImageChange, preview, file, label, d
               </Col>
             </Row>
           )}
-          {fileList && fileList.length > 0 && (
+          {previewList && previewList.length > 0 && (
             <Row>
               <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12} className="d-flex flex-column justify-content-around gap-3">
-                {fileList.map((_, fileButtonIndex) => (
+                {previewList.map((_, fileButtonIndex) => (
                   <Row key={fileButtonIndex}>
                     <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
                       <Button
@@ -164,7 +164,7 @@ export default function ImageUpload({ handleImageChange, preview, file, label, d
             </Row>
           )}
         </Col>
-        <Col>
+        <Col xs={6} sm={6} md={6} lg={6} xl={6} xxl={6}>
           {preview && <Image src={preview} fluid thumbnail />}
           {fileList && fileList.length > 0 && previewList && (
             <Carousel activeIndex={index} onSelect={handleSelect}>
@@ -173,19 +173,10 @@ export default function ImageUpload({ handleImageChange, preview, file, label, d
                   key={fileIndex}
                   className="filelist-carousel-item"
                 >
-                  {/* <p className="text-start">Filnamn: {file.name}</p>
-                  <p className="text-start">Filstorlek: {getFileSize(file.size)}</p> */}
                   <p>
                     {fileIndex + 1}. {file.name}, {getFileSize(file.size)}
                   </p>
                   <Image src={previewList[fileIndex]} fluid thumbnail />
-
-                  {/* <Carousel.Caption className="filelist-carousel-caption">
-                    <div className="filelist-carousel-options">
-                      <p>Filnamn: {file.name}</p>
-                      <p>Filstorlek: {getFileSize(file.size)}</p>
-                    </div>
-                  </Carousel.Caption> */}
                 </Carousel.Item>
               ))}
             </Carousel>
