@@ -9,7 +9,7 @@
     "backend:run": "nodemon --env-file=.env backend/backendDist/index.js",
     "start": "npm run backend:compile && concurrently \"npm run backend:watch\" \"npm run backend:run\" \"npm run dev\"",
     "dev": "cd frontend && vite",
-    "build": "tsc -b && vite build",
+    "build": "cd frontend && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },

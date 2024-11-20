@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./MovieCalendar.css";
-import Carousel from "react-bootstrap/Carousel";
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import Titanic from "../../../public/titanic_poster.jpg";
 import Pippi from "../../../public/pippi_poster.jpg";
 import Sleepers from "../../../public/sleepers_poster.jpg";
-import Titanic from "../../../public/titanic_poster.jpg";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { loaderQuery } from "../../utils/queryService";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { QueryParams } from "../../utils/queryService";
 
 type FullScreening = {
@@ -31,34 +30,40 @@ type FullScreening = {
 function MovieCalendar() {
   const queryParams = useLoaderData() as QueryParams;
   const { data } = useSuspenseQuery(loaderQuery(queryParams));
-  const screenings: FullScreening[] = data;
-  const [activeWeekIndex, setActiveWeekIndex] = useState(0); // State för att hålla koll på aktiv vecka
+  const [allMovies, setAllMovies] = useState<FullScreening[]>([]);
+  const [selectedWeek, setSelectedWeek] = useState<number>(48);
+  const [moviesToDisplay, setMoviesToDisplay] = useState<FullScreening[]>([]);
 
-  const weeks = [
-    { title: "Vecka 40", startDate: "2024-10-01" },
-    { title: "Vecka 41", startDate: "2024-10-08" },
-    { title: "Vecka 42", startDate: "2024-10-15" },
-    { title: "Vecka 43", startDate: "2024-10-22" },
-  ];
+  useEffect(() => {
+    const flatMovies: FullScreening[] = data.flatMap((weeks: any) =>
+      weeks.flatMap((days: any) => days)
+    );
+    setAllMovies(flatMovies);
+  }, [data]);
 
-  // Filmer för varje dag i varje vecka
-  const daysData = [
-    // Vecka 40
-    [
-      {
-        day: "Måndag - September 30",
-        movies: [
-          {
-            title: "Pippi Långstrump (1970)",
-            genre: "Barnlitteratur",
-            age: "8+",
-            time: "17:00",
-            poster: Pippi,
-          },
-        ],
-      },
-    ],
-  ];
+  useEffect(() => {
+    if (allMovies.length > 0) {
+      const filteredMovies = allMovies.filter(
+        (movie) => movie.week === selectedWeek
+      );
+      setMoviesToDisplay(filteredMovies);
+    }
+  }, [selectedWeek, allMovies]);
+
+  const handleWeekChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedWeek(Number(event.target.value));
+  };
+
+  const navigate = useNavigate();
+
+  const groupedMoviesByDay = moviesToDisplay.reduce((acc, movie) => {
+    const key = `${movie.dayName}-${movie.day}`;
+    if (!acc[key]) {
+      acc[key] = [];
+    }
+    acc[key].push(movie);
+    return acc;
+  }, {} as Record<string, FullScreening[]>);
 
   return (
     <section className="Movie-Calendar">
@@ -67,67 +72,70 @@ function MovieCalendar() {
         <p>Se vilka filmer som går de kommande veckorna.</p>
       </div>
       <div className="Weeks">
-        <Carousel
-          slide={false}
-          indicators={false}
-          interval={null}
-          wrap={false}
-          activeIndex={activeWeekIndex}
-          onSelect={(selectedIndex) => setActiveWeekIndex(selectedIndex)}
-        >
-          {weeks.map((week, index) => (
-            <Carousel.Item key={index}>
-              <div className="carousel-text">
-                <h3>{week.title}</h3>
-              </div>
-            </Carousel.Item>
-          ))}
-        </Carousel>
+        <label>
+          Select Week:
+          <select value={selectedWeek} onChange={handleWeekChange}>
+            {Array.from({ length: 52 }, (_, i) => (
+              <option key={i} value={i + 1}>
+                Week {i + 1}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
-      <div className="Days">
-        <Accordion>
-          {daysData[activeWeekIndex].map((dayData, dayIndex) => (
-            <Accordion.Item eventKey={dayIndex.toString()} key={dayIndex}>
-              <Accordion.Header>{dayData.day}</Accordion.Header>
-              <Accordion.Body>
-                <div className="Poster-Container">
-                  {dayData.movies.map((movie, index) => (
-                    <div className="Poster-Description" key={index}>
-                      <Card style={{ width: "16rem" }}>
-                        <Card.Img variant="top" src={movie.poster} />
-                        <Card.Body>
-                          <Card.Title>{movie.title}</Card.Title>
-                          <div className="Genre-Age">
-                            <Card.Text className="Genre">
-                              {movie.genre}
-                            </Card.Text>
-                            <Card.Text className="Age Age-8">
-                              <p>{movie.age}</p>
-                            </Card.Text>
-                          </div>
 
-                          <div className="Time-Button-Container">
-                            <Card.Text className="Movie-Time">
-                              <p>{movie.time}</p>
-                            </Card.Text>
-                            <Button
-                              className="Movie-Button"
-                              variant="outline-primary"
-                              href="/boka"
-                            >
-                              Boka nu
-                            </Button>
-                          </div>
-                        </Card.Body>
-                      </Card>
-                    </div>
-                  ))}
-                </div>
-              </Accordion.Body>
-            </Accordion.Item>
-          ))}
-        </Accordion>
-      </div>
+      <ul>
+        {Object.keys(groupedMoviesByDay).length > 0 ? (
+          Object.entries(groupedMoviesByDay).map(([dayKey, movies]) => (
+            <div className="Days" key={dayKey}>
+              <Accordion>
+                <Accordion.Item eventKey={dayKey}>
+                  <Accordion.Header>
+                    {dayKey.replace(/-/g, " ")}
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    {movies.map((movie, index) => (
+                      <div className="Poster-Description" key={index}>
+                        <Card style={{ width: "16rem" }}>
+                          <Card.Img variant="top" src={movie.poster} />
+                          <Card.Body>
+                            <Card.Title>{movie.movieTitle}</Card.Title>
+                            <div className="Genre-Age">
+                              <Card.Text className="Genre">
+                                {movie.genre}
+                              </Card.Text>
+                              <Card.Text className="Age Age-8">
+                                <p>{movie.age}</p>
+                              </Card.Text>
+                            </div>
+
+                            <div className="Time-Button-Container">
+                              <Card.Text className="Movie-Time">
+                                <p>{movie.time}</p>
+                              </Card.Text>
+                              <Button
+                                className="Movie-Button"
+                                variant="outline-primary"
+                                onClick={() =>
+                                  navigate(`/boka/${movie.screeningId}`)
+                                }
+                              >
+                                Boka nu
+                              </Button>
+                            </div>
+                          </Card.Body>
+                        </Card>
+                      </div>
+                    ))}
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            </div>
+          ))
+        ) : (
+          <p>No movies available for week {selectedWeek}</p>
+        )}
+      </ul>
     </section>
   );
 }
