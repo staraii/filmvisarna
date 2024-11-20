@@ -71,7 +71,8 @@ export const login = async (req: Request, res: Response) => {
     // Save the user's ID in session
     req.session.userId = user.id;
     req.session.userEmail = user.email; 
-    req.session.userRole = user.role;
+    req.session.userRole = user.role || 'visitor';
+    
     
 
      // Return the user's email along with a success message
@@ -84,28 +85,38 @@ export const login = async (req: Request, res: Response) => {
 
 // GET /api/login: Check if user is logged in
 export const getLoggedInUser = async (req: Request, res: Response) => {
+  
   if (!req.session.userId) {
+    // No user is logged in, set the role as 'visitor'
+    req.session.userRole = 'visitor';
     return res.status(401).json({ message: 'Ingen användare är inloggad' });
   }
 
   try {
-    // Fetch the user by ID from the database, now with additional fields
+    // Fetch the user by ID from the database
     const user = await findUserById(req.session.userId);
 
     if (!user) {
       return res.status(401).json({ message: 'Ingen användare är inloggad' });
     }
 
-    // Include additional fields in the response
-    res.json({ 
-      user: { 
-        id: user.id, 
-        email: user.email, 
-        role: user.role,
+    // Log the session details and user role for debugging
+    console.log('User logged in:', {
+      userId: req.session.userId,
+      userEmail: req.session.userEmail,
+      userRole: req.session.userRole || 'visitor',
+    });
+
+    // Return the user's details (with the role they have)
+    res.json({
+      user: {
+        id: user.id,
+        email: user.email,
+        role: req.session.userRole, // role will be either 'user' or 'visitor'
         firstName: user.firstName,
         lastName: user.lastName,
-        phone: user.phone 
-      } 
+        phone: user.phone,
+      }
     });
   } catch (error) {
     console.error('Error fetching logged-in user:', error);
@@ -126,8 +137,12 @@ export const checkSession = async (req: Request, res: Response) => {
       },
     });
   } else {
-    // If session is not valid or has expired, respond with unauthenticated status
-    res.json({ isAuthenticated: false });
+    // No user logged in, assign 'visitor' role
+    req.session.userRole = 'visitor';
+    return res.json({
+      isAuthenticated: false,
+      role: 'visitor',  // Explicitly return visitor role for unauthenticated users
+    });
   }
 };
 

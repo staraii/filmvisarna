@@ -31,18 +31,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('isAuthenticated', 'true');
     localStorage.setItem('userEmail', email);
     localStorage.setItem('firstName', firstName);
-    await fetchUserData(); // Fetch user data after logging in
   };
 
   const fetchUserData = async () => {
-    try {
-      const userData = await AuthService.getMe(); // Fetch user data
-      login(userData.email, userData.firstName); // Store email and firstName in context
-    } catch (error) {
-      console.error('Failed to fetch user data:', error);
-      setIsAuthenticated(false); // Optionally log out user on failure
-    }
-  };
+  try {
+    const userData = await AuthService.getMe(); // Fetch user data
+    setUserEmail(userData.email); // Update state without calling login
+    setFirstName(userData.firstName);
+    setIsAuthenticated(true);
+  } catch (error) {
+    console.error('Failed to fetch user data:', error);
+    setIsAuthenticated(false); // Optionally log out user on failure
+  }
+};
 
   const logout = () => {
     setIsAuthenticated(false);

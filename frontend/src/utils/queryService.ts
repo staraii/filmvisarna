@@ -206,7 +206,7 @@ export const fetchUserBookings = async (email: string) => {
     }
 
     const data = await response.json();
-    console.log("Fetched user bookings:", data); // Log fetched data
+    
     return data; // Return the bookings data
   } catch (error) {
     console.error("Fetch error:", error);
