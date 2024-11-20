@@ -3,9 +3,6 @@ import "./MovieCalendar.css";
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import Titanic from "../../../public/titanic_poster.jpg";
-import Pippi from "../../../public/pippi_poster.jpg";
-import Sleepers from "../../../public/sleepers_poster.jpg";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { loaderQuery } from "../../utils/queryService";
 import { useLoaderData, useNavigate } from "react-router-dom";
@@ -25,6 +22,8 @@ type FullScreening = {
   numberOfOccupiedSeats: number;
   occupiedSeats: string;
   occupiedPercent: number;
+  ageRating: number;
+  posterURL: string;
 };
 
 function MovieCalendar() {
@@ -57,7 +56,7 @@ function MovieCalendar() {
   const navigate = useNavigate();
 
   const groupedMoviesByDay = moviesToDisplay.reduce((acc, movie) => {
-    const key = `${movie.dayName}-${movie.day}`;
+    const key = `${movie.dayName}-${movie.day}/${movie.month}`;
     if (!acc[key]) {
       acc[key] = [];
     }
@@ -73,11 +72,11 @@ function MovieCalendar() {
       </div>
       <div className="Weeks">
         <label>
-          Select Week:
+          Välj vecka:
           <select value={selectedWeek} onChange={handleWeekChange}>
-            {Array.from({ length: 52 }, (_, i) => (
-              <option key={i} value={i + 1}>
-                Week {i + 1}
+            {[48, 49, 50].map((week) => (
+              <option key={week} value={week}>
+                {week}
               </option>
             ))}
           </select>
@@ -97,33 +96,35 @@ function MovieCalendar() {
                     {movies.map((movie, index) => (
                       <div className="Poster-Description" key={index}>
                         <Card style={{ width: "16rem" }}>
-                          <Card.Img variant="top" src={movie.poster} />
-                          <Card.Body>
-                            <Card.Title>{movie.movieTitle}</Card.Title>
-                            <div className="Genre-Age">
-                              <Card.Text className="Genre">
-                                {movie.genre}
-                              </Card.Text>
-                              <Card.Text className="Age Age-8">
-                                <p>{movie.age}</p>
-                              </Card.Text>
-                            </div>
+                          <div className="Card">
+                            <Card.Img
+                              variant="top"
+                              src={`/images/${movie.posterURL}?url`}
+                            />
+                            <Card.Body>
+                              <div className="Genre-Age">
+                                <Card.Text className="Age">
+                                  <Card.Title>{movie.movieTitle}</Card.Title>
+                                  <p>{movie.ageRating}+</p>
+                                </Card.Text>
+                              </div>
 
-                            <div className="Time-Button-Container">
-                              <Card.Text className="Movie-Time">
-                                <p>{movie.time}</p>
-                              </Card.Text>
-                              <Button
-                                className="Movie-Button"
-                                variant="outline-primary"
-                                onClick={() =>
-                                  navigate(`/boka/${movie.screeningId}`)
-                                }
-                              >
-                                Boka nu
-                              </Button>
-                            </div>
-                          </Card.Body>
+                              <div className="Time-Button-Container">
+                                <Card.Text className="Movie-Time">
+                                  <p>{movie.time}</p>
+                                </Card.Text>
+                                <Button
+                                  className="Movie-Button"
+                                  variant="outline-primary"
+                                  onClick={() =>
+                                    navigate(`/boka/${movie.screeningId}`)
+                                  }
+                                >
+                                  Boka nu
+                                </Button>
+                              </div>
+                            </Card.Body>
+                          </div>
                         </Card>
                       </div>
                     ))}
