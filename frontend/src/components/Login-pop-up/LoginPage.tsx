@@ -24,21 +24,24 @@ const LoginPage = () => {
     setPassword(e.target.value);
   };
 
- const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setError(null);
 
-    try {
-        // Call the login function and expect to get the email in response
-        const response = await login(email, password);
-        const { email: userEmail, firstName } = response;
-        
-        authLogin(userEmail, firstName);
-        setShowSuccessModal(true); // Show modal after successful login
-    } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
-        setError(errorMessage);
-    }
+  try {
+    // Call the login function and expect to get the email in response
+    const response = await login(email, password);
+    const { email: userEmail, firstName } = response;
+
+    // Set default role to 'user' or 'visitor'
+    const role = 'user'; // Default role, can be adjusted if needed
+
+    authLogin(userEmail, firstName, role); // Pass the role when calling authLogin
+    setShowSuccessModal(true); // Show modal after successful login
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
+    setError(errorMessage);
+  }
 };
 
   const handleModalClose = () => {
@@ -95,14 +98,7 @@ const LoginPage = () => {
             </Form.Group>
 
             {/* Remember Me Checkbox */}
-            <Form.Group className="mb-3" controlId="formRememberMe">
-              <Form.Check
-                type="checkbox"
-                label="Kom ihåg mig"
-                checked={rememberMe}
-                onChange={() => setRememberMe(!rememberMe)}
-              />
-            </Form.Group>
+           
 
             {/* Login Button */}
             <Button variant="primary" type="submit" className="w-100 mb-3">

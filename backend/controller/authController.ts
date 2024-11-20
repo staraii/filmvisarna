@@ -8,7 +8,7 @@ import { RegisterUser, LoginUser } from '../types/userTypes.js';
 
 export const register = async (req: Request, res: Response) => {
   // Destructure only the required fields from the request body
-  const { firstName, lastName, email, password, phone }: RegisterUser = req.body;
+  const { firstName, lastName, email, password, phone = 'user' }: RegisterUser = req.body;
 
   // Validate required fields
   if (!firstName || !lastName || !email || !password || !phone) {
@@ -32,7 +32,7 @@ export const register = async (req: Request, res: Response) => {
       email: normalizedEmail,
       password: hashedPassword,
       phone,
-      // No role is passed here
+      role: 'user',
     });
 
     
@@ -71,12 +71,16 @@ export const login = async (req: Request, res: Response) => {
     // Save the user's ID in session
     req.session.userId = user.id;
     req.session.userEmail = user.email; 
-    req.session.userRole = user.role || 'visitor';
+    req.session.userRole = user.role || 'user';
     
     
 
      // Return the user's email along with a success message
-    res.json({ message: 'Inloggningen lyckades', email: user.email });
+   res.json({
+      message: 'Inloggningen lyckades',
+      email: user.email,
+      role: user.role, // Include role in response
+    });
   } catch (error) {
     console.error('Error during login:', error);
     res.status(500).json({ message: 'Error during login' });
@@ -85,31 +89,27 @@ export const login = async (req: Request, res: Response) => {
 
 // GET /api/login: Check if user is logged in
 export const getLoggedInUser = async (req: Request, res: Response) => {
-  
   if (!req.session.userId) {
-    // No user is logged in, set the role as 'visitor'
-    req.session.userRole = 'visitor';
+    req.session.userRole = 'visitor'; // Default role for unauthenticated users
     return res.status(401).json({ message: 'Ingen användare är inloggad' });
   }
 
   try {
-    // Fetch the user by ID from the database
     const user = await findUserById(req.session.userId);
 
     if (!user) {
       return res.status(401).json({ message: 'Ingen användare är inloggad' });
     }
 
-    // Return the user's details (with the role they have)
     res.json({
       user: {
         id: user.id,
         email: user.email,
-        role: req.session.userRole, // role will be either 'user' or 'visitor'
+        role: user.role || 'user', // Default role if not set
         firstName: user.firstName,
         lastName: user.lastName,
         phone: user.phone,
-      }
+      },
     });
   } catch (error) {
     console.error('Error fetching logged-in user:', error);

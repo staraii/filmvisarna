@@ -6,6 +6,7 @@ export interface FormData {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  role: string;
 }
 
 // Validation for Registration Input Fields
@@ -147,7 +148,7 @@ export const logout = async () => {
 export const getMe = async () => {
   const response = await fetch('/api/login', {
     method: 'GET',
-    credentials: 'include'
+    credentials: 'include',  // Ensures the session cookie is sent with the request
   });
 
   if (!response.ok) {
@@ -155,9 +156,12 @@ export const getMe = async () => {
   }
 
   const data = await response.json();
+
+  // Ensure 'role' is returned along with 'email' and 'firstName'
   return {
     email: data.user.email,
     firstName: data.user.firstName,
+    role: data.user.role || 'user', // Provide default value 'user' if no role is available
   };
 };
 

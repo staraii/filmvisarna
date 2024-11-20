@@ -31,6 +31,7 @@ import NewMovie from "./pages/Admin/components/NewMovie/NewMovie.tsx";
 import Tickets from "./pages/Admin/components/Tickets/Tickets.tsx";
 import BookingStatus from "./pages/Admin/components/BookingStatus/BookingStatus.tsx";
 
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -136,7 +137,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Admin />,
+      element: (
+           <ProtectedRoute adminOnly={true}>
+            <Admin />
+          </ProtectedRoute>
+        ),
+
     errorElement: <ErrorPage />,
     children: [
       {
