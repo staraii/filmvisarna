@@ -47,13 +47,19 @@ const LoginPage = () => {
   };
 
   return (
+    
     <Container fluid className="login-page-container">
       <Row className="justify-content-center mt-5">
         <Col xs={12} sm={10} md={8} lg={12}>
           <h2 className="text-center mb-4">Logga in</h2>
-          {error && <div className="alert alert-danger">{error}</div>}
 
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} noValidate>
+
+              {/* Error Alert */}
+          <div className="alert-container">
+            {error && <div className="alert alert-danger">{error}</div>}
+            </div>
+            
             {/* Email Field */}
             <Form.Group controlId="formEmail" className="mb-3">
               <Form.Label>E-postadress</Form.Label>
@@ -62,9 +68,11 @@ const LoginPage = () => {
                 placeholder="Ange din e-postadress"
                 value={email}
                 onChange={handleEmailChange}
-                required
+                
               />
             </Form.Group>
+
+            
 
             {/* Password Field with Persistent Eye Toggle */}
             <Form.Group controlId="formPassword" className="mb-3">
@@ -75,7 +83,7 @@ const LoginPage = () => {
                   placeholder="Ange ditt lösenord"
                   value={password}
                   onChange={handlePasswordChange}
-                  required
+                  
                 />
                 <InputGroup.Text
                   onClick={() => setShowPassword(!showPassword)}
@@ -137,6 +145,8 @@ const LoginPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      
     </Container>
   );
 };

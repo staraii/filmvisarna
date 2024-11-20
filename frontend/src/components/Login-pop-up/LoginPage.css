@@ -6,6 +6,7 @@
   /* Increased maximum width for better readability */
   margin: auto;
   /* Center the container on larger screens */
+ 
 }
 
 /* Style for links */
@@ -47,6 +48,8 @@ button.btn-md {
   font-size: 16px;
   /* Consistent button size */
 }
+
+
 
 /* Adjustments for screens wider than 768px */
 @media (min-width: 768px) {
