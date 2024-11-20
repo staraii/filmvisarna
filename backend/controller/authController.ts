@@ -100,13 +100,6 @@ export const getLoggedInUser = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Ingen användare är inloggad' });
     }
 
-    // Log the session details and user role for debugging
-    console.log('User logged in:', {
-      userId: req.session.userId,
-      userEmail: req.session.userEmail,
-      userRole: req.session.userRole || 'visitor',
-    });
-
     // Return the user's details (with the role they have)
     res.json({
       user: {
