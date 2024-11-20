@@ -6,10 +6,10 @@ import MovieForm from "../MovieForm/MovieForm";
 
 export default function NewMovie() {
   return (
-    <Container className="my-5">
+    <Container className="my-0">
       <Row>
         <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
-          <MovieForm existing={false} />
+          <MovieForm />
         </Col>
       </Row>
     </Container>

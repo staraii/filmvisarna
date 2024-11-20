@@ -25,8 +25,8 @@ interface ToggleCategoriesProps {
 export default function ToggleCategories({categories, toggleCategories}: ToggleCategoriesProps) {
   
   return (
-    <Row>
-      <Col className="border border-secondary rounded mx-3 mt-4 py-3">
+    // <Row>
+      <Col className="border border-secondary rounded mx-0 mt-5 py-3">
         <Row>
           <Col>Kategorier</Col>
         </Row>
@@ -34,7 +34,7 @@ export default function ToggleCategories({categories, toggleCategories}: ToggleC
           <Col xs={12} className="d-flex flex-row flex-wrap">
             <ToggleButtonGroup type="checkbox" role="Filmkategorier" aria-label="Filmkategorier">
               <Row
-                className="d-flex flex-row flex-wrap justify-content-around mt-4"
+                className="d-flex flex-row flex-wrap justify-content-around mt-4 px-3"
               >
                 <Col xs={12} className="d-flex flex-row flex-wrap gap-2">
                   {categoriesList.map((cat, index) => (
@@ -58,6 +58,6 @@ export default function ToggleCategories({categories, toggleCategories}: ToggleC
           </Col>
         </Row>
       </Col>
-    </Row>
+    // </Row>
   );
 }
