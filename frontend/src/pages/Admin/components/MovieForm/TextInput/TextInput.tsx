@@ -1,61 +1,60 @@
-import { useState } from "react";
 import Form from "react-bootstrap/Form";
-//import FloatingLabel from "react-bootstrap/FloatingLabel";
+import Col from "react-bootstrap/Col";
+import { TextInputParams } from "../../../AdminTypes";
 
 interface TextInputProps {
-  controlId: string;
-  label: string;
-  type: string;
-  placeholder: string;
   value: string;
-  name: string;
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleTouched: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isInvalid: boolean;
-  feedback: string;
-  regExp: RegExp;
+  params: TextInputParams;
 }
-export default function TextInput({ controlId, label, type, placeholder, value, name, handleOnChange, isInvalid, regExp, feedback }: TextInputProps) {
-  const [touched, setTouched] = useState(false);
+export default function TextInput({ value, handleOnChange, handleTouched, isInvalid, params }: TextInputProps) {
 
-  if (type === "textarea") {
+  if (params.type === "textarea") {
     return (
-      <Form.Floating className="text-secondary">
+      <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
+        <Form.Floating className="text-secondary">
           <Form.Control
-            id={controlId}
+            id={params.controlId}
             as="textarea"
-            placeholder={`${placeholder}`}
-            defaultValue={value}
-            name={name}
+            placeholder={params.label}
+            value={value}
+            name={params.name}
             onChange={handleOnChange}
-            isInvalid={touched && !regExp.test(value)}
-            onBlur={() => setTouched(true)}
+            isInvalid={isInvalid}
+            onBlur={(e: React.FocusEvent<HTMLInputElement>) => handleTouched(e)}
             className="rows-5 border-secondary"
             style={{ resize: "none", height: "7rem" }}
             size="sm"
           />
-        <label htmlFor={controlId}>{label}</label>
-        <Form.Control.Feedback type="invalid">{feedback}</Form.Control.Feedback>
-      </Form.Floating>
+          <label htmlFor={params.controlId}>{params.label}</label>
+          <Form.Control.Feedback type="invalid">
+            {params.feedback}
+          </Form.Control.Feedback>
+        </Form.Floating>
+      </Col>
     );
   }
 
   return (
-    <Form.Floating className="text-secondary">
-      {/* <Form.Label className="align-left">{label}</Form.Label> */}
-      <Form.Control
-        id={controlId}
-        type={type}
-        placeholder={`${placeholder}`}
-        defaultValue={value}
-        name={name}
-        onChange={handleOnChange}
-        isInvalid={touched && !regExp.test(value)}
-        onBlur={() => setTouched(true)}
-        size="sm"
-        className="border-secondary"
-      />
-      <label htmlFor={controlId}>{label}</label>
-      <Form.Control.Feedback type="invalid">{feedback}</Form.Control.Feedback>
-    </Form.Floating>
+    <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
+      <Form.Floating className="text-secondary w-100">
+        <Form.Control
+          id={params.controlId}
+          type={params.type}
+          placeholder={params.name === "trailerURL" ? "" : params.label}
+          value={value}
+          name={params.name}
+          onChange={handleOnChange}
+          isInvalid={isInvalid}
+          onBlur={(e: React.FocusEvent<HTMLInputElement>) => handleTouched(e)}
+          size="sm"
+          className="border-secondary"
+        />
+        <label htmlFor={params.controlId} className="text-wrap">{params.label}</label>
+        <Form.Control.Feedback type="invalid">{params.feedback}</Form.Control.Feedback>
+      </Form.Floating>
+    </Col>
   );
 }
