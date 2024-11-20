@@ -98,7 +98,14 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
             </Form.Group>
 
             {/* Remember Me Checkbox */}
-           
+            <Form.Group className="mb-3" controlId="formRememberMe">
+              <Form.Check
+                type="checkbox"
+                label="Kom ihåg mig"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+              />
+            </Form.Group>
 
             {/* Login Button */}
             <Button variant="primary" type="submit" className="w-100 mb-3">

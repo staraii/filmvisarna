@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Container, Row, Col, Modal, InputGroup } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { useAuth } from '../../utils/authContext'; // Import useAuth to get access to register
 import './Register.css';
