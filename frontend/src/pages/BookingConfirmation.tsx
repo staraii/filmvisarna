@@ -7,6 +7,7 @@ import { useAuth } from "../utils/authContext";
 import "./BookingConfirmation.css";
 import QrModal from "../components/QrModal/QrModal";
 import { useEffect, useState } from "react";
+import useLocationTitle from "../utils/useLocationTitle";
 
 const ticketTypeTranslations: { [key: string]: string } = {
   Adult: "Vuxen",
@@ -47,6 +48,7 @@ const formatBookingDate = (bookingDate: string): string => {
 };
 
 export default function BookingConfirmationPage() {
+  useLocationTitle("Tack för din bokning!");
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
   const { data: screeningData } = useSuspenseQuery(loaderQuery(queryParamsOne));
   const { data: bookingData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
