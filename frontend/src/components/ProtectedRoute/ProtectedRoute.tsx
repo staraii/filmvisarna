@@ -17,7 +17,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, adminOnly = f
 
   // If it's an admin-only route and the user is not an admin, redirect to another page
   if (adminOnly && role !== 'admin') {
-    return <Navigate to="/unauthorized" />; // Optionally, you can create an Unauthorized page
+    return <Navigate to="/" />; // Optionally, you can create an Unauthorized page
   }
 
   // If user is authenticated and either the route is not admin-only, or the user is an admin, render children
