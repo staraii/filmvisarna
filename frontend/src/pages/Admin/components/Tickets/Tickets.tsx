@@ -91,7 +91,7 @@ export default function Tickets() {
     navigate(`/admin/bokningar/${bookingNumber}`);
   }
   return (
-    <Container fluid className="d-flex flex-column justify-content-around">
+    <Container fluid className="d-flex flex-column justify-content-around px-5">
       <Row>
         <Col xs={12} md={12} xl={12} className="mt-5 mb-3 pt-5">
           <h3>Biljetter</h3>
