@@ -11,6 +11,8 @@ import QrModal from "../../components/QrModal/QrModal";
 
 
 
+
+
 // Define types for bookings and modal props
 interface CancelConfirmationModalProps {
   onConfirm: () => void;
@@ -44,6 +46,7 @@ interface Booking {
 }
 
 const MinProfil = () => {
+ 
   const { userEmail, firstName, fetchUserData } = useAuth();
   
   const { data: bookings, refetch } = useQuery({
@@ -71,13 +74,19 @@ const MinProfil = () => {
   }, [fetchUserData]);
 
    // Split bookings into current and past
-  useEffect(() => {
-    if (bookings) {
-      const now = new Date();
-      setCurrentBookings(bookings.filter((b: Booking) => new Date(b.screeningTime) >= now));
-      setPastBookings(bookings.filter((b: Booking) => new Date(b.screeningTime) < now));
-    }
-  }, [bookings]);
+ useEffect(() => {
+  if (bookings) {
+    const now = new Date();
+
+    // Sort bookings by screeningTime (newest first)
+    const sortedBookings = [...bookings].sort(
+      (a, b) => new Date(b.screeningTime).getTime() - new Date(a.screeningTime).getTime()
+    );
+
+    setCurrentBookings(sortedBookings.filter((b: Booking) => new Date(b.screeningTime) >= now));
+    setPastBookings(sortedBookings.filter((b: Booking) => new Date(b.screeningTime) < now));
+  }
+}, [bookings]);
 
   // Adjust pagination if no bookings exist on the current page
   useEffect(() => {
@@ -95,19 +104,19 @@ const MinProfil = () => {
     setShowConfirmationModal(true);
   };
 
-  const confirmCancelBooking = async () => {
-    if (!bookingToCancel || !userEmail) return;
-    try {
-      await cancelBooking(bookingToCancel.id, userEmail, bookingToCancel.number);
-      refetch();
-    } catch (error) {
-      console.error("Error while canceling:", error);
-    } finally {
-      setShowConfirmationModal(false);
-      setBookingToCancel(null);
-    }
-  };
-
+ const confirmCancelBooking = async () => {
+  if (!bookingToCancel || !userEmail) return;
+  try {
+    await cancelBooking(bookingToCancel.id, userEmail, bookingToCancel.number);
+    refetch(); // Fetch updated bookings
+    setCurrentBookingPage(1); // Reset to first page
+  } catch (error) {
+    console.error("Error while canceling:", error);
+  } finally {
+    setShowConfirmationModal(false);
+    setBookingToCancel(null);
+  }
+};
   const handleBookingClick = (booking: Booking) => {
     setSelectedBooking(booking);
     setShowModal(true);
