@@ -1,5 +1,6 @@
 import "./bookingPage.css";
 import { Row, Col, Stack, Button, FormGroup } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
 import InputForm from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import {
@@ -40,6 +41,10 @@ export default function BookingPage() {
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
   const [seats, setSeats] = useState<Seats>({});
   const [email, setEmail] = useState("");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   //react easier state add?
 
@@ -134,7 +139,7 @@ export default function BookingPage() {
         { state: { email } }
       );
     } else if (actionData && !actionData.bookingSuccess) {
-      alert("Bokning misslyckades");
+      handleShow();
       setSelectedSeat([]);
       setHoveredSeats([]);
     }
@@ -227,7 +232,18 @@ export default function BookingPage() {
             </Col>
           </Row>
         </Stack>
-
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Något gick fel!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Problem med bokning.</Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-secondary" onClick={handleClose}>
+              Stäng
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        ;
         <Stack className="w-100 h-100 p-3 d-flex flex-column">
           <h4>{screeningData.theatreName}</h4>
           <Stack className="p-1">

@@ -31,7 +31,7 @@ export type HomePageScreenings = {
   occupiedPercent: number;
   ageRating: string;
   slideURL: string;
-  posterURL: string[];
+  posterURL: string;
   subtitles: string;
   spokenLanguage: string;
   posterPreview?: string;

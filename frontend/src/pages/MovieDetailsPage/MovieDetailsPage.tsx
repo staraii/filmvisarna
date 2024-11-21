@@ -7,8 +7,12 @@ import { sv } from 'date-fns/locale';
 
 import { useLoaderData } from "react-router-dom";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { QueryParams, loaderQuery,} from "../utils/queryService";
-import useLocationTitle from "../utils/useLocationTitle";
+
+import useLocationTitle from "../../utils/useLocationTitle";
+
+import { QueryParams, loaderQuery,} from "../../utils/queryService";
+
+
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
 
