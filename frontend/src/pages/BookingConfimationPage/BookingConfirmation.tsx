@@ -1,13 +1,13 @@
 import { Row, Col, Container, Button } from "react-bootstrap";
 import { useLoaderData, useLocation } from "react-router-dom";
-import { getWeekday } from "../utils/dateTimeUtils";
+import { getWeekday } from "../../utils/dateTimeUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { DualQueryParams, loaderQuery } from "../utils/queryService";
-import { useAuth } from "../utils/authContext";
+import { DualQueryParams, loaderQuery } from "../../utils/queryService";
+import { useAuth } from "../../utils/authContext";
 import "./BookingConfirmation.css";
-import QrModal from "../components/QrModal/QrModal";
+import QrModal from "../../components/QrModal/QrModal";
 import { useEffect, useState } from "react";
-import useLocationTitle from "../utils/useLocationTitle";
+import useLocationTitle from "../../utils/useLocationTitle";
 
 const ticketTypeTranslations: { [key: string]: string } = {
   Adult: "Vuxen",
@@ -149,7 +149,7 @@ export default function BookingConfirmationPage() {
               variant="outline-secondary"
               onClick={() => handleShowQR(booking.bookingNumber)}
             >
-              Qr Code viewer
+              Visa QR kod
             </Button>
             {showQrViewer && (
               <Col className="qr-code">
