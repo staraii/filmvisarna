@@ -38,7 +38,8 @@ export default function QrModal({ show, hide, bookingNumber }: QrModalProps) {
     const serializer = new XMLSerializer();
     const fileURI = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<?xml version="1.0" standalone="no"?>' + serializer.serializeToString(node));
     
-    downloadStringAsFile(fileURI, 'qrcode-svg.svg');
+    //downloadStringAsFile(fileURI, 'qrcode-svg.svg');
+    downloadStringAsFile(fileURI, `filmvisarna-bokning-${bookingNumber}`);
 
   }
   return (
