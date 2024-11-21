@@ -7,20 +7,13 @@ import ToggleButton from "react-bootstrap/ToggleButton";
 import TextInput from "../TextInput/TextInput";
 import { Review, RegExes, TextInputParamsList } from "../../../AdminTypes";
 
-// interface Review {
-//   review: string;
-//   reviewBy: string;
-//   rating: string;
-//   [key: string]: string;
-// }
-//type Review = { [key: string]: string };
+
 const REVIEW_DEFAULT: Review = {
   reviewBy: "",
   review: "",
   rating: "",
 }
 
-//type RegExes = { [key: string]: RegExp };
 const regExes: RegExes = {
   rating: /^[1-5]$/,
   reviewBy: /^[a-zA-ZåäöÅÄÖ0-9.,&_\-" ]+$/,
@@ -50,32 +43,43 @@ const reviewInputParams: TextInputParamsList = {
 const HIGHEST_RATING = 5;
 
 
-export default function NewReview({addReview}: {addReview: (newReview: Review) => void}) {
+export default function NewReview({
+  addReview,
+  handleTouched,
+  touched,
+  handleUntouchReview,
+}: {
+  addReview: (newReview: Review) => void;
+    handleTouched: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
+    touched: { [key: string]: boolean };
+    handleUntouchReview: () => void;
+}) {
   const [review, setReview] = useState<Review>(REVIEW_DEFAULT);
-  const [touched, setTouched] = useState<{[key: string]: boolean}>({})
   const [isValid, setIsValid] = useState<{ [key: string]: boolean }>({});
   const [isOpen, setIsOpen] = useState(false);
-  const handleTouched = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name } = e.currentTarget;
-    setTouched((prevTouch) => ({ ...prevTouch, [name]: true }));
-  };
   const checkIfValid = (name: string, value: string) => {
-    setIsValid((prevInvalid) => ({...prevInvalid, [name]: regExes[name].test(value) ? true : false}))
-  }
+    setIsValid((prevInvalid) => ({
+      ...prevInvalid,
+      [name]: regExes[name].test(value) ? true : false,
+    }));
+  };
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
-    checkIfValid(name, value)
+    checkIfValid(name, value);
     setReview((prevRev) => ({ ...prevRev, [name]: value }));
-  }
+  };
   const handleAddReview = () => {
-    addReview({ review: review.review, reviewBy: review.reviewBy, rating: review.rating });
-    setReview(REVIEW_DEFAULT)
+    addReview({
+      review: review.review,
+      reviewBy: review.reviewBy,
+      rating: review.rating,
+    });
+    setReview(REVIEW_DEFAULT);
     setIsValid({});
-    setTouched({});
+    handleUntouchReview();
     setIsOpen(false);
-  }
+  };
+
   return (
     <Row className="px-4">
       <Col
@@ -98,14 +102,26 @@ export default function NewReview({addReview}: {addReview: (newReview: Review) =
             className="d-flex flex-row justify-content-center align-items-center"
           >
             <Row>
-              <Col xs={8} sm={10} md={8} lg={10} xl={10} xxl={10}
+              <Col
+                xs={8}
+                sm={10}
+                md={8}
+                lg={10}
+                xl={10}
+                xxl={10}
                 className="d-flex flex-row align-items-center"
               >
                 <p className="text-secondary fs-4 fw-bold m-0">
                   Lägg till ny Recension
                 </p>
               </Col>
-              <Col xs={4} sm={2} md={4} lg={2} xl={2} xxl={2}
+              <Col
+                xs={4}
+                sm={2}
+                md={4}
+                lg={2}
+                xl={2}
+                xxl={2}
                 className="p-0 d-flex flex-row justify-content-center align-items-center"
               >
                 <Button
@@ -120,66 +136,70 @@ export default function NewReview({addReview}: {addReview: (newReview: Review) =
             </Row>
           </Col>
         </Row>
-        {isOpen && (<>
-        <Row>
-          <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
-            <p className="movieform-label">Skriven av</p>
-            <TextInput
-              value={review.reviewBy}
-              handleOnChange={handleOnChange}
-              handleTouched={handleTouched}
-              isInvalid={!isValid.reviewBy && touched.reviewBy}
-              params={reviewInputParams.reviewBy}
-            />
-          </Col>
-        </Row>
+        {isOpen && (
+          <>
+            <Row>
+              <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
+                <p className="movieform-label">Skriven av</p>
+                <TextInput
+                  value={review.reviewBy}
+                  handleOnChange={handleOnChange}
+                  handleTouched={handleTouched}
+                  isInvalid={!isValid.reviewBy && touched.reviewBy}
+                  params={reviewInputParams.reviewBy}
+                />
+              </Col>
+            </Row>
 
-        <Row>
-          <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
-            <p>Betyg</p>
-            <ButtonGroup>
-              {Array.from({ length: HIGHEST_RATING }, (_, index) => (
-                <ToggleButton
-                  key={index}
-                  id={`rating-radio-${index}`}
-                  type="radio"
-                  variant="outline-secondary"
-                  name="rating"
-                  value={`${index + 1}`}
-                  checked={review.rating === `${index + 1}`}
-                  onChange={handleOnChange}
+            <Row>
+              <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
+                <p>Betyg</p>
+                <ButtonGroup>
+                  {Array.from({ length: HIGHEST_RATING }, (_, index) => (
+                    <ToggleButton
+                      key={index}
+                      id={`rating-radio-${index}`}
+                      type="radio"
+                      variant="outline-secondary"
+                      name="rating"
+                      value={`${index + 1}`}
+                      checked={review.rating === `${index + 1}`}
+                      onChange={handleOnChange}
+                    >
+                      {index + 1}
+                    </ToggleButton>
+                  ))}
+                </ButtonGroup>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
+                <p className="movieform-label">Recension</p>
+                <TextInput
+                  value={review.review}
+                  handleOnChange={handleOnChange}
+                  handleTouched={handleTouched}
+                  isInvalid={!isValid.review && touched.review}
+                  params={reviewInputParams.review}
+                />
+              </Col>
+            </Row>
+
+            <Row className="mt-3">
+              <Col xs={6} sm={6} md={6} lg={6} xl={6} xxl={6}>
+                <Button
+                  variant="outline-secondary w-100"
+                  disabled={
+                    !(isValid.review && isValid.reviewBy && isValid.rating)
+                  }
+                  onClick={handleAddReview}
                 >
-                  {index + 1}
-                </ToggleButton>
-              ))}
-            </ButtonGroup>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12}>
-            <p className="movieform-label">Recension</p>
-            <TextInput
-              value={review.review}
-              handleOnChange={handleOnChange}
-              handleTouched={handleTouched}
-              isInvalid={!isValid.review && touched.review}
-              params={reviewInputParams.review}
-            />
-          </Col>
-        </Row>
-
-        <Row className="mt-3">
-          <Col xs={6} sm={6} md={6} lg={6} xl={6} xxl={6}>
-            <Button
-              variant="outline-secondary w-100"
-              disabled={!(isValid.review && isValid.reviewBy && isValid.rating)}
-              onClick={handleAddReview}
-            >
-              Lägg till recension
-            </Button>
-          </Col>
-        </Row>
-        </>  )}
+                  Lägg till recension
+                </Button>
+              </Col>
+            </Row>
+          </>
+        )}
       </Col>
     </Row>
   );
