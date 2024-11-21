@@ -7,13 +7,14 @@ import { logout as authLogout } from "../../services/authService"; // Import you
 import { Modal, Button } from "react-bootstrap"; // Import Modal and Button for confirmation
 import "./wide-navbar.css";
 
+
 const WideNavBar = () => {
   const { isAuthenticated, logout } = useAuth(); // Access authentication state and logout function
   const navigate = useNavigate();
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); // State for logout confirmation modal
 
   useEffect(() => {
-    console.log("Authentication state changed:", isAuthenticated);
+   
   }, [isAuthenticated]); // Re-render the navbar when `isAuthenticated` changes
 
   const handleLogoutConfirmation = () => {
@@ -53,7 +54,7 @@ const WideNavBar = () => {
           Filmer
         </Nav.Link>
         <Nav.Link as={Link} to="/bio-kalender" className="fw-medium">
-          Bio kalender
+          Biokalender
         </Nav.Link>
 
         {/* Conditionally show the "Avboka biljetter" link if not authenticated */}
@@ -66,8 +67,8 @@ const WideNavBar = () => {
         {/* Conditionally show login/logout and member/profile links based on auth status */}
         {isAuthenticated ? (
           <>
-            <Nav.Link as={Link} to="/profil" className="fw-medium">
-              Min profil
+             <Nav.Link as={Link} to="/profil" className="fw-medium">
+               Min profil
             </Nav.Link>
             <Nav.Link className="fw-medium" onClick={handleLogoutConfirmation}>
               Logga ut
@@ -105,6 +106,7 @@ const WideNavBar = () => {
 };
 
 export default WideNavBar;
+
 
 
 

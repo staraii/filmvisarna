@@ -1,9 +1,8 @@
 .Days {
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
   margin-top: 20px;
 }
-
 
 .Poster-Container {
   display: flex;
@@ -15,7 +14,8 @@
 }
 
 .Days img {
-  max-width: 100%;
+  max-width: 50%;
+  margin: 0 auto;
   height: auto;
 }
 
@@ -44,31 +44,33 @@
   font-size: 1.1rem;
 }
 
-.Genre {
-  color: rgb(193, 193, 193);
-}
-
 .Genre-Age {
   display: flex;
-  justify-content: space-between;
 }
 
 .Age {
   border-radius: 12px;
   padding: 4px;
   height: 30px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .Age p {
   font-size: 0.9rem;
 }
 
-.Age-15 {
-  background-color: rgb(114, 172, 0);
+label {
+  padding: 0.5rem;
 }
 
-.Age-8 {
-  background-color: rgb(0, 162, 174);
+select {
+  padding: 0.1rem;
+  margin-left: 0.3rem;
+  background-color: #1e1637;
+  color: rgb(231, 231, 231);
+  border-radius: 5px;
+  border: 1px black solid;
 }
 
 @media (min-width: 763px) {
@@ -78,14 +80,6 @@
 
   .Poster-Description {
     flex: 1 1 calc(33.33% - 20px);
-  }
-
-  .carousel-control-prev {
-    left: 10rem;
-  }
-
-  .carousel-control-next {
-    right: 10rem;
   }
 }
 
@@ -107,25 +101,13 @@
   }
 }
 
-.carousel-text h3 {
-  font-size: 24px;
-  margin-top: 10px;
-}
-
-.carousel-control-prev {
-  left: 5rem;
-}
-
-.carousel-control-next {
-  right: 5rem;
-}
 
 .Movie-Button {
   color: #ac9ed9;
   background-color: #0b0815;
   border: 1.5px solid #ac9ed9;
   flex-shrink: 0;
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin: 0;
 }
 
@@ -145,7 +127,7 @@
 }
 
 .Movie-Time p {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin: 1rem 0rem 0rem 0rem;
 }
 

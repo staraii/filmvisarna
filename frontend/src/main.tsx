@@ -1,11 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import {
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "../sass/main.scss";
 import App from "./App.tsx";
 
@@ -14,18 +11,26 @@ import { loader, doubleLoader, bookingAction } from "./utils/queryService.ts";
 import ErrorPage from "./pages/ErrorPage/ErrorPage.tsx";
 import HomePage from "./pages/HomePage/HomePage";
 import Movies from "./pages/Movies/Movies.tsx";
-import MovieDetailsPage from "./pages/MovieDetailsPage.tsx";
+import MovieDetailsPage from "./pages/MovieDetailsPage/MovieDetailsPage.tsx";
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
 import BookingPage from "./pages/BookingPage";
 import Register from "./pages/Register/Register";
 import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
-import CancelTicketsLogin from "./pages/Cancel-Tickets-Login/CancelTicketsLogin";
-import LoginPage from "./components/Login-pop-up/LoginPage.tsx";
-import PasswordReset from "./components/Login-pop-up/passwordReset";
+import LoginPage from "./pages/LoginPage/LoginPage.tsx";
+import PasswordReset from "./pages/LoginPage/passwordReset.tsx";
 import BookingConfirmationPage from "./pages/BookingConfirmation.tsx";
 import MinProfil from "./pages/myProfile/myProfile.tsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.tsx";
 import { AuthProvider } from "./utils/authContext.tsx";
+
+import Admin from "./pages/Admin/Admin.tsx";
+import AdminMain from "./pages/Admin/components/AdminMain/AdminMain.tsx";
+import AdminMovies from "./pages/Admin/components/AdminMovies/AdminMovies.tsx";
+import EditMovie from "./pages/Admin/components/EditMovie/EditMovie.tsx";
+import NewMovie from "./pages/Admin/components/NewMovie/NewMovie.tsx";
+import Tickets from "./pages/Admin/components/Tickets/Tickets.tsx";
+import BookingStatus from "./pages/Admin/components/BookingStatus/BookingStatus.tsx";
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,7 +50,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-
         loader: doubleLoader(
           queryClient,
           ["/api/bookings/homePageMovies", "/api/bookings/homePageScreenings"],
@@ -69,7 +73,7 @@ const router = createBrowserRouter([
       {
         path: "bio-kalender",
         element: <MovieCalendar />,
-        loader: loader(queryClient, "/api/screenings", "screenings"),
+        loader: loader(queryClient, "/api/screenings/all", "screenings"),
         errorElement: <ErrorPage />,
       },
       {
@@ -102,13 +106,6 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "avboka-loggedin",
-        element: <CancelTicketsLogin />,
-        //loader: userLoader(queryClient),
-        //action: userAction(queryClient),
-        errorElement: <ErrorPage />,
-      },
-      {
         path: "forgot-password",
         element: <PasswordReset />,
         //action: passwordAction(queryClient),
@@ -138,6 +135,61 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "/admin",
+      element: (
+           <ProtectedRoute adminOnly={true}>
+            <Admin />
+          </ProtectedRoute>
+        ),
+
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <AdminMain />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "filmer",
+        loader: loader(queryClient, "/api/bookings/moviesList", "movies"),
+        element: <AdminMovies />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "film/:id",
+        loader: loader(
+          queryClient,
+          "/api/bookings/fullMovies?id=",
+          "movie",
+          "id"
+        ),
+        element: <EditMovie />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "film/ny",
+        element: <NewMovie />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "biljetter",
+        element: <Tickets />,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "bokningar/:bookingNumber",
+        loader: loader(
+          queryClient,
+          "/api/bookings/fullBookings?bookingNumber=",
+          "bookings",
+          "bookingNumber"
+        ),
+        element: <BookingStatus />,
+        errorElement: <ErrorPage />,
+      },
+    ],
+  },
 ]);
 
 createRoot(document.getElementById("root")!).render(
@@ -145,7 +197,7 @@ createRoot(document.getElementById("root")!).render(
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
     </AuthProvider>
   </StrictMode>

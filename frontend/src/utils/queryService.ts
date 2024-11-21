@@ -27,18 +27,15 @@ export type HomePageScreenings = {
   movieId: number;
   movieTitle: string;
   dateTime: string;
-  dayName: string;
-  day: number;
-  month: number;
-  week: number;
-  time: string;
   theatreName: string;
   occupiedPercent: number;
   ageRating: string;
   slideURL: string;
-  posterURL: string[];
+  posterURL: string;
   subtitles: string;
   spokenLanguage: string;
+  posterPreview?: string;
+  slidePreview?: string;
 };
 
 export async function getQueryData(query: string) {
@@ -206,7 +203,7 @@ export const fetchUserBookings = async (email: string) => {
     }
 
     const data = await response.json();
-    console.log("Fetched user bookings:", data); // Log fetched data
+    
     return data; // Return the bookings data
   } catch (error) {
     console.error("Fetch error:", error);
@@ -214,40 +211,3 @@ export const fetchUserBookings = async (email: string) => {
   }
 };
 
-// Function to cancel a booking by ID and email
-export const cancelBooking = async (bookingId: number, email: string) => {
-  if (bookingId === undefined || !email) {
-    throw new Error("Booking ID and email are required to cancel a booking.");
-  }
-
-  try {
-    const response = await fetch(
-      `/api/bookings/cancelBooking?bookingId=${encodeURIComponent(
-        bookingId
-      )}&email=${encodeURIComponent(email)}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        `Error: ${response.status} ${response.statusText} - ${
-          errorData.message || "No additional error information."
-        }`
-      );
-    }
-
-    const data = await response.json();
-    console.log("Successfully cancelled booking:", data);
-    return data; // Optional: return response data if needed
-  } catch (error) {
-    console.error("Cancel booking error:", error);
-    throw error; // Re-throw to handle in your UI component
-  }
-};

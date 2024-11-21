@@ -5,15 +5,44 @@ import Nav from "react-bootstrap/Nav";
 import { useNavigate } from "react-router-dom";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Stack from "react-bootstrap/Stack";
+import { useAuth } from "../../utils/authContext"; // Importing AuthContext for auth state
+import { logout as authLogout } from "../../services/authService"; // Import your logout function from authService
+import { useEffect } from "react";
+
 
 export default function MobileNavBar() {
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
+
+
   const handleNavigation = (path: string) => {
     setShowMenu(false);
     navigate(`${path}`);
   };
 
+  
+
+    useEffect(() => {
+   
+    }, [isAuthenticated]); // Re-render the navbar when `isAuthenticated` changes
+  
+    const handleLogout = async () => {
+    try {
+      await authLogout(); // Call the logout function from your auth service
+      logout(); // Call the context's logout function to update the state
+      navigate("/") // Redirect to homepage after logout
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // Optionally, show a user-friendly message here
+    } finally {
+      setShowMenu(false); // Close the logout confirmation modal
+    }
+  };
+
+  
+
+  
   return (
     <Navbar fixed="bottom" bg="primary" className="navbar-bottom">
       <Nav.Link className="icon-link" onClick={() => navigate("/")}>
@@ -228,25 +257,42 @@ export default function MobileNavBar() {
             </Nav.Link>
           </Stack>
 
-          {/* Menu links */}
-          <Nav.Link
-            className="fw-medium mb-3"
-            onClick={() => handleNavigation("/avboka")}
-          >
-            Avboka platser
-          </Nav.Link>
-          <Nav.Link
-            className="fw-medium mb-3"
-            onClick={() => handleNavigation("/loggain")}
-          >
-            Logga in
-          </Nav.Link>
-          <Nav.Link
-            className="fw-medium"
-            onClick={() => handleNavigation("/register")}
-          >
-            Bli medlem
-          </Nav.Link>
+            {isAuthenticated ? (
+            <>
+              <Nav.Link
+                className="fw-medium mb-3"
+                onClick={() => handleNavigation("/profil")}
+              >
+                Min profil
+              </Nav.Link>
+              <Nav.Link className="fw-medium" onClick={handleLogout}>
+                Logga ut
+              </Nav.Link>
+            </>
+          ) : (
+            <>
+              <Nav.Link
+                className="fw-medium mb-3"
+                onClick={() => handleNavigation("/avboka")}
+              >
+                Avboka platser
+              </Nav.Link>
+              <Nav.Link
+                className="fw-medium mb-3"
+                onClick={() => handleNavigation("/loggain")}
+              >
+                Logga in
+              </Nav.Link>
+              <Nav.Link
+                className="fw-medium"
+                onClick={() => handleNavigation("/register")}
+              >
+                Bli medlem
+              </Nav.Link>
+            </>
+          )}
+
+          
         </Offcanvas.Body>
       </Offcanvas>
     </Navbar>

@@ -1,5 +1,7 @@
 import "./bookingPage.css";
-import { Row, Col, Container, Stack, Button } from "react-bootstrap";
+import { Row, Col, Stack, Button, FormGroup } from "react-bootstrap";
+import Modal from "react-bootstrap/Modal";
+import InputForm from "react-bootstrap/Form";
 import { useEffect, useState } from "react";
 import {
   useNavigate,
@@ -10,6 +12,8 @@ import {
 import { loaderQuery, QueryParams } from "../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { getWeekday } from "../utils/dateTimeUtils";
+import { useAuth } from ".././utils/authContext";
+import { getParsedYearDateTime } from "../utils/dateTimeUtils";
 
 interface RowSeats {
   seats: number;
@@ -26,7 +30,9 @@ interface BookingActionData {
   bookingNumber?: string;
   error?: string;
 }
+
 export default function BookingPage() {
+  const { userEmail, isAuthenticated } = useAuth();
   const [ticketAdult, setticketAdult] = useState<number>(2);
   const [ticketChild, setTicketChild] = useState<number>(0);
   const [ticketSenior, setTicketSenior] = useState<number>(0);
@@ -35,6 +41,11 @@ export default function BookingPage() {
   const [hoveredSeats, setHoveredSeats] = useState<string[]>([]);
   const [seats, setSeats] = useState<Seats>({});
   const [email, setEmail] = useState("");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   //react easier state add?
 
   const queryParams = useLoaderData() as QueryParams;
@@ -42,15 +53,77 @@ export default function BookingPage() {
   const screeningData = data["success"][0];
   const actionData = useActionData() as BookingActionData;
   const navigate = useNavigate();
+
+  const [seatData, setData] = useState<string[]>([]);
+
+  useEffect(() => {
+    const date = new Date().toLocaleString();
+    const currentTime = getParsedYearDateTime(date);
+    const screeningTime = getParsedYearDateTime(screeningData.dateTime);
+
+    const currentDateObj = new Date(
+      currentTime.year,
+      Number(currentTime.month) - 1,
+      Number(currentTime.date),
+      parseInt(currentTime.time.split(":")[0], 10),
+      parseInt(currentTime.time.split(":")[1], 10)
+    );
+
+    const screeningDateObj = new Date(
+      screeningTime.year,
+      Number(screeningTime.month) - 1,
+      Number(screeningTime.date),
+      parseInt(screeningTime.time.split(":")[0], 10),
+      parseInt(screeningTime.time.split(":")[1], 10)
+    );
+
+    if (currentDateObj > screeningDateObj) {
+      throw new Error("Åtkomst nekas");
+    }
+  }, []);
+
+  useEffect(() => {
+    const evtSource = new EventSource(
+      `/api/events/${screeningData.screeningId}`
+    );
+    evtSource.onmessage = (event) => {
+      if (event.data) {
+        const parsedData = JSON.parse(event.data) as Array<{
+          seats: string | null;
+        }>;
+
+        const updatedOccupiedSeats = parsedData
+          .filter((seatEntry) => seatEntry.seats !== null)
+          .flatMap((seatEntry) =>
+            seatEntry.seats!.split(",").map((seat) => seat.trim())
+          );
+
+        setData(updatedOccupiedSeats);
+      }
+    };
+    evtSource.onerror = () => {
+      console.error(Error, "Failed to connect to SSE");
+      evtSource.close();
+    };
+    return () => {
+      evtSource.close();
+    };
+  }, []);
+
+  //nullchecks
   if (screeningData.occupiedSeats === null) screeningData.occupiedSeats = "0";
 
-  const occupiedSeatArray = screeningData.occupiedSeats
-    .split(",")
-    .map((seat: string) => seat.trim());
+  if (seatData?.length) {
+    for (let i = 0; i < seatData.length, i++; ) {
+      if (seatData[i] === null) seatData[i] = "";
+    }
+  }
+  //nullchecks
 
-  // useEffect(() => {
-  //   console.log(screeningData);
-  // }, []);
+  const occupiedSeatArray = seatData
+    ? seatData.map((seat) => seat.trim())
+    : screeningData.occupiedSeats;
+
   useEffect(() => {
     window.scrollTo({
       top: 180,
@@ -58,11 +131,17 @@ export default function BookingPage() {
       behavior: "instant",
     });
   }, []);
+
   useEffect(() => {
     if (actionData?.bookingSuccess) {
       navigate(
-        `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`
+        `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`,
+        { state: { email } }
       );
+    } else if (actionData && !actionData.bookingSuccess) {
+      handleShow();
+      setSelectedSeat([]);
+      setHoveredSeats([]);
     }
   }, [actionData, navigate]);
 
@@ -93,20 +172,6 @@ export default function BookingPage() {
   }, [screeningData]);
 
   // nog skriva om SSE för att passa bättre här, gör detta för sprint 5
-  const [seatData, setData] = useState<{ num: number } | null>();
-  useEffect(() => {
-    const evtSource = new EventSource(
-      `http://localhost:5173/api/events/${screeningData.screeningId}`
-    );
-    evtSource.onmessage = (event) => {
-      if (event.data) {
-        setData(JSON.parse(event.data));
-      }
-    };
-    return () => {
-      evtSource.close();
-    };
-  }, []);
 
   useEffect(() => {
     setTickets(ticketAdult + ticketSenior + ticketChild);
@@ -117,15 +182,9 @@ export default function BookingPage() {
 
     const rowData = seats[row];
     if (!rowData) return;
-    // console.log("rowData", rowData.start, rowData.end);
-    // console.log("index ", index);
-    // console.log("row ", row);
+
     let hoveredSeatIds: string[] = [];
-    //console.log("hoveredseats", hoveredSeats);
-    // console.log("seatcount", seatCount);
-    // console.log("index", index);
-    //index climbs for each seat but seatcount is set for each row, i need to limit the index per row
-    //
+
     for (let i = 0; i < tickets; i++) {
       const currentSeatIndex = index + i;
 
@@ -154,18 +213,18 @@ export default function BookingPage() {
           <Row className="pt-4">
             <Col>
               {screeningData.movieTitle.length < 15 ? (
-                <h1 className="">{screeningData.movieTitle}</h1>
+                <h1 className="screeningheader">{screeningData.movieTitle}</h1>
               ) : (
-                <h3>{screeningData.movieTitle} </h3>
+                <h3 className="screeningheader">{screeningData.movieTitle} </h3>
               )}
             </Col>
             <Col className="pt-2">
-              <h5>
+              <h5 className="screeningheader">
                 {getWeekday(screeningData.dayName) +
                   " " +
                   screeningData.dateTime.split("T")[0]}
               </h5>
-              <h5 className="">{screeningData.time}</h5>
+              <h5 className="screeningheader">{screeningData.time}</h5>
             </Col>
             <Col className="pt-2">
               <p>(Sv.text) (Eng.tal)</p>
@@ -173,8 +232,19 @@ export default function BookingPage() {
             </Col>
           </Row>
         </Stack>
-
-        <Stack className="w-100 h-100 border-end border-start p-3 d-flex flex-column">
+        <Modal show={show} onHide={handleClose}>
+          <Modal.Header closeButton>
+            <Modal.Title>Något gick fel!</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Problem med bokning.</Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-secondary" onClick={handleClose}>
+              Stäng
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        ;
+        <Stack className="w-100 h-100 p-3 d-flex flex-column">
           <h4>{screeningData.theatreName}</h4>
           <Stack className="p-1">
             <Stack direction="horizontal">
@@ -191,7 +261,7 @@ export default function BookingPage() {
               >
                 +
               </Button>
-              <p className="m-3">Standard: 140 kr</p>
+              <p className="m-2">Standard: 140 kr</p>
             </Stack>
             <Stack direction="horizontal">
               <Button
@@ -229,7 +299,10 @@ export default function BookingPage() {
             </Stack>
           </Stack>
 
-          <Stack className="seat-container pt-5 mx-auto justify-content-center align-items-center">
+          <Stack
+            gap={4}
+            className="seat-container pt-5 mx-auto justify-content-center align-items-center"
+          >
             {Object.entries(seats).map(([row, seatData]) => {
               const { seats: seatCount } = seatData as RowSeats;
               let rowCumulativeIndex = cumulativeIndex;
@@ -250,6 +323,12 @@ export default function BookingPage() {
                           <Button
                             onClick={() => handleSeatSelect()}
                             onMouseOver={() =>
+                              displaySeats(
+                                Number(row),
+                                rowCumulativeIndex + index
+                              )
+                            }
+                            onTouchStart={() =>
                               displaySeats(
                                 Number(row),
                                 rowCumulativeIndex + index
@@ -279,23 +358,47 @@ export default function BookingPage() {
           </Stack>
         </Stack>
       </Stack>
-      <footer className="d-flex justify-content-center align-items-center container booking-summary flex-row justify-content-around ">
-        <div>
+
+      <footer className="d-flex justify-content-center align-items-center container booking-summary flex-row justify-content-around">
+        <Row>
           <Form method="post">
             <input
               type="hidden"
               name="screeningId"
               value={screeningData.screeningId}
             />
-            <input
-              className="m-2"
-              type="text"
-              name="email"
-              value={email}
-              id=""
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="E-post"
-            />
+
+            {/* Conditionally render the email input based on authentication */}
+            <Row className="">
+              {!isAuthenticated ? (
+                <Col className="d-flex justify-content-center align-items-center w-100">
+                  <FormGroup className="mb-3" controlId="formEmail">
+                    <InputForm.Control
+                      type="email"
+                      placeholder="E-post"
+                      value={email}
+                      style={{ width: "250px", marginBottom: "2rem" }}
+                      name="email"
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </FormGroup>
+                </Col>
+              ) : (
+                <Col>
+                  <input type="hidden" name="email" value={userEmail ?? ""} />
+                </Col>
+              )}
+              <Col className="">
+                <Button
+                  type="submit"
+                  variant="outline-secondary"
+                  className="book-button-screening-card "
+                >
+                  Boka
+                </Button>
+              </Col>
+            </Row>
             <input
               type="hidden"
               name="seats"
@@ -310,12 +413,8 @@ export default function BookingPage() {
                 ticket3: ticketChild,
               })}
             />
-
-            <Button type="submit" className="booking-btn">
-              <h5 className="m-1">Boka</h5>
-            </Button>
           </Form>
-        </div>
+        </Row>
       </footer>
     </>
   );

@@ -1,5 +1,5 @@
 import "./Cancel-Tickets.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
@@ -15,12 +15,12 @@ function CancelTickets() {
   const handleShowErrorModal = () => setShowErrorModal(true);
   const handleCloseErrorModal = () => setShowErrorModal(false);
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
+ const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setEmail(e.target.value);
+};
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
 
     const emailPattern =
       /^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|outlook\.com)$/;
@@ -43,7 +43,7 @@ function CancelTickets() {
             <Form.Label>Mailadress</Form.Label>
             <Form.Control
               type="email"
-              placeholder="name@example.com"
+              placeholder="Ange din e-postadress"
               value={email}
               onChange={handleEmailChange}
               className="Custom-Input"

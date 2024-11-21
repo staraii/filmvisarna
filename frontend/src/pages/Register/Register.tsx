@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { Form, Button, Container, Row, Col, Modal } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Form, Button, Container, Row, Col, Modal, InputGroup } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
 import { useAuth } from '../../utils/authContext'; // Import useAuth to get access to register
 import './Register.css';
@@ -13,12 +13,13 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
+  role: string;  // Add role property here
 }
 
 const Register = () => {
   const { register } = useAuth(); // Access register from AuthContext
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
     lastName: '',
@@ -27,6 +28,7 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
+    role: 'user',
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -45,11 +47,6 @@ const Register = () => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-
-    if (formData.password !== formData.confirmPassword) {
-      setError('Lösenord och bekräfta lösenord matchar inte.');
-      return;
-    }
 
     try {
       // Use the register function from AuthContext to handle registration and authentication
@@ -77,7 +74,7 @@ const Register = () => {
           {/* Error Alert */}
           {error && <div className="alert alert-danger">{error}</div>}
 
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} noValidate>
             {/* First and Last Name Fields */}
             <Row className="mb-3">
               <Col xs={6}>
@@ -89,7 +86,6 @@ const Register = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleChange}
-                    required
                   />
                 </Form.Group>
               </Col>
@@ -102,7 +98,6 @@ const Register = () => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleChange}
-                    required
                   />
                 </Form.Group>
               </Col>
@@ -117,50 +112,49 @@ const Register = () => {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
-                required
               />
             </Form.Group>
 
             {/* Password and Confirm Password Fields */}
             <Row className="mb-3">
-              <Col xs={6} className="position-relative">
+              <Col xs={6}>
                 <Form.Group controlId="formPassword">
                   <Form.Label>Lösenord</Form.Label>
-                  <Form.Control
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Ange ditt lösenord"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                  />
-                  <span
-                    className="password-toggle-icon"
-                    onClick={() => setShowPassword(!showPassword)}
-                    style={{ cursor: 'pointer', position: 'absolute', right: '10px', top: '35%' }}
-                  >
-                    {showPassword ? <EyeSlash /> : <Eye />}
-                  </span>
+                  <InputGroup>
+                    <Form.Control
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Ange ditt lösenord"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                    />
+                    <InputGroup.Text
+                      onClick={() => setShowPassword(!showPassword)}
+                      style={{ cursor: 'pointer', background: 'transparent', borderLeft: 'none' }}
+                    >
+                      {showPassword ? <EyeSlash /> : <Eye />}
+                    </InputGroup.Text>
+                  </InputGroup>
                 </Form.Group>
               </Col>
-              <Col xs={6} className="position-relative">
+              <Col xs={6}>
                 <Form.Group controlId="formConfirmPassword">
                   <Form.Label>Bekräfta lösenord</Form.Label>
-                  <Form.Control
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Bekräfta ditt lösenord"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    required
-                  />
-                  <span
-                    className="password-toggle-icon"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    style={{ cursor: 'pointer', position: 'absolute', right: '10px', top: '35%' }}
-                  >
-                    {showConfirmPassword ? <EyeSlash /> : <Eye />}
-                  </span>
+                  <InputGroup>
+                    <Form.Control
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="Bekräfta lösenord"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                    />
+                    <InputGroup.Text
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      style={{ cursor: 'pointer', background: 'transparent', borderLeft: 'none' }}
+                    >
+                      {showConfirmPassword ? <EyeSlash /> : <Eye />}
+                    </InputGroup.Text>
+                  </InputGroup>
                 </Form.Group>
               </Col>
             </Row>
@@ -174,28 +168,6 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            {/* Policy Agreement Checkboxes */}
-            <Form.Group className="mb-3">
-              <Form.Check
-                type="checkbox"
-                label={
-                  <>
-                    Jag har läst och accepterat{' '}
-                    <Link to="/integrity-policy" className="text-primary" style={{ textDecoration: 'underline' }}>
-                      integritets och cookie policy
-                    </Link>
-                  </>
-                }
-                required
-              />
-              <Form.Check
-                type="checkbox"
-                label="Jag vill gärna få inbjudningar till premiärer, nyheter och erbjudanden, och kan närsomhelst återkalla mitt samtycke."
-                className="mt-2"
               />
             </Form.Group>
 
@@ -228,6 +200,7 @@ const Register = () => {
 };
 
 export default Register;
+
 
 
 

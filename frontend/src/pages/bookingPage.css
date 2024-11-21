@@ -2,14 +2,17 @@
   padding-top: 154px;
 }
 .booking-header {
-  background-color: #ac9ed9;
+  background-color: #702c53;
   @media (min-width: 1000px) {
     width: 1000px;
   }
 }
 .booking-summary {
-  background-color: #ac9ed9;
+  background-color: #702c53;
   height: 150px;
+}
+.booking-btn {
+  margin-top: -60px;
 }
 .header-section {
   flex-direction: row;
@@ -31,8 +34,9 @@
   background-color: #702c53;
   border: 1px solid black;
   border-radius: 4px;
-  height: 15px;
+  height: 25px;
   width: 15px;
+  margin: 1px;
   @media (min-width: 1250px) {
     height: 50px;
     width: 50px;
@@ -58,4 +62,8 @@
   background-color: red;
   cursor: not-allowed;
   pointer-events: none;
+}
+.screeningheader {
+  color: white !important;
+  font-weight: 200;
 }

@@ -2,7 +2,7 @@
 
 .profile-container {
   padding: 20px;
-  max-width: 800px;
+  max-width: 100%;
 
   /* Limit the width for larger screens */
   margin: auto;
@@ -23,7 +23,7 @@
 .profile-table th,
 .profile-table td {
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid#ccc;
   text-align: left;
 }
 
@@ -176,72 +176,180 @@ hr {
 }
 
 
-
-
-
-/* Button styling to match pagination */
-.cancel-button {
-  color: #fdfdfd;
-  /* Text color */
-  background-color: transparent;
-  /* Background color */
-  border: 1px solid #e9dfe1;
-  /* Border color */
-  padding: 0.5rem 1rem;
-  /* Padding for button */
-  border-radius: 4px;
-  /* Rounded corners */
-  cursor: pointer;
-  /* Pointer cursor on hover */
-  transition: background-color 0.3s, color 0.3s;
-  /* Smooth transition for hover effects */
-}
-
-/* Hover state for cancel button */
-.cancel-button:hover {
-  background-color: rgba(218, 200, 203, 0.1);
-  /* Hover background color */
-  color: #c15f6f;
-  /* Change text color on hover */
-}
-
-/* Active and disabled state */
-.cancel-button:disabled {
-  color: #ccc;
-  /* Disabled text color */
-  border-color: #ccc;
-  /* Disabled border color */
-  cursor: not-allowed;
-  /* Not allowed cursor */
-}
-
-
-/* Media Queries for Responsive Design */
 @media (max-width: 600px) {
+  /* Profile container */
   .profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    margin: auto;
+    
+  }
+
+  /* Hide hr on mobile */
+  hr {
+    display: none;
+  }
+
+  /* Profile Table Styling */
+ .profile-table {
+   width: 100%;
+   /* Take full width */
+   margin: 0 auto;
+   /* Center the table */
+   table-layout: auto;
+   /* Let the table handle the layout */
+ }
+
+  .profile-table thead {
+    display: none; /* Hide table headers for mobile */
+  }
+
+    /* Table rows */
+  .profile-table tr {
+    display: block; /* Make rows block-level for stacking */
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
     padding: 10px;
-    /* Reduce padding for small screens */
+    background-color: #0b0815;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    width: 100%; /* Ensure full width of the row */
   }
 
-  .profile-table th,
+  /* Table cells */
   .profile-table td {
-    font-size: 14px;
-    /* Smaller font size for mobile */
-    padding: 8px;
-    /* Reduce padding */
+    display: block;
+    width: 100%; /* Ensure full width */
+    padding: 10px 0;
+    color: #e7dede;
+    border: none;
+    text-align: center; /* Center content horizontally */
+    word-wrap: break-word;
   }
 
-  .profile-section {
-    margin-bottom: 15px;
-    /* Reduce margin for sections */
+  .profile-table td:before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #c15f6f;
+    margin-right: 10px;
+    text-align: center;
   }
 
-  .pagination button {
-    padding: 4px 8px;
-    /* Smaller padding for buttons */
-    font-size: 12px;
-    /* Smaller font size for buttons */
-    margin-bottom: 50px;
+
+  /* History Booking Section */
+  .history-booking {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 90%;
+    text-align: center;
   }
 
+  /* History booking item styling */
+  .history-booking-item {
+    margin-bottom: 10px;
+    background-color: #0b0815;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+  }
+
+  /* History booking cancel button */
+  .history-booking .cancel-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #c15f6f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 80%;
+    max-width: 300px;
+    text-align: center;
+  }
+
+  .history-booking .cancel-button:hover {
+    background-color: #551a3a;
+  }
+
+  /* Adjusting h2 heading size */
+  .history-booking h2 {
+    font-size: 1.6rem;
+  }
+
+  /* Adjust other h2 elements */
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  /* Modal Content (make sure modal is centered on small screens) */
+  .modal-content {
+    background-color: #0b0815;
+    border-radius: 8px;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    text-align: center;
+  }
+
+  .modal-title {
+    font-size: 20px;
+    color: #c15f6f;
+  }
+
+  .modal-body {
+    font-size: 16px;
+    color: #e7dede;
+    margin-bottom: 20px;
+  }
+
+  .modal-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Modal Footer Buttons */
+  .modal-footer .btn {
+    width: 80%;
+    max-width: 300px;
+    margin: 5px 0;
+    border-radius: 5px;
+  }
+
+  /* Cancel button styling */
+  .modal-footer .btn-secondary {
+    background-color: transparent;
+    border: 1px solid #c15f6f;
+    color: #c15f6f;
+  }
+
+  .modal-footer .btn-secondary:hover {
+    background-color: rgba(206, 76, 97, 0.1);
+  }
+
+  /* Confirm button styling */
+  .modal-footer .btn-danger {
+    background-color: #c15f6f;
+    color: white;
+  }
+
+  .modal-footer .btn-danger:hover {
+    background-color: #551a3a;
+  }
 }
+

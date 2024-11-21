@@ -24,21 +24,24 @@ const LoginPage = () => {
     setPassword(e.target.value);
   };
 
- const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setError(null);
 
-    try {
-        // Call the login function and expect to get the email in response
-        const response = await login(email, password);
-        const userEmail = response.email; // Extract email from response
-        console.log("User Email:", userEmail); // Check the email here
-        authLogin(userEmail);
-        setShowSuccessModal(true); // Show modal after successful login
-    } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
-        setError(errorMessage);
-    }
+  try {
+    // Call the login function and expect to get the email in response
+    const response = await login(email, password);
+    const { email: userEmail, firstName } = response;
+
+    // Set default role to 'user' or 'visitor'
+    const role = 'user'; // Default role, can be adjusted if needed
+
+    authLogin(userEmail, firstName, role); // Pass the role when calling authLogin
+    setShowSuccessModal(true); // Show modal after successful login
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
+    setError(errorMessage);
+  }
 };
 
   const handleModalClose = () => {
@@ -47,13 +50,19 @@ const LoginPage = () => {
   };
 
   return (
+    
     <Container fluid className="login-page-container">
       <Row className="justify-content-center mt-5">
         <Col xs={12} sm={10} md={8} lg={12}>
           <h2 className="text-center mb-4">Logga in</h2>
-          {error && <div className="alert alert-danger">{error}</div>}
 
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleSubmit} noValidate>
+
+              {/* Error Alert */}
+          <div className="alert-container">
+            {error && <div className="alert alert-danger">{error}</div>}
+            </div>
+            
             {/* Email Field */}
             <Form.Group controlId="formEmail" className="mb-3">
               <Form.Label>E-postadress</Form.Label>
@@ -62,9 +71,11 @@ const LoginPage = () => {
                 placeholder="Ange din e-postadress"
                 value={email}
                 onChange={handleEmailChange}
-                required
+                
               />
             </Form.Group>
+
+            
 
             {/* Password Field with Persistent Eye Toggle */}
             <Form.Group controlId="formPassword" className="mb-3">
@@ -75,7 +86,7 @@ const LoginPage = () => {
                   placeholder="Ange ditt lösenord"
                   value={password}
                   onChange={handlePasswordChange}
-                  required
+                  
                 />
                 <InputGroup.Text
                   onClick={() => setShowPassword(!showPassword)}
@@ -137,6 +148,8 @@ const LoginPage = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      
     </Container>
   );
 };

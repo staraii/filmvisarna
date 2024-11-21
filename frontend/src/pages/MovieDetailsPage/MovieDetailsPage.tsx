@@ -1,13 +1,13 @@
-import { useState, useRef,} from 'react';
+import { useState, useRef,useEffect } from 'react';
 import './MovieDetailsPage.css'
-import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, CarouselItem,} from "react-bootstrap"
+import { Button, Card, Carousel, Dropdown, DropdownButton, Container, Row, Col, } from "react-bootstrap"
 import { useNavigate } from "react-router-dom";
 import { format } from 'date-fns';
 import { sv } from 'date-fns/locale';
 
 import { useLoaderData } from "react-router-dom";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { QueryParams, loaderQuery,} from "../utils/queryService";
+import { QueryParams, loaderQuery,} from "../../utils/queryService";
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -48,18 +48,26 @@ interface Movie {
 interface ApiResponse {
   success: boolean;
   movie: Movie[];
-  screenings: { dateTime: string; id: number; movieId: number; theatreId: number }[];
+  screenings: Screening[];
 }
-
+interface Screening {
+  dateTime: string;
+  id: number;
+  movieId: number;
+  theatreId: number;
+}
 
 function MovieDetailsPage() {
   const navigate = useNavigate();
+  useEffect(() => {
+  window.scrollTo(0, 0);
+  },[]);
   const  queryParams  = useLoaderData() as QueryParams;
   const { data } = useSuspenseQuery(loaderQuery(queryParams)); 
   
 
   const movie = data as ApiResponse;
-  console.log(data);
+  //console.log(data);
 
     if (typeof movie.movie[0].reviews === "string") {
     try {
@@ -68,32 +76,6 @@ function MovieDetailsPage() {
       console.error("Kunde inte parsa reviews:", error);
     }
   }
-  //const [movie, setMovieData] = useState<ApiResponse | null>(null);
-
-  //Get data from database
-//  useEffect(() => {
-//    const fetchMovieDetails = async () => {
-//      try {
-//        const response = await fetch('/api/moviesDetails/2');
-//        
-//        if (!response.ok) {
-//          throw new Error('Något gick fel vid hämtning av filmdata.');
-//        }
-//        
-//        const data = await response.json(); // JSON
-//
-//        data.movie[0].reviews = JSON.parse(`[${data.movie[0].reviews}]`);
-//
-//        setMovieData(data);
-//        console.log(data);
-//      } catch (error) {
-//        console.error('Fel vid hämtning av filmdata:', error);
-//      }
-//    };
-//
-//    fetchMovieDetails();
-//  }, []);
-//  //-------------------------------------------------------
 
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false); 
   const toggleDescriptionText = () => {
@@ -106,25 +88,47 @@ function MovieDetailsPage() {
   };
   
 
+
   const [selectedTime, setSelectedTime,] = useState<string | null>("välj visning");
   const [selectedTheatreId, setSelectedTheatreId] = useState<string | null>(null);
   const [selectedScreeningId, setSelectedScreeningId] = useState<string | null>(null);
+  const [showWarning, setShowWarning] = useState(false);
+
+  const [visibleCount, setVisibleCount] = useState(8); // start with * visningar
+  const initialCount = 8;
+
+  // show more visningar
+  const handleShowMore = () => {
+    setVisibleCount((prevCount) => prevCount + 5);
+  };
+  //show less visnigar
+  const handleShowLess = () => {
+  setVisibleCount((prevCount) => Math.max(prevCount - 5, initialCount));
+};
 
   const handleSelectTime = (eventKey: string | null) => {
-    if (eventKey) {
-      
+    if (eventKey && eventKey !== "välj visning") {
       const [screeningId,theatreId, time] = eventKey.split('|');
       setSelectedTime(time);
       setSelectedTheatreId(theatreId);
       setSelectedScreeningId(screeningId);
-
-      // Logga screening.id
-      console.log('screening', screeningId);
-      console.log('theatre', theatreId);
-      console.log('time',time);
+      setShowWarning(false);
+      //console.log('screening', screeningId);
+      //console.log('theatre', theatreId);
+      //console.log('time',time);
+    }else {
+    setShowWarning(true);
     }
-  };  
-
+  };
+  
+    const handleBookingClick = () => {
+    if (selectedScreeningId) {
+      navigate(`/boka/${selectedScreeningId}`);
+      setShowWarning(false);
+    } else {
+      setShowWarning(true);
+    }
+  };
 
   //
   if (!movie) { 
@@ -142,16 +146,24 @@ function MovieDetailsPage() {
     }, 200);
   };
 
-    const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
-    const date = format(new Date(screening.dateTime), 'yyyy-MM-dd');
-    if (!acc[date]) acc[date] = [];
-    acc[date].push(screening);
+  //const groupedScreenings = movie.screenings.reduce((acc: any, screening) => {
+  const groupedScreenings: Record<string, Screening[]> = movie.screenings.reduce((acc: Record<string, Screening[]>, screening) => {
+    const screeningDate = new Date(screening.dateTime);
+    const today = new Date();
+
+    // no old screenings
+    if (screeningDate > today) {
+      const date = format(screeningDate, 'yyyy-MM-dd');
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(screening);
+    }
     return acc;
   }, {});
 
+
   return (
     <>
-      <Container>
+      <Container className='page'>
         <Container className="d-flex flex-column align-items-center">
           <Row className="d-flex flex-column flex-md-row ">
             <Col xs={12} md={12} lg={6} xl={6} xxl={6} className='movie-trailer-container'>
@@ -177,7 +189,7 @@ function MovieDetailsPage() {
                   <Card.Text className='see-more-container'>
                     {isDescriptionExpanded ? fullText : shortText}
                     <Button variant="link" onClick={toggleDescriptionText} className="see-more-btn">
-                      {isDescriptionExpanded ? 'See mindre' : 'See mer'}
+                      {isDescriptionExpanded ? 'Se mindre' : 'Se mer'}
                     </Button>
                   </Card.Text>
                 </Container>
@@ -190,12 +202,12 @@ function MovieDetailsPage() {
           <Row className="d-flex flex-column flex-md-row mt-5">
             <Col xs={{ span: 12 }} lg={{ span: 6, order: 'last' }}>
               <Carousel className='carouselMovieDetail' interval={null} indicators={false}>
-                {movie.movie[0].details.mediaURLs.posterURL.map((poster, index) => (
-                  <Carousel.Item key={index}>
+                {movie.movie[0].details.mediaURLs.posterURL.slice(1).map((poster, index) => (
+                  <Carousel.Item key={index+1}>
                     <img 
                       className='d-block w-100 poster-image'
                       src={`/images/${poster}`}
-                      alt={`Poster ${index + 1}`}
+                      alt={`Poster ${index + 2}`}
                     />
                   </Carousel.Item>
                 ))}
@@ -204,7 +216,7 @@ function MovieDetailsPage() {
             <Col className='d-flex flex-column film-details-rec'>
               <Card>
                 <Card.Body>
-                  <Card.Title>Film Detaljer</Card.Title>
+                  <Card.Title>FilmDetaljer</Card.Title>
                   <Card.Text className="mb-0 see-more-container" >
                     <strong>Regissör:</strong> {movie.movie[0].details.credits.directedBy.join(', ')}
                     <br />
@@ -228,12 +240,12 @@ function MovieDetailsPage() {
                   </Card.Text>
                   <Card.Text className=" see-more-container">
                     <Button variant="link" onClick={toggleDetailsText} className="mt-1 see-more-btn">
-                      {isDetailsExpanded ? 'See mindre' : 'See mer'}
+                      {isDetailsExpanded ? 'Se mindre' : 'Se mer'}
                     </Button>
                   </Card.Text>
                 </Card.Body>
               </Card>
-              <Card>
+              <Card className='card-review' >
                 {movie.movie[0].reviews && Array.isArray(movie.movie[0].reviews) && (
                   <Carousel interval={null} className="custom-review-carousel">
                     {movie.movie[0].reviews.map((review, index) => (
@@ -274,9 +286,9 @@ function MovieDetailsPage() {
                 flip={false}
                 rootCloseEvent="click"
               >
-                <Dropdown.Item eventKey="välj visning" as="button">välj visning</Dropdown.Item>
-                {Object.entries(groupedScreenings).flatMap(([, screenings]: [string, any]) =>
-                  screenings.map((screening: any) => (
+                {/* <Dropdown.Item eventKey="välj visning" as="button">välj visning</Dropdown.Item> */}
+                {Object.entries(groupedScreenings).flatMap(([, screenings]) =>
+                  screenings.map((screening: Screening) => (
                     <Dropdown.Item 
                       key={screening.id} 
                       eventKey={`${screening.id}|${screening.theatreId}|${format(new Date(screening.dateTime), 'MM-dd HH:mm')}`} 
@@ -294,43 +306,57 @@ function MovieDetailsPage() {
         <Row className="d-flex justify-content-center mt-3 mb-3">
           <Col xs="auto">
             <Col className='seats-left mt-2' >Salong {selectedTheatreId || "(välj visning)"}</Col> 
-            <Button onClick={() => navigate(`/boka/${selectedScreeningId}`)} className=' mt-3'>Boka platser</Button>
+            <Button onClick={handleBookingClick} className=' mt-3'>Boka platser</Button>
+            {showWarning && <div className="text-danger mt-2">Vänligen välj en visning först.</div>}
           </Col>
         </Row>
 
         {/* karusell ------------------------------------------------------------------- */}
 
         <Container className="calendar-container mt-5">
-          <Carousel interval={null} indicators={false} controls={true} className="calendar-carousel">
-            {Object.entries(groupedScreenings).map(([date, screenings]: [string, any]) => (
-              <CarouselItem key={date} className="calendar-item">
+          <Row className="calendar-grid">
+            {Object.entries(groupedScreenings).slice(0, visibleCount).map(([date, screenings]) => (
+              <Col key={date} className="calendar-col">
                 <Card className="calendar-card">
-                  <Card.Header>
-                    <h4>{format(new Date(date), 'EEEE dd/MM', { locale: sv })}</h4>
+                  <Card.Header className="card-header">
+                      <h4>
+                        {format(new Date(date), 'EEEE', { locale: sv })}
+                        <br />
+                        {format(new Date(date), 'dd/MM', { locale: sv })}
+                      </h4>
                   </Card.Header>
                   <Card.Body>
-                    {screenings.map((screening: any) => (
+                    {screenings.map((screening: Screening) => (
                       <Card
                         key={screening.id}
                         onClick={() => navigate(`/boka/${screening.id}`)}
                         className="mb-3 square-card"
                       >
                         <Card.Body className="bg-primary">
-                          <Card.Title>{format(new Date(screening.dateTime), 'HH:mm')}</Card.Title>
+                          <Card.Text style={{ fontSize: '125%',marginBottom: '0'}} >{format(new Date(screening.dateTime), 'HH:mm')}</Card.Text>
                           <Card.Text>Salong {screening.theatreId}</Card.Text>
                         </Card.Body>
                       </Card>
                     ))}
                   </Card.Body>
                 </Card>
-              </CarouselItem>
+              </Col>
             ))}
-          </Carousel>
+          </Row>
         </Container>
+        <Col>
+          {Object.keys(groupedScreenings).length > visibleCount && (
+          <Button onClick={handleShowMore} className="mt-3" style={{ marginRight: '10px' }}>
+            Visa fler
+          </Button>
+          )}
 
-
-{/* karusell ------------------------------------------------------------------- */}
-      
+          {visibleCount > initialCount && (
+            <Button onClick={handleShowLess} className="mt-3">
+              Visa färre
+            </Button>
+          )}
+        </Col>
       </Container>
     </>
   )

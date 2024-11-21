@@ -126,6 +126,7 @@ const createNewBooking = async (req: Request, res: Response) => {
       ? +req.query.userId
       : null;
   const { email, screeningId, seats } = req.body;
+  console.log(seats)
   if (
     !regExes.email.test(email) ||
     !regExes.id.test(screeningId.toString()) ||
@@ -133,7 +134,7 @@ const createNewBooking = async (req: Request, res: Response) => {
       (seat: Seat) =>
         regExes.seats.test(seat.seatId.toString()) &&
         regExes.ticketType.test(seat.ticketTypeId.toString())
-    )
+    ) || seats.length === 0
   ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
