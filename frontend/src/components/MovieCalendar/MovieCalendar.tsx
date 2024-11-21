@@ -7,6 +7,10 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { loaderQuery } from "../../utils/queryService";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { QueryParams } from "../../utils/queryService";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { getWeekday } from "../../utils/dateTimeUtils";
 
 type FullScreening = {
   screeningId: number;
@@ -56,7 +60,8 @@ function MovieCalendar() {
   const navigate = useNavigate();
 
   const groupedMoviesByDay = moviesToDisplay.reduce((acc, movie) => {
-    const key = `${movie.dayName}-${movie.day}/${movie.month}`;
+    const translatedDayName = getWeekday(movie.dayName);
+    const key = `${translatedDayName}-${movie.day}/${movie.month}`;
     if (!acc[key]) {
       acc[key] = [];
     }
@@ -94,38 +99,43 @@ function MovieCalendar() {
                   </Accordion.Header>
                   <Accordion.Body>
                     {movies.map((movie, index) => (
-                      <div className="Poster-Description" key={index}>
-                        <Card style={{ width: "16rem" }}>
-                          <div className="Card">
-                            <Card.Img
-                              variant="top"
-                              src={`/images/${movie.posterURL}?url`}
-                            />
+                      <div className="Movies" key={index}>
+                        <Container>
+                          <Card style={{ width: "17rem" }}>
                             <Card.Body>
-                              <div className="Genre-Age">
-                                <Card.Text className="Age">
-                                  <Card.Title>{movie.movieTitle}</Card.Title>
-                                  <p>{movie.ageRating}+</p>
-                                </Card.Text>
-                              </div>
-
-                              <div className="Time-Button-Container">
-                                <Card.Text className="Movie-Time">
-                                  <p>{movie.time}</p>
-                                </Card.Text>
-                                <Button
-                                  className="Movie-Button"
-                                  variant="outline-primary"
-                                  onClick={() =>
-                                    navigate(`/boka/${movie.screeningId}`)
-                                  }
-                                >
-                                  Boka nu
-                                </Button>
-                              </div>
+                              <Row className="Row">
+                                <Col>
+                                  <Card.Img
+                                    variant="top"
+                                    src={`/images/${movie.posterURL}?url`}
+                                  />
+                                </Col>
+                                <Col>
+                                  <Card.Text className="Movie-Description">
+                                    <Card.Title className="Movie-Title">
+                                      <h4>{movie.movieTitle}</h4>
+                                    </Card.Title>
+                                    <Card.Text className="Age-Rating">
+                                      <p>{movie.ageRating}+</p>
+                                    </Card.Text>
+                                    <Card.Text className="Movie-Time">
+                                      <p>{movie.time}</p>
+                                    </Card.Text>
+                                    <Button
+                                      className="Movie-Button"
+                                      variant="outline-primary"
+                                      onClick={() =>
+                                        navigate(`/boka/${movie.screeningId}`)
+                                      }
+                                    >
+                                      Boka nu
+                                    </Button>
+                                  </Card.Text>
+                                </Col>
+                              </Row>
                             </Card.Body>
-                          </div>
-                        </Card>
+                          </Card>
+                        </Container>
                       </div>
                     ))}
                   </Accordion.Body>

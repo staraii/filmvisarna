@@ -1,67 +1,40 @@
 .Days {
-  width: 100%;
+  width: 95%;
   margin: 0 auto;
   margin-top: 20px;
 }
 
-.Poster-Container {
+.Movie-calendar {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  max-width: 1024px;
-  margin: 0 auto;
 }
 
-.Days img {
-  max-width: 50%;
-  margin: 0 auto;
-  height: auto;
+.Movies img {
+  width: 120px;
 }
 
-.accordion-button {
-  transition: background-color 0.3s ease;
-}
+.Movie-Description {}
 
-.Poster-Description {
-  background-color: #1e1637;
-  max-width: 17rem;
-  margin: 10px;
-  text-align: center;
-  padding: 4px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
-.Poster-Description h4 {
+.Movie-Description h4 {
+  font-size: 1.3rem;
   margin-top: 1rem;
-  font-size: 2rem;
 }
 
-.Poster-Description p {
-  font-size: 1.1rem;
+.Movie-Description p {
+  font-size: 1rem;
 }
 
-.Genre-Age {
-  display: flex;
-}
-
-.Age {
-  border-radius: 12px;
-  padding: 4px;
-  height: 30px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.Age p {
-  font-size: 0.9rem;
+.Row {
+  background-color: #1e1637;
+  border-radius: 10px;
+  padding: 5px;
 }
 
 label {
   padding: 0.5rem;
+}
+
+.accordion-button {
+  transition: background-color 0.3s ease;
 }
 
 select {
@@ -73,42 +46,12 @@ select {
   border: 1px black solid;
 }
 
-@media (min-width: 763px) {
-  .Poster-Container {
-    flex-direction: row;
-  }
-
-  .Poster-Description {
-    flex: 1 1 calc(33.33% - 20px);
-  }
-}
-
-@media (max-width: 763px) {
-  .accordion-item {
-    margin-bottom: 2px;
-  }
-
-  .accordion-body {
-    padding: 8px 10px;
-  }
-
-  .accordion-header {
-    padding: 5px 10px;
-  }
-
-  .accordion-header button {
-    margin: 0;
-  }
-}
-
-
 .Movie-Button {
   color: #ac9ed9;
   background-color: #0b0815;
   border: 1.5px solid #ac9ed9;
   flex-shrink: 0;
-  font-size: 1rem;
-  margin: 0;
+  font-size: 0.8rem;
 }
 
 .Movie-Button:hover {
@@ -117,20 +60,6 @@ select {
   background-color: #ac9ed9;
 }
 
-.Time-Button-Container {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin: 0;
-  background-color: #1e1637;
-  border-radius: 0.5rem;
-}
-
 .Movie-Time p {
   font-size: 1.4rem;
-  margin: 1rem 0rem 0rem 0rem;
-}
-
-.Movie-Text {
-  margin-top: 1rem;
 }
