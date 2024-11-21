@@ -36,7 +36,6 @@ export default function ScreeningCard({
   posterPreview,
 }: ScreeningCardProps) {
   const navigate = useNavigate();
-  occupiedPercent = 0;
   const soldOut = occupiedPercent > 99 ? true : false;
   const { month, date, dayName, time } = getParsedDateTime(dateTime);
   const age = ageRatingUtil(ageRating.toString());
@@ -59,7 +58,7 @@ export default function ScreeningCard({
           src={slidePreview ? slidePreview : `/images/${slideURL}?url`}
           className={`overlay-image rounded d-block ${
             soldOut ? "overlay-image-sold-out" : ""
-          }`}
+            }`}
         />
         <Card.ImgOverlay className="rounded overlay-content">
           <Row className="d-inline-flex flex-row justify-content-between mb-0">
@@ -83,7 +82,6 @@ export default function ScreeningCard({
                       cursor: "pointer",
                     }}
                     alt={`${movieTitle} poster`}
-                    // onClick={ () => navigate(`/filmer/${movieId}`)}
                     onClick={() => handleNavigate(`/filmer/${movieId}`)}
                   />
                 </Col>
@@ -99,7 +97,6 @@ export default function ScreeningCard({
               <Row>
                 <Col xs={12} className="pb-0">
                   <Card.Text as="h3" className="text-end date-time-font">
-                    {/* {getWeekday(dayName)} */}
                     {dayName}
                   </Card.Text>
                 </Col>
@@ -165,7 +162,6 @@ export default function ScreeningCard({
                 variant="outline-secondary"
                 as="button"
                 className="w-100 book-button-screening-card"
-                //onClick={() => navigate(`/boka/${screeningId}`)}
                 onClick={() => handleNavigate(`/boka/${screeningId}`)}
                 disabled={soldOut}
               >
