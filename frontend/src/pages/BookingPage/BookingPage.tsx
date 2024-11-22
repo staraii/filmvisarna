@@ -9,11 +9,12 @@ import {
   Form,
   useActionData,
 } from "react-router-dom";
-import { loaderQuery, QueryParams } from "../utils/queryService";
+import { loaderQuery, QueryParams } from "../../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getWeekday } from "../utils/dateTimeUtils";
-import { useAuth } from ".././utils/authContext";
-import { getParsedYearDateTime } from "../utils/dateTimeUtils";
+import { getWeekday } from "../../utils/dateTimeUtils";
+import { useAuth } from "../../utils/authContext";
+import { getParsedYearDateTime } from "../../utils/dateTimeUtils";
+import useLocationTitle from "../../utils/useLocationTitle";
 
 interface RowSeats {
   seats: number;
@@ -55,7 +56,7 @@ export default function BookingPage() {
   const navigate = useNavigate();
 
   const [seatData, setData] = useState<string[]>([]);
-
+  useLocationTitle(screeningData.movieTitle);
   useEffect(() => {
     const date = new Date().toLocaleString();
     const currentTime = getParsedYearDateTime(date);
@@ -243,7 +244,7 @@ export default function BookingPage() {
             </Button>
           </Modal.Footer>
         </Modal>
-        ;
+
         <Stack className="w-100 h-100 p-3 d-flex flex-column">
           <h4>{screeningData.theatreName}</h4>
           <Stack className="p-1">
