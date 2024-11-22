@@ -186,7 +186,7 @@ export const fetchUserBookings = async (email: string) => {
       `/api/bookings/fullBookings?email=${encodeURIComponent(email)}`,
       {
         method: "GET",
-        credentials: "include", // This ensures cookies are sent along with the request
+        credentials: "include", 
         headers: {
           "Content-Type": "application/json",
         },
@@ -204,10 +204,10 @@ export const fetchUserBookings = async (email: string) => {
 
     const data = await response.json();
     
-    return data; // Return the bookings data
+    return data; 
   } catch (error) {
     console.error("Fetch error:", error);
-    throw error; // Re-throw to be caught by useQuery
+    throw error; 
   }
 };
 

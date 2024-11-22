@@ -47,11 +47,11 @@ const fetchUserData = async () => {
     const userData = await AuthService.getMe();
     setUserEmail(userData.email);
     setFirstName(userData.firstName);
-    setRole(userData.role || 'user'); // Set default role if missing
+    setRole(userData.role || 'user'); 
     setIsAuthenticated(true);
   } catch (error) {
     console.error('Failed to fetch user data:', error);
-    setIsAuthenticated(false); // Optional: this could also be handled differently
+    setIsAuthenticated(false); 
   }
 };
 
@@ -68,7 +68,7 @@ const fetchUserData = async () => {
  const register = async (formData: AuthService.FormData) => {
   try {
     const { email, firstName } = await AuthService.register(formData);
-    const role = 'user'; // Set the default role manually for now
+    const role = 'user'; 
     login(email, firstName, role);
   } catch (error) {
     console.error('Registration failed:', error);

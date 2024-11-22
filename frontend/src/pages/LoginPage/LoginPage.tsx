@@ -6,7 +6,7 @@ import { useAuth } from "../../utils/authContext";
 import { Eye, EyeSlash } from "react-bootstrap-icons"; 
 import './LoginPage.css';
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -33,11 +33,11 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     const response = await login(email, password);
     const { email: userEmail, firstName } = response;
 
-    // Set default role to 'user' or 'visitor'
-    const role = 'user'; // Default role, can be adjusted if needed
+    // set role to user by default
+    const role = 'user'; 
 
-    authLogin(userEmail, firstName, role); // Pass the role when calling authLogin
-    setShowSuccessModal(true); // Show modal after successful login
+    authLogin(userEmail, firstName, role); 
+    setShowSuccessModal(true); 
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
     setError(errorMessage);
@@ -45,8 +45,8 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 };
 
   const handleModalClose = () => {
-    setShowSuccessModal(false); // Close modal
-    navigate("/profil"); // Redirect to profile after closing modal
+    setShowSuccessModal(false); 
+    navigate("/profil"); 
   };
 
   return (

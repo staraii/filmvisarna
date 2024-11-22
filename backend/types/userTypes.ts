@@ -5,7 +5,7 @@ export interface User {
   firstname: string;
   lastname: string;
   email: string;
-  password: string; // Password should be hashed in practice
+  password: string; 
   phone: string;
   role: string;
 }

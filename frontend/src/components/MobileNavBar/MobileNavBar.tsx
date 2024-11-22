@@ -5,8 +5,8 @@ import Nav from "react-bootstrap/Nav";
 import { useNavigate } from "react-router-dom";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Stack from "react-bootstrap/Stack";
-import { useAuth } from "../../utils/authContext"; // Importing AuthContext for auth state
-import { logout as authLogout } from "../../services/authService"; // Import your logout function from authService
+import { useAuth } from "../../utils/authContext"; 
+import { logout as authLogout } from "../../services/authService"; 
 import { useEffect } from "react";
 
 
@@ -29,14 +29,14 @@ export default function MobileNavBar() {
   
     const handleLogout = async () => {
     try {
-      await authLogout(); // Call the logout function from your auth service
-      logout(); // Call the context's logout function to update the state
-      navigate("/") // Redirect to homepage after logout
+      await authLogout(); 
+      logout(); 
+      navigate("/") 
     } catch (error) {
       console.error("Logout failed:", error);
-      // Optionally, show a user-friendly message here
+    
     } finally {
-      setShowMenu(false); // Close the logout confirmation modal
+      setShowMenu(false); 
     }
   };
 

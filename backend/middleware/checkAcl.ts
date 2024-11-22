@@ -6,10 +6,10 @@ import { RowDataPacket } from 'mysql2';
 // Define the structure of your ACL rule
 interface AclRule {
   id: number;
-  userRoles: string; // Updated from 'role' to 'userRoles'
+  userRoles: string; 
   method: string;
   restApiRoute: string;
-  description?: string; // Optional, if you have a description field
+  description?: string; 
   fieldMatchingUserId?: boolean;
 }
 
@@ -26,14 +26,14 @@ async function getAclRule(userRoles: string, route: string, method: string): Pro
     if (rows.length > 0) {
       return {
         id: rows[0].id,
-        userRoles: rows[0].userRoles, // Changed from 'role' to 'userRoles'
+        userRoles: rows[0].userRoles, 
         method: rows[0].method,
         restApiRoute: rows[0].restApiRoute,
         description: rows[0].description,
-      } as AclRule; // Cast the result as AclRule
+      } as AclRule; 
     }
 
-    return undefined; // No matching rule found
+    return undefined; 
   } catch (error) {
     console.error('Error fetching ACL rule:', error);
     throw error;
@@ -50,8 +50,8 @@ export const checkAcl = async (req: Request, res: Response, next: NextFunction) 
       return res.status(401).json({ message: 'Unauthorized: No session data' });
     }
 
-    const route = req.path.replace(/\d+$/, '*'); // Get the current route
-    const method = req.method; // Get the HTTP method (GET, POST, etc.)
+    const route = req.path.replace(/\d+$/, '*'); 
+    const method = req.method; 
 
     // Get ACL rule for the user's role, current route, and method
     console.log('Checking ACL for:', userRole, route, method);
@@ -65,7 +65,7 @@ export const checkAcl = async (req: Request, res: Response, next: NextFunction) 
     if (aclRule.fieldMatchingUserId) {
       // Here, instead of comparing to requestedScreeningId, we might want to skip this check
       // because we want users to see their own screenings without specifying IDs in the route
-      const requestedScreeningId = req.params.id; // ID from the URL
+      const requestedScreeningId = req.params.id; 
       if (requestedScreeningId && requestedScreeningId !== userId.toString()) {
         return res.status(403).json({ message: 'Access denied: User ID does not match' });
       }
