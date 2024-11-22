@@ -12,9 +12,7 @@
   width: 120px;
 }
 
-.Movie-Description {}
-
-.Movie-Description h4 {
+.Movie-Title h4 {
   font-size: 1.3rem;
   margin-top: 1rem;
 }
@@ -24,7 +22,7 @@
 }
 
 .Row {
-  background-color: #1e1637;
+  background-color: #100b1e;
   border-radius: 10px;
   padding: 5px;
 }
