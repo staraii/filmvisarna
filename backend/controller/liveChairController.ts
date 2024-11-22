@@ -5,7 +5,7 @@ export default class LiveChairController {
     try {
       const query = "SELECT seats FROM fullBookings WHERE screeningId =?";
       const values = id;
-      let result = await db.query(query, values);
+      let result = await db.execute(query, [values]);
       return result;
     } catch (error) {
       console.error("Error fetching from database", error);

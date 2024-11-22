@@ -13,12 +13,12 @@ import HomePage from "./pages/HomePage/HomePage";
 import Movies from "./pages/Movies/Movies.tsx";
 import MovieDetailsPage from "./pages/MovieDetailsPage/MovieDetailsPage.tsx";
 import MovieCalendar from "./components/MovieCalendar/MovieCalendar";
-import BookingPage from "./pages/BookingPage";
+import BookingPage from "./pages/BookingPage/BookingPage.tsx";
 import Register from "./pages/Register/Register";
 import CancelTickets from "./pages/Cancel-Tickets/Cancel-Tickets";
 import LoginPage from "./pages/LoginPage/LoginPage.tsx";
-import PasswordReset from "./pages/LoginPage/passwordReset.tsx";
-import BookingConfirmationPage from "./pages/BookingConfirmation.tsx";
+import PasswordReset from "./pages/LoginPage/passwordReset";
+import BookingConfirmationPage from "./pages/BookingConfimationPage/BookingConfirmation.tsx";
 import MinProfil from "./pages/myProfile/myProfile.tsx";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute.tsx";
 import { AuthProvider } from "./utils/authContext.tsx";
@@ -30,7 +30,6 @@ import EditMovie from "./pages/Admin/components/EditMovie/EditMovie.tsx";
 import NewMovie from "./pages/Admin/components/NewMovie/NewMovie.tsx";
 import Tickets from "./pages/Admin/components/Tickets/Tickets.tsx";
 import BookingStatus from "./pages/Admin/components/BookingStatus/BookingStatus.tsx";
-
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -137,11 +136,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-      element: (
-           <ProtectedRoute adminOnly={true}>
-            <Admin />
-          </ProtectedRoute>
-        ),
+    element: (
+      <ProtectedRoute adminOnly={true}>
+        <Admin />
+      </ProtectedRoute>
+    ),
 
     errorElement: <ErrorPage />,
     children: [
