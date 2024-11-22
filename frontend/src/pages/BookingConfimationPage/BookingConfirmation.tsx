@@ -65,14 +65,13 @@ export default function BookingConfirmationPage() {
     throw new Error("Åtkomst nekas: Bokningsdata saknas eller är ogiltig.");
   }
 
-  useEffect(() => {
-    const mail = isAuthenticated ? userEmail : location.state?.email;
+useEffect(() => {
+  const mail = isAuthenticated ? userEmail : location.state?.email;
 
-    if (mail !== booking.email) {
-      throw new Error("Åtkomst nekas.");
-    }
-  }),
-    [];
+  if (mail !== booking.email) {
+    throw new Error("Åtkomst nekas.");
+  }
+}, []);
 
   const [showQrViewer, setShowQrViewer] = useState<null | string>(null);
   const handleShowQR = (bookingNumber: string) => {

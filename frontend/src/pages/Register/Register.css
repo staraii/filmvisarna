@@ -41,17 +41,15 @@ button:hover {
 /* Styling the form inputs to make them larger */
 .form-control {
   height: 40px;
-  font-size: 1.2rem;
+  font-size: 1rem;
   width: 100%;
 }
 
+
+
 /* Add media query to adjust margin based on mobile view */
 @media (max-width: 768px) {
-  button {
-    /* margin-bottom: 70px; */
-    /* Extra margin on mobile view for more space */
-  }
-
+ 
     .register-button {
       margin-bottom: 30px;
       /* Space below the button for mobile */

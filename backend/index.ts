@@ -78,13 +78,13 @@ app.listen(SERVER_PORT, () => {
   console.log(`Server is running on port ${SERVER_PORT}`); // Log server start
 });
 
-// Frontend directory prefix
-//const FRONTEND_PREFIX = process.env.FRONTEND_PREFIX || "../frontend/dist";
-// Getting path to frontend dist folder
-//const FRONTEND_DIST = path.join(__dirname, FRONTEND_PREFIX);
-// Serving static files from frontend dist folder
-//app.use(express.static(FRONTEND_DIST));
-// If no route path matches serve frontend entry file
-//app.get("*", (_req, res) => {
-//  res.sendFile(path.join(FRONTEND_DIST, "index.html"));
-//})
+//Frontend directory prefix
+const FRONTEND_PREFIX = process.env.FRONTEND_PREFIX || "../frontend/dist";
+//Getting path to frontend dist folder
+const FRONTEND_DIST = path.join(__dirname, FRONTEND_PREFIX);
+//Serving static files from frontend dist folder
+app.use(express.static(FRONTEND_DIST));
+//If no route path matches serve frontend entry file
+app.get("*", (_req, res) => {
+ res.sendFile(path.join(FRONTEND_DIST, "index.html"));
+})

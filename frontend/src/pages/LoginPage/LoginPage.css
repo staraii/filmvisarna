@@ -28,6 +28,14 @@
   /* Remove underline on hover, if desired */
 }
 
+.form-check {
+  display: flex;
+  /* Use flexbox to align items horizontally */
+  align-items: center;
+  /* Vertically align checkbox and text */
+}
+
+
 /* Form input and button adjustments */
 form .form-control {
   font-size: 16px;
@@ -42,6 +50,7 @@ form .form-control {
 form .form-check-label {
   font-size: 16px;
   /* Larger font size for checkbox label */
+
 }
 
 button.btn-md {
@@ -49,7 +58,10 @@ button.btn-md {
   /* Consistent button size */
 }
 
-
+.form-check-input {
+  margin-top: 0px;
+  /* Remove any extra margin on top of the checkbox */
+}
 
 /* Adjustments for screens wider than 768px */
 @media (min-width: 768px) {
