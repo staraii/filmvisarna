@@ -13,7 +13,7 @@ import liveChairRouter from "./routes/liveChairRouter.js";
 import moviesDetailsRouter from "./routes/moviesDetailsRouter.js";
 import authRouter from "./routes/authRouter.js";
 import session from "express-session";
-import MySQLStore from "express-mysql-session"; // Import MySQL session store
+import MySQLStore from "express-mysql-session"; 
 
 // Getting directory path
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -40,22 +40,22 @@ const SERVER_PORT = process.env.SERVER_PORT || 5001;
 export const db = mysql.createPool(dbConfig);
 
 // Create MySQL session store
-const MySQLSessionStore = MySQLStore(session as any); // Link the MySQLStore with express-session
-const sessionStore = new MySQLSessionStore(dbConfig); // Initialize session store with DB config
+const MySQLSessionStore = MySQLStore(session as any); 
+const sessionStore = new MySQLSessionStore(dbConfig); 
 
 export const app = express();
 
 // Session middleware with MySQL store
 app.use(
   session({
-    name: "session_cookie_name", // Name of the session cookie
-    secret: process.env.SESSION_SECRET || "your_secret_key", // Secret for session encryption
-    store: sessionStore, // Use MySQL session store
-    resave: false, // Do not save session if unmodified
-    saveUninitialized: false, // Do not create session until something is stored
+    name: "session_cookie_name", 
+    secret: process.env.SESSION_SECRET || "your_secret_key", 
+    store: sessionStore, 
+    resave: false, 
+    saveUninitialized: false, 
     cookie: {
-      secure: false, // Set true if using HTTPS
-      maxAge: 1000 * 60 * 60 * 24, // Set session expiration time to 24 hours (in milliseconds)
+      secure: false, 
+      maxAge: 1000 * 60 * 60 * 24, 
     },
   })
 );
@@ -75,7 +75,7 @@ app.use("/api/events", liveChairRouter);
 
 // Start the server
 app.listen(SERVER_PORT, () => {
-  console.log(`Server is running on port ${SERVER_PORT}`); // Log server start
+  console.log(`Server is running on port ${SERVER_PORT}`); 
 });
 
 // Frontend directory prefix

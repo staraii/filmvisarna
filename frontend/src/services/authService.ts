@@ -49,7 +49,7 @@ const validateRegistrationInput = (formData: FormData): string | null => {
     return "Telefonnumret måste vara 10 siffror långt.";
   }
 
-  return null; // No errors
+  return null; 
 };
 
 // Validation for Login Input Fields
@@ -62,14 +62,14 @@ const validateLoginInput = (email: string, password: string): string | null => {
     return "Ogiltigt e-postformat.";
   }
 
-  return null; // No errors
+  return null; 
 };
 
 // Login function with validation
 export const login = async (email: string, password: string) => {
   const validationError = validateLoginInput(email, password);
   if (validationError) {
-    throw new Error(validationError); // Throw validation error immediately
+    throw new Error(validationError);
   }
 
   const response = await fetch('/api/login', {
@@ -97,7 +97,7 @@ export const login = async (email: string, password: string) => {
 export const register = async (formData: FormData) => {
   const validationError = validateRegistrationInput(formData);
   if (validationError) {
-    throw new Error(validationError); // Throw validation error immediately
+    throw new Error(validationError); 
   }
 
   const { email, password, firstName, lastName, phoneNumber } = formData;
@@ -126,10 +126,10 @@ export const register = async (formData: FormData) => {
   }
 
   const data = await login(email, password);
-  return data; // This should include `{ email, firstName }`
+  return data; 
 };
 
-// Logout function (unchanged)
+// Logout function 
 export const logout = async () => {
   const response = await fetch('/api/login', {
     method: 'DELETE',
@@ -144,11 +144,11 @@ export const logout = async () => {
   return response.json();
 };
 
-// Check if authenticated (unchanged)
+// Check if authenticated 
 export const getMe = async () => {
   const response = await fetch('/api/login', {
     method: 'GET',
-    credentials: 'include',  // Ensures the session cookie is sent with the request
+    credentials: 'include',  
   });
 
   if (!response.ok) {
@@ -157,11 +157,11 @@ export const getMe = async () => {
 
   const data = await response.json();
 
-  // Ensure 'role' is returned along with 'email' and 'firstName'
+ 
   return {
     email: data.user.email,
     firstName: data.user.firstName,
-    role: data.user.role || 'user', // Provide default value 'user' if no role is available
+    role: data.user.role || 'user', 
   };
 };
 

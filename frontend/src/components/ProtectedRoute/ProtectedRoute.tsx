@@ -4,7 +4,7 @@ import { useAuth } from '../../utils/authContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
-  adminOnly?: boolean; // Optional prop for restricting access to admin-only
+  adminOnly?: boolean; 
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, adminOnly = false }) => {

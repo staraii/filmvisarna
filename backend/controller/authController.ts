@@ -27,8 +27,8 @@ export const register = async (req: Request, res: Response) => {
 
     // Create a new user
     await createUser({
-      firstName: firstName, // Ensure this matches your database field
-      lastName: lastName,   // Ensure this matches your database field
+      firstName: firstName, 
+      lastName: lastName,   
       email: normalizedEmail,
       password: hashedPassword,
       phone,
@@ -44,7 +44,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// POST /api/login: Login Function
+// Login Function
 
 export const login = async (req: Request, res: Response) => {
   const { email, password }: LoginUser = req.body;
@@ -79,7 +79,7 @@ export const login = async (req: Request, res: Response) => {
    res.json({
       message: 'Inloggningen lyckades',
       email: user.email,
-      role: user.role, // Include role in response
+      role: user.role, 
     });
   } catch (error) {
     console.error('Error during login:', error);
@@ -90,7 +90,7 @@ export const login = async (req: Request, res: Response) => {
 // GET /api/login: Check if user is logged in
 export const getLoggedInUser = async (req: Request, res: Response) => {
   if (!req.session.userId) {
-    req.session.userRole = 'visitor'; // Default role for unauthenticated users
+    req.session.userRole = 'visitor'; 
     return res.status(401).json({ message: 'Ingen användare är inloggad' });
   }
 
@@ -105,7 +105,7 @@ export const getLoggedInUser = async (req: Request, res: Response) => {
       user: {
         id: user.id,
         email: user.email,
-        role: user.role || 'user', // Default role if not set
+        role: user.role || 'user', 
         firstName: user.firstName,
         lastName: user.lastName,
         phone: user.phone,
@@ -125,25 +125,24 @@ export const checkSession = async (req: Request, res: Response) => {
       isAuthenticated: true,
       user: {
         id: req.session.userId,
-        email: req.session.userEmail,  // Use the stored email in the session
+        email: req.session.userEmail,  
         role: req.session.userRole,
       },
     });
   } else {
-    // No user logged in, assign 'visitor' role
     req.session.userRole = 'visitor';
     return res.json({
       isAuthenticated: false,
-      role: 'visitor',  // Explicitly return visitor role for unauthenticated users
+      role: 'visitor',  
     });
   }
 };
 
 // DELETE /api/login: Logout Function
 export const logout = (req: Request, res: Response) => {
-  // Check if there is a session
+ 
   if (!req.session || !req.session.userId) {
-    return res.status(200).json({ message: 'Ingen användare är inloggad.' }); // Custom message
+    return res.status(200).json({ message: 'Ingen användare är inloggad.' }); 
   }
 
   // Destroy the session to log the user out
