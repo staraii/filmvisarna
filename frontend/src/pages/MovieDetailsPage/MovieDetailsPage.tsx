@@ -7,7 +7,11 @@ import { sv } from 'date-fns/locale';
 
 import { useLoaderData } from "react-router-dom";
 import { useSuspenseQuery } from "@tanstack/react-query";
+
+import useLocationTitle from "../../utils/useLocationTitle";
+
 import { QueryParams, loaderQuery,} from "../../utils/queryService";
+
 
 //import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -58,6 +62,7 @@ interface Screening {
 }
 
 function MovieDetailsPage() {
+  
   const navigate = useNavigate();
   useEffect(() => {
   window.scrollTo(0, 0);
@@ -68,7 +73,7 @@ function MovieDetailsPage() {
 
   const movie = data as ApiResponse;
   //console.log(data);
-
+  useLocationTitle(`${movie.movie[0].title}`)
     if (typeof movie.movie[0].reviews === "string") {
     try {
       movie.movie[0].reviews = JSON.parse(`[${movie.movie[0].reviews}]`);
