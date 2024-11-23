@@ -3,23 +3,23 @@ import { Movie, Review, FilesDefault } from "../AdminTypes";
 
 
 const movieRegExes = {
-  title: /^[a-zA-ZåäöÅÄÖ0-9.,&\-" ]+$/,
+  title: /^[a-zA-ZåäöÅÄÖ0-9.,&!\-" ]+$/,
   ageRating: /^(?:1|7|11|15)$/,
   duration: /^[1-9][0-9]*$/,
   releaseYear: /^19[0-9][0-9]$/,
   spokenLanguage: /^[a-zA-ZåäöÅÄÖ]{2,3}$/,
   subtitles: /^[a-zA-ZåäöÅÄÖ]{2,3}$/,
-  cast: /^[a-zA-ZåäöÅÄÖ0-9.,\- ]+$/,
-  directedBy: /^[a-zA-ZåäöÅÄÖ0-9.,\- ]+$/,
-  description: /^[a-zA-ZåäöÅÄÖ0-9.,&\-" ]+$/,
+  cast: /^[a-zA-ZåäöÅÄÖ0-9.,()\- ]+$/,
+  directedBy: /^[a-zA-ZåäöÅÄÖ0-9.,&!\- "]+$/,
+  description: /^[a-zA-ZåäöÅÄÖ0-9.,&!\- "]+$/,
   trailerURL:
     /(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/,
 };
 
 const reviewsRegExes:{[key: string]: RegExp} = {
   rating: /^[1-5]$/,
-  reviewBy: /^[a-zA-ZåäöÅÄÖ0-9.,&_\-" ]+$/,
-  review: /^[a-zA-ZåäöÅÄÖ0-9.,&_\-" ]+$/,
+  reviewBy: /^[a-zA-ZåäöÅÄÖ0-9.,!&_\-" ]+$/,
+  review: /^[a-zA-ZåäöÅÄÖ0-9.,&!_\-" ]+$/,
 };
 
 interface UseValidateMovieProps {
