@@ -10,6 +10,7 @@ import ShowReviews from "./ShowReviews/ShowReviews";
 import { Review, Movie, ImagesStateDefault, FilesDefault } from "../../AdminTypes";
 import useValidateMovie from "../useValidateMovie";
 import useNewMovieService from "../../utils/newMovieService";
+import { useQueryClient, QueryClient } from "@tanstack/react-query";
 
 const movieDefaults: Movie = {
   title: "",
@@ -47,13 +48,14 @@ const filesDefault: FilesDefault = {
   postersList: [],
 }
 
-interface FilesToSubmit {
-  poster: File;
-  slide: File;
-  postersList: File[];
-}
+// interface FilesToSubmit {
+//   poster: File;
+//   slide: File;
+//   postersList: File[];
+// }
 
 export default function MovieForm() {
+  const queryClient: QueryClient = useQueryClient();
   const [movie, setMovie] = useState<Movie>(movieDefaults);
   const [categories, setCategories] = useState<string[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -61,9 +63,9 @@ export default function MovieForm() {
   const [files, setFiles] = useState<FilesDefault>(filesDefault);
   const [touched, setTouched] = useState<{ [key: string]: boolean }>({});
   const { errors, isValid, isInvalid } = useValidateMovie({ movie, categories, reviews, files })
-  const { addNewMovie } = useNewMovieService();
+  const { addNewMovie } = useNewMovieService(queryClient);
   const handleSubmitMovie = (movie: Movie, categories: string[], reviews: Review[], imageFiles: FilesDefault) => {
-
+    movie.createdAt = new Date().toLocaleString();
     if (imageFiles.poster instanceof File && imageFiles.slide instanceof File && (imageFiles.postersList.length > 0 && imageFiles.postersList[0] instanceof File)) {
       const images = { poster: imageFiles.poster, slide: imageFiles.slide, postersList: [...imageFiles.postersList] };
       addNewMovie({ movie, files: images, categories, reviews });
@@ -230,7 +232,7 @@ export default function MovieForm() {
           xxl={6}
           className="px-4 mt-4"
         >
-          {errors.map((error) => (<Row>
+          {errors.map((error, index) => (<Row key={index}>
             <Col><p>{error}</p></Col>
           </Row>))}
         </Col>
