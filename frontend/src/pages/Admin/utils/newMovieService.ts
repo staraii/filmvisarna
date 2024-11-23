@@ -1,17 +1,13 @@
 import fileToBase64 from "../../../utils/fileToBase64";
 import { Movie, Review } from "../AdminTypes";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import reqUtil from "../../../utils/reqUtil";
 import { useNavigate } from "react-router-dom";
+import { QueryClient } from "@tanstack/react-query";
 
 
 interface NewMovieServiceProps {
   movie: Movie;
-  // files: {
-  //   poster: File;
-  //   slide: File;
-  //   postersList: File[];
-  // },
   files: Files;
   categories: string[];
   reviews: Review[];
@@ -33,7 +29,7 @@ interface AddNewMovie {
   images: EncodedImages;
 }
 
-export default function useNewMovieService() {
+export default function useNewMovieService(queryClient: QueryClient) {
   const navigate = useNavigate();
 
 
@@ -50,50 +46,23 @@ export default function useNewMovieService() {
 
   const uploadNewMovie = useMutation({
     mutationFn: (newMovie: AddNewMovie) => {
-      return reqUtil("POST", "/api/movies/", { newMovie }
+      return reqUtil("POST", "/api/movies/", newMovie
       )
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["movies"]})
       navigate("/admin/");
-    }
+    },
   }) 
 
   async function addNewMovie({ movie, files, categories, reviews }: NewMovieServiceProps){
     const images: EncodedImages = await encodeImageFiles(files);
+    console.log(images)
     const body = { movie, images, categories, reviews };
     uploadNewMovie.mutate(body);
   }
 
 
-//   const movieDefaults: Movie = {
-//   title: "",
-//   ageRating: "",
-//   createdAt: "",
-//   cast: "",
-//   directedBy: "",
-//   duration: "",
-//   trailerURL: "",
-//   subtitles: "",
-//   spokenLanguage: "",
-//   description: "",
-//   releaseYear: "",
-// };
-  // const newMovie = {
-  //   movie: {
-  //     title: movie.title,
-  //     ageRating: movie.ageRating,
-  //     details: {
-  //       credits: {
-  //         cast: [...movie.cast.split(", ")],
-  //         directedBy: [...movie.directedBy.split(", ")],
-  //         duration: movie.duration,
-  //         mediaURLs: {
-  //           slideURL: files.slide.name,
 
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
   return { addNewMovie };
 }
