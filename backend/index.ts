@@ -1,6 +1,3 @@
-// Main entry point for the Express application.
-// Sets up the server and connects to the MySQL database.
-
 import express from "express";
 import mysql, { PoolOptions } from "mysql2/promise";
 import path from "path";
@@ -13,13 +10,13 @@ import liveChairRouter from "./routes/liveChairRouter.js";
 import moviesDetailsRouter from "./routes/moviesDetailsRouter.js";
 import authRouter from "./routes/authRouter.js";
 import session from "express-session";
-import MySQLStore from "express-mysql-session"; // Import MySQL session store
+import MySQLStore from "express-mysql-session"; 
 
 // Getting directory path
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Getting path to images directory
-const IMAGES_FOLDER = path.join(__dirname, "../assets/images/");
+const IMAGES_FOLDER = path.join(__dirname, "./assets/images/");
 // Serving static files from /images
 const imageServer = express();
 imageServer.use(express.static(IMAGES_FOLDER));
@@ -61,7 +58,7 @@ app.use(
 );
 
 // Middleware to parse JSON requests
-app.use(express.json());
+app.use(express.json({limit: "10MB"}));
 
 app.use("/images", imageServer);
 
@@ -79,12 +76,12 @@ app.listen(SERVER_PORT, () => {
 });
 
 // Frontend directory prefix
-//const FRONTEND_PREFIX = process.env.FRONTEND_PREFIX || "../frontend/dist";
+const FRONTEND_PREFIX = process.env.FRONTEND_PREFIX || "../frontend/dist";
 // Getting path to frontend dist folder
-//const FRONTEND_DIST = path.join(__dirname, FRONTEND_PREFIX);
+const FRONTEND_DIST = path.join(__dirname, FRONTEND_PREFIX);
 // Serving static files from frontend dist folder
-//app.use(express.static(FRONTEND_DIST));
+app.use(express.static(FRONTEND_DIST));
 // If no route path matches serve frontend entry file
-//app.get("*", (_req, res) => {
-//  res.sendFile(path.join(FRONTEND_DIST, "index.html"));
-//})
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(FRONTEND_DIST, "index.html"));
+})
