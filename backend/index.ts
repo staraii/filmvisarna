@@ -1,6 +1,3 @@
-// Main entry point for the Express application.
-// Sets up the server and connects to the MySQL database.
-
 import express from "express";
 import mysql, { PoolOptions } from "mysql2/promise";
 import path from "path";
@@ -14,12 +11,12 @@ import moviesDetailsRouter from "./routes/moviesDetailsRouter.js";
 import authRouter from "./routes/authRouter.js";
 import session from "express-session";
 import MySQLStore from "express-mysql-session"; 
-
+ 
 // Getting directory path
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Getting path to images directory
-const IMAGES_FOLDER = path.join(__dirname, "../assets/images/");
+const IMAGES_FOLDER = path.join(__dirname, "./assets/images/");
 // Serving static files from /images
 const imageServer = express();
 imageServer.use(express.static(IMAGES_FOLDER));
@@ -61,16 +58,16 @@ app.use(
 );
 
 // Middleware to parse JSON requests
-app.use(express.json());
+app.use(express.json({limit: "10MB"}));
 
 app.use("/images", imageServer);
 
 // Routers
-app.use("/api/screenings", screeningsRouter);
-app.use("/api/bookings", bookingsRouter);
+app.use(screeningsRouter);
+app.use(bookingsRouter);
 app.use(moviesRouter);
 app.use(authRouter);
-app.use("/api/moviesDetails", moviesDetailsRouter);
+app.use(moviesDetailsRouter);
 app.use("/api/events", liveChairRouter);
 
 // Start the server
