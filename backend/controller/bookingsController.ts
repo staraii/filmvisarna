@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bookingsService from "../services/bookingsService.js";
-import MailService from "../services/mailService.js";
+//import MailService from "../services/mailService.js";
 import { db } from "../index.js";
 
 const regExes = { 
@@ -80,6 +80,12 @@ const handleGetBookings = async (req: Request, res: Response) => {
         ) {
           whereArgs.push(`FIND_IN_SET(?, REPLACE(\`${key}\`, " ", ""))`);
           queryParamsArr.push(value);
+        
+        } else if (key === "date") {
+            whereArgs.push(`dateTime >= ?`);
+            whereArgs.push(`dateTime <= ?`);
+            queryParamsArr.push(value + " 00:00:00");
+            queryParamsArr.push(value + " 23:59:59");
         } else {
           whereArgs.push(`\`${key}\` = ?`);
           queryParamsArr.push(value);
@@ -118,13 +124,8 @@ type Seat = {
   seatId: number;
   ticketTypeId: number;
 };
-// POST /api/bookings/:userId?  body{ email, screeningId, seats: [{seatId: number, ticketTypeId: number}]}
+// POST /api/bookings/  body{ email, screeningId, seats: [{seatId: number, ticketTypeId: number}]}
 const createNewBooking = async (req: Request, res: Response) => {
-  //const userId = regExes.id.test(req.params.userId) ? +req.params.userId : null;
-  const userId =
-    typeof req.query.userId === "string" && regExes.id.test(req.query.userId)
-      ? +req.query.userId
-      : null;
   const { email, screeningId, seats } = req.body;
   console.log(seats)
   if (
@@ -139,7 +140,6 @@ const createNewBooking = async (req: Request, res: Response) => {
     return res.status(400).json({ error: "Missing required fields" });
   }
   const result = await bookingsService.createNewBooking(
-    userId,
     email,
     screeningId,
     seats
@@ -152,8 +152,8 @@ const createNewBooking = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Booking confirmation not found" });
   }
   //Send email
-  const mailService = new MailService();
-  await mailService.sendMail(result.bookingNumber);
+  //const mailService = new MailService();
+  //await mailService.sendMail(result.bookingNumber);
   return res.status(201).json(booking);
 };
 
@@ -207,7 +207,6 @@ const updateBooking = async (req: Request, res: Response) => {
 };
 
 // DELETE /api/bookings/:bookings?bookingNumber=ADR304    /admin, staff
-// DELETE /api/bookings/:bookings?bookingNumber=ADR304&userId=4     /user
 // DELETE /api/bookings/:bookings?bookingNumber=ADR304&email=adress@email.se    /visitor
 const deleteBooking = async (req: Request, res: Response) => {
   const bookingNumber =
@@ -219,10 +218,6 @@ const deleteBooking = async (req: Request, res: Response) => {
     typeof req.query.email === "string" && regExes.email.test(req.query.email)
       ? req.query.email
       : undefined;
-  const userId =
-    typeof req.query.userId === "string" && regExes.id.test(req.query.userId)
-      ? req.query.userId
-      : undefined;
 
   if (!bookingNumber) {
     return res.status(400).json({ message: "Invalid request parameters" });
@@ -230,7 +225,6 @@ const deleteBooking = async (req: Request, res: Response) => {
   const result = await bookingsService.deleteBooking(
     bookingNumber,
     email!,
-    userId!
   );
   if (!result) {
     return res.status(500).json({ message: "Error deleting resource" });
