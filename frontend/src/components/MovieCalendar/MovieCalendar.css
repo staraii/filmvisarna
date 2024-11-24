@@ -9,12 +9,24 @@
 }
 
 .Movies img {
-  width: 120px;
+  width: 130px;
+}
+
+@media (max-width: 480px) {
+  .Movie-Button {
+    margin-bottom: 0.6rem;
+  }
+
 }
 
 .Movie-Title h4 {
   font-size: 1.3rem;
   margin-top: 1rem;
+}
+
+
+.Movie-Text {
+  margin: 1rem;
 }
 
 .Movie-Description p {
