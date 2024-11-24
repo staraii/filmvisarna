@@ -66,7 +66,6 @@ const updateBookingStatus = async (bookingNumber: string, isPayed: string, isAct
   }
 }
 
-// DELETE /api/bookings/:bookingNumber/:email
 const deleteBooking = async (bookingNumber: string, email: string) => {
   let sql = "SELECT `id` FROM `bookings` WHERE `bookingNumber` = ?";
   const values = [bookingNumber];
@@ -74,10 +73,6 @@ const deleteBooking = async (bookingNumber: string, email: string) => {
     sql += " AND `email` = ?";
     values.push(email);
   }
-  // if (userId) {
-  //   sql += " AND `userId` = ?";
-  //   values.push(userId);
-  // }
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
