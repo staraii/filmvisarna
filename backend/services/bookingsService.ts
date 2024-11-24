@@ -10,7 +10,7 @@ type Seat = {
   ticketTypeId: number;
 };
 
-const createNewBooking = async (userId: number | null, email: string, screeningId: number, seats: Seat[]) => {
+const createNewBooking = async (email: string, screeningId: number, seats: Seat[]) => {
   const bookingNumber = await getValidBookingNumber();
   let bookingId:number;
   const connection = await db.getConnection();
@@ -18,12 +18,12 @@ const createNewBooking = async (userId: number | null, email: string, screeningI
     await connection.beginTransaction();
     const [bookingResult] = await connection.execute<ResultSetHeader>(
 
-      "INSERT INTO `bookings` (`userId`, `screeningId`, `email`, `bookingNumber`, `bookingDate`) VALUES (?, ?, ?, ?, ?)",
+      "INSERT INTO `bookings` (`screeningId`, `email`, `bookingNumber`, `bookingDate`) VALUES (?, ?, ?, ?)",
 
-      [userId, screeningId, email, bookingNumber, new Date().toLocaleString("sv-SE")]
+      [screeningId, email, bookingNumber, new Date().toLocaleString("sv-SE")]
     );
     bookingId = bookingResult.insertId;
-    console.log("bookingId1: " + bookingId)
+    //console.log("bookingId1: " + bookingId)
     const seatsToBook = seats.map((seat) =>
       connection.execute(
         "INSERT INTO `bookedSeats` (`bookingId`, `seatId`, `screeningId`, `ticketTypeId`) VALUES (?, ?, ?, ?)",
@@ -67,17 +67,17 @@ const updateBookingStatus = async (bookingNumber: string, isPayed: string, isAct
 }
 
 // DELETE /api/bookings/:bookingNumber/:email
-const deleteBooking = async (bookingNumber: string, email: string, userId: string) => {
+const deleteBooking = async (bookingNumber: string, email: string) => {
   let sql = "SELECT `id` FROM `bookings` WHERE `bookingNumber` = ?";
   const values = [bookingNumber];
   if (email) {
     sql += " AND `email` = ?";
     values.push(email);
   }
-  if (userId) {
-    sql += " AND `userId` = ?";
-    values.push(userId);
-  }
+  // if (userId) {
+  //   sql += " AND `userId` = ?";
+  //   values.push(userId);
+  // }
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
