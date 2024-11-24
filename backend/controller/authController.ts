@@ -71,7 +71,7 @@ export const login = async (req: Request, res: Response) => {
     // Save the user's ID in session
     req.session.userId = user.id;
     req.session.userEmail = user.email; 
-    req.session.userRole = user.role || 'user';
+    req.session.userRole = user.role;
     
     
 
@@ -105,7 +105,7 @@ export const getLoggedInUser = async (req: Request, res: Response) => {
       user: {
         id: user.id,
         email: user.email,
-        role: user.role || 'user', 
+        role: user.role, 
         firstName: user.firstName,
         lastName: user.lastName,
         phone: user.phone,
