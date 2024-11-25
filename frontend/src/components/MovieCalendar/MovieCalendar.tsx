@@ -11,6 +11,12 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { getWeekday } from "../../utils/dateTimeUtils";
+import { ageRatingUtil } from "../../utils/ageRatingUtil";
+
+function shortenTitle(title: string): string {
+  const words = title.split(" ");
+  return words.length > 2 ? `${words[0]} ${words[1]}...` : title;
+}
 
 type FullScreening = {
   screeningId: number;
@@ -97,11 +103,11 @@ function MovieCalendar() {
                   <Accordion.Header>
                     {dayKey.replace(/-/g, " ")}
                   </Accordion.Header>
-                  <Accordion.Body>
+                  <Accordion.Body className="Accordion-Body">
                     {movies.map((movie, index) => (
                       <div className="Movies" key={index}>
                         <Container>
-                          <Card style={{ width: "17rem" }}>
+                          <Card className="Card">
                             <Card.Body>
                               <Row className="Row">
                                 <Col>
@@ -113,10 +119,14 @@ function MovieCalendar() {
                                 <Col>
                                   <Card.Text className="Movie-Description">
                                     <Card.Title className="Movie-Title">
-                                      <h4>{movie.movieTitle}</h4>
+                                      <h4>{shortenTitle(movie.movieTitle)}</h4>
                                     </Card.Title>
                                     <Card.Text className="Age-Rating">
-                                      <p>{movie.ageRating}+</p>
+                                      <p>
+                                        {ageRatingUtil(
+                                          movie.ageRating.toString()
+                                        )}
+                                      </p>
                                     </Card.Text>
                                     <Card.Text className="Movie-Time">
                                       <p>{movie.time}</p>

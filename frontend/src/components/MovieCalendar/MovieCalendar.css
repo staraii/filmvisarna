@@ -1,6 +1,5 @@
 .Days {
   width: 95%;
-  margin: 0 auto;
   margin-top: 20px;
 }
 
@@ -9,12 +8,23 @@
 }
 
 .Movies img {
-  width: 120px;
+  width: 130px;
+}
+
+@media (max-width: 480px) {
+  .Movie-Button {
+    margin-bottom: 0.6rem;
+  }
+
 }
 
 .Movie-Title h4 {
   font-size: 1.3rem;
   margin-top: 1rem;
+}
+
+.Movie-Text {
+  margin: 1rem;
 }
 
 .Movie-Description p {
@@ -29,10 +39,6 @@
 
 label {
   padding: 0.5rem;
-}
-
-.accordion-button {
-  transition: background-color 0.3s ease;
 }
 
 select {
@@ -56,6 +62,10 @@ select {
   border: 1.5px solid #ac9ed9;
   color: #0b0815;
   background-color: #ac9ed9;
+}
+
+.accordion-button {
+  transition: background-color 0.3s ease;
 }
 
 .Movie-Time p {
