@@ -76,7 +76,7 @@ app.listen(SERVER_PORT, () => {
 });
 
 //Frontend directory prefix
-const FRONTEND_PREFIX = process.env.FRONTEND_PREFIX || "../frontend/dist";
+const FRONTEND_PREFIX = process.env.FRONTEND_PREFIX || "../../frontend/dist";
 //Getting path to frontend dist folder
 const FRONTEND_DIST = path.join(__dirname, FRONTEND_PREFIX);
 //Serving static files from frontend dist folder
