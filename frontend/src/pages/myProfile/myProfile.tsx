@@ -107,7 +107,7 @@ const MinProfil = () => {
  const confirmCancelBooking = async () => {
   if (!bookingToCancel || !userEmail) return;
   try {
-    await cancelBooking(bookingToCancel.id, userEmail, bookingToCancel.number);
+    await cancelBooking(userEmail, bookingToCancel.number);
     refetch(); 
     setCurrentBookingPage(1); 
   } catch (error) {
