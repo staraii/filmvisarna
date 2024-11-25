@@ -10,13 +10,14 @@ import liveChairRouter from "./routes/liveChairRouter.js";
 import moviesDetailsRouter from "./routes/moviesDetailsRouter.js";
 import authRouter from "./routes/authRouter.js";
 import session from "express-session";
-import MySQLStore from "express-mysql-session"; 
- 
+import MySQLStore from "express-mysql-session";
+import seedScreening from "./utils/seedScreenings.js";
+
 // Getting directory path
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Getting path to images directory
-const IMAGES_FOLDER = path.join(__dirname, "./assets/images/");
+const IMAGES_FOLDER = path.join(__dirname, "../assets/images/");
 // Serving static files from /images
 const imageServer = express();
 imageServer.use(express.static(IMAGES_FOLDER));
@@ -37,28 +38,28 @@ const SERVER_PORT = process.env.SERVER_PORT || 5001;
 export const db = mysql.createPool(dbConfig);
 
 // Create MySQL session store
-const MySQLSessionStore = MySQLStore(session as any); 
-const sessionStore = new MySQLSessionStore(dbConfig); 
+const MySQLSessionStore = MySQLStore(session as any);
+const sessionStore = new MySQLSessionStore(dbConfig);
 
 export const app = express();
 
 // Session middleware with MySQL store
 app.use(
   session({
-    name: "session_cookie_name", 
-    secret: process.env.SESSION_SECRET || "your_secret_key", 
-    store: sessionStore, 
-    resave: false, 
-    saveUninitialized: false, 
+    name: "session_cookie_name",
+    secret: process.env.SESSION_SECRET || "your_secret_key",
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
-      secure: false, 
-      maxAge: 1000 * 60 * 60 * 24, 
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
     },
   })
 );
 
 // Middleware to parse JSON requests
-app.use(express.json({limit: "10MB"}));
+app.use(express.json({ limit: "10MB" }));
 
 app.use("/images", imageServer);
 
@@ -72,8 +73,14 @@ app.use("/api/events", liveChairRouter);
 
 // Start the server
 app.listen(SERVER_PORT, () => {
-  console.log(`Server is running on port ${SERVER_PORT}`); 
+  console.log(`Server is running on port ${SERVER_PORT}`);
 });
+
+//kör funktionen initialt en gång för att få data, sedan var andra vecka. Kan bli problem om servern startas om
+seedScreening();
+//seed intervall 2 veckor
+const interval = 14 * 24 * 60 * 60 * 1000;
+setInterval(seedScreening, interval);
 
 //Frontend directory prefix
 const FRONTEND_PREFIX = process.env.FRONTEND_PREFIX || "../../frontend/dist";
@@ -83,5 +90,5 @@ const FRONTEND_DIST = path.join(__dirname, FRONTEND_PREFIX);
 app.use(express.static(FRONTEND_DIST));
 //If no route path matches serve frontend entry file
 app.get("*", (_req, res) => {
- res.sendFile(path.join(FRONTEND_DIST, "index.html"));
-})
+  res.sendFile(path.join(FRONTEND_DIST, "index.html"));
+});
