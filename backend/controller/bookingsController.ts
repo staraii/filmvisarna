@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import bookingsService from "../services/bookingsService.js";
-//import MailService from "../services/mailService.js";
+import MailService from "../services/mailService.js";
 import { db } from "../index.js";
 
 const regExes = { 
@@ -152,8 +152,8 @@ const createNewBooking = async (req: Request, res: Response) => {
     return res.status(404).json({ message: "Booking confirmation not found" });
   }
   //Send email
-  //const mailService = new MailService();
-  //await mailService.sendMail(result.bookingNumber);
+  const mailService = new MailService();
+  await mailService.sendMail(result.bookingNumber);
   return res.status(201).json(booking);
 };
 
