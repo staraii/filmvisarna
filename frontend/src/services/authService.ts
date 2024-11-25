@@ -89,7 +89,7 @@ export const login = async (email: string, password: string) => {
 
   return {
     email: data.email,
-    firstName: data.firstName || '',
+    firstName: data.firstName,
   };
 };
 
@@ -161,13 +161,13 @@ export const getMe = async () => {
   return {
     email: data.user.email,
     firstName: data.user.firstName,
-    role: data.user.role || 'user', 
+    role: data.user.role, 
   };
 };
 
 // Cancel booking (unchanged)
-export const cancelBooking = async (bookingId: number, email: string, bookingNumber: string) => {
-  const response = await fetch(`/api/bookings/${bookingId}?bookingNumber=${bookingNumber}&email=${email}`, {
+export const cancelBooking = async (email: string, bookingNumber: string) => {
+  const response = await fetch(`/api/bookings?bookingNumber=${bookingNumber}&email=${email}`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',

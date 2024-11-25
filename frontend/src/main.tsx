@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+//import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "../sass/main.scss";
 import App from "./App.tsx";
 
@@ -30,6 +30,7 @@ import EditMovie from "./pages/Admin/components/EditMovie/EditMovie.tsx";
 import NewMovie from "./pages/Admin/components/NewMovie/NewMovie.tsx";
 import Tickets from "./pages/Admin/components/Tickets/Tickets.tsx";
 import BookingStatus from "./pages/Admin/components/BookingStatus/BookingStatus.tsx";
+import NotFound from "./pages/NotFound/NotFound.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -44,7 +45,6 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-    //loader: appLoader(queryClient),
     children: [
       {
         index: true,
@@ -66,7 +66,6 @@ const router = createBrowserRouter([
         path: "filmer/:movieId",
         element: <MovieDetailsPage />,
         loader: loader(queryClient, "/api/moviesDetails/", "movie", "movieId"),
-        //loader: doubleLoader(queryClient, ["/api/moviesDetails/", "/api/bookings/homePageScreenings?screeningId="], ["movie", "homePageScreenings"]),
         errorElement: <ErrorPage />,
       },
       {
@@ -111,12 +110,12 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
       },
       {
-        path: "/boka/:screeningId/order-bekraftelse/:bookingNumber",
+        path: "/boka/:screeningId/order-bekraftelse/:bookingNumber/:email",
         loader: doubleLoader(
           queryClient,
           ["/api/screenings/", "/api/screenings/booking/"],
           ["screening", "booking"],
-          ["screeningId", "bookingNumber"]
+          ["screeningId", ["bookingNumber", "email"]],
         ),
 
         element: <BookingConfirmationPage />,
@@ -131,6 +130,10 @@ const router = createBrowserRouter([
         ),
 
         errorElement: <ErrorPage />,
+      },
+      {
+        path: "/*",
+        element: <NotFound />,
       },
     ],
   },

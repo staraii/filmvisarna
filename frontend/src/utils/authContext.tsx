@@ -47,7 +47,7 @@ const fetchUserData = async () => {
     const userData = await AuthService.getMe();
     setUserEmail(userData.email);
     setFirstName(userData.firstName);
-    setRole(userData.role || 'user'); 
+    setRole(userData.role); 
     setIsAuthenticated(true);
   } catch (error) {
     console.error('Failed to fetch user data:', error);
@@ -59,6 +59,7 @@ const fetchUserData = async () => {
     setIsAuthenticated(false);
     setUserEmail(null);
     setFirstName(null);
+    setRole(null)
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('firstName');

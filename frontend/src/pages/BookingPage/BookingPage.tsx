@@ -29,6 +29,7 @@ type Seats = {
 interface BookingActionData {
   bookingSuccess: boolean;
   bookingNumber?: string;
+  email?: string;
   error?: string;
 }
 
@@ -135,10 +136,10 @@ export default function BookingPage() {
 
   useEffect(() => {
     if (actionData?.bookingSuccess) {
-      navigate(
-        `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`,
-        { state: { email } }
-      );
+            navigate(
+              `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}/${actionData.email}`,
+              { state: { email } }
+            );
     } else if (actionData && !actionData.bookingSuccess) {
       handleShow();
       setSelectedSeat([]);
@@ -184,7 +185,7 @@ export default function BookingPage() {
     const rowData = seats[row];
     if (!rowData) return;
 
-    let hoveredSeatIds: string[] = [];
+    const hoveredSeatIds: string[] = [];
 
     for (let i = 0; i < tickets; i++) {
       const currentSeatIndex = index + i;
@@ -306,7 +307,7 @@ export default function BookingPage() {
           >
             {Object.entries(seats).map(([row, seatData]) => {
               const { seats: seatCount } = seatData as RowSeats;
-              let rowCumulativeIndex = cumulativeIndex;
+              const rowCumulativeIndex = cumulativeIndex;
 
               return (
                 <div key={row} className="d-flex flex-row-reverse">

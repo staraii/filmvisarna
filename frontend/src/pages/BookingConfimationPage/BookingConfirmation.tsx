@@ -54,13 +54,13 @@ export default function BookingConfirmationPage() {
   const { data: bookingData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
   const { userEmail, isAuthenticated } = useAuth();
   const location = useLocation();
-  const booking = bookingData.success[0];
+  const booking = bookingData[0];
   const screening = screeningData.success[0];
 
   if (
     !screeningData?.success?.[0] ||
-    !bookingData?.success?.[0]?.seats ||
-    !bookingData?.success?.[0]?.bookingNumber
+    !booking?.seats ||
+    !booking?.bookingNumber
   ) {
     throw new Error("Åtkomst nekas: Bokningsdata saknas eller är ogiltig.");
   }
