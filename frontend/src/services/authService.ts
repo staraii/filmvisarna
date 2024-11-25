@@ -166,7 +166,7 @@ export const getMe = async () => {
 };
 
 // Cancel booking (unchanged)
-export const cancelBooking = async (bookingId: number, email: string, bookingNumber: string) => {
+export const cancelBooking = async (email: string, bookingNumber: string) => {
   const response = await fetch(`/api/bookings?bookingNumber=${bookingNumber}&email=${email}`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
