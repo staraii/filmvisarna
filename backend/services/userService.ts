@@ -11,19 +11,18 @@ export const createUser = async (userData: RegisterUser) => {
   const { firstName, lastName, email, password, phone } = userData;
 
   try {
-
-      // Set a default role for users
-    const defaultRole = "user"; // Or whatever role you want as default
+    const defaultRole = "user"; 
   
-    // Insert user data into the 'users' table
-    const [result] = await db.query(
+    // Insert user data into the database using a prepared statement
+    const [result] = await db.execute(
       'INSERT INTO users (firstName, lastName, email, password, phone, role) VALUES (?, ?, ?, ?, ?, ?)',
       [firstName, lastName, email, password, phone, defaultRole]
     );
     
-    // Return the insertion result (could include the inserted ID)
+   
     return result;
   } catch (error) {
+    
     console.error('Error inserting user:', error);
     throw error; 
   }
@@ -32,10 +31,10 @@ export const createUser = async (userData: RegisterUser) => {
 // Find a user by their email
 export const findUserByEmail = async (email: string) => {
   try {
-    // Query the 'users' table for a user with the provided email
-    const [rows]: any = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+   
+    const [rows]: any = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
     
-    // Return the first user found or undefined if no user found
+   
     return rows[0];
   } catch (error) {
     console.error('Error finding user by email:', error);
@@ -43,40 +42,41 @@ export const findUserByEmail = async (email: string) => {
   }
 };
 
-// Find a user by their ID (for session-based authentication)
+// Find a user by their ID (used for authentication or session validation)
 export const findUserById = async (id: number) => {
   try {
-    // Query the 'users' table for a user with the provided ID
-    const [rows]: any = await db.query('SELECT * FROM users WHERE id = ?', [id]);
+    // Look up a user by their unique ID in the database
+    const [rows]: any = await db.execute('SELECT * FROM users WHERE id = ?', [id]);
     
-    // Return the first user found or undefined if no user found
-    return rows[0];
+    
+    return rows[0]
   } catch (error) {
     console.error('Error finding user by ID:', error);
     throw error; 
   }
 };
 
-
-
-// Function to fetch user profile by email
+// Fetch user bookings by email (calls an external API)
 export const fetchUserBookings = async (email: string | null) => {
   if (!email) {
     throw new Error("Email is required to fetch bookings.");
   }
 
   try {
+    // Send a GET request to the API to fetch bookings for the user
     const response = await fetch(`/api/bookings/fullBookings?email=${encodeURIComponent(email)}`, {
       method: 'GET',
-      credentials: 'include',
+      credentials: 'include', 
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
+ 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
+
 
     return await response.json();
   } catch (error) {

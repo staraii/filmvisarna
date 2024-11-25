@@ -2,7 +2,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Container, Row, Col, Modal, InputGroup } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeSlash } from 'react-bootstrap-icons';
-import { useAuth } from '../../utils/authContext'; // Import useAuth to get access to register
+import { useAuth } from '../../utils/authContext'; 
 import './Register.css';
 
 interface FormData {
@@ -13,11 +13,11 @@ interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
-  role: string;  // Add role property here
+  role: string;  
 }
 
 const Register = () => {
-  const { register } = useAuth(); // Access register from AuthContext
+  const { register } = useAuth(); 
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<FormData>({
@@ -33,7 +33,7 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Success modal state
+  const [showSuccessModal, setShowSuccessModal] = useState(false); 
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,15 +51,15 @@ const Register = () => {
     try {
       // Use the register function from AuthContext to handle registration and authentication
       await register(formData);
-      setShowSuccessModal(true); // Show modal on successful registration
+      setShowSuccessModal(true); 
     } catch (error) {
       setError('Registrering misslyckades: ' + (error as Error).message);
     }
   };
 
   const handleModalClose = () => {
-    setShowSuccessModal(false); // Close modal
-    navigate('/profil'); // Redirect to profile page after successful registration
+    setShowSuccessModal(false); 
+    navigate('/profil');
   };
 
   return (

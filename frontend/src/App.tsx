@@ -29,7 +29,7 @@ export default function App() {
     };
 
     fetchSession();
-  }, []); // Empty dependency array to run only once on mount
+  }, []); 
 
   return (
     <section className="app-section">

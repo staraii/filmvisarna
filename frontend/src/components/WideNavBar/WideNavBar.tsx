@@ -2,16 +2,16 @@ import Navbar from "react-bootstrap/Navbar";
 import { useEffect, useState } from "react";
 import Nav from "react-bootstrap/Nav";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../utils/authContext"; // Importing AuthContext for auth state
-import { logout as authLogout } from "../../services/authService"; // Import your logout function from authService
-import { Modal, Button } from "react-bootstrap"; // Import Modal and Button for confirmation
+import { useAuth } from "../../utils/authContext"; 
+import { logout as authLogout } from "../../services/authService"; 
+import { Modal, Button } from "react-bootstrap"; 
 import "./wide-navbar.css";
 
 
 const WideNavBar = () => {
-  const { isAuthenticated, logout } = useAuth(); // Access authentication state and logout function
+  const { isAuthenticated, logout } = useAuth(); 
   const navigate = useNavigate();
-  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); // State for logout confirmation modal
+  const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false); 
 
   useEffect(() => {
    
@@ -23,19 +23,18 @@ const WideNavBar = () => {
 
   const handleLogout = async () => {
     try {
-      await authLogout(); // Call the logout function from your auth service
-      logout(); // Call the context's logout function to update the state
-      navigate("/"); // Redirect to homepage after logout
+      await authLogout(); 
+      logout(); 
+      navigate("/"); 
     } catch (error) {
       console.error("Logout failed:", error);
-      // Optionally, show a user-friendly message here
     } finally {
-      setShowLogoutConfirmation(false); // Close the logout confirmation modal
+      setShowLogoutConfirmation(false); 
     }
   };
 
   const handleCloseLogoutConfirmation = () => {
-    setShowLogoutConfirmation(false); // Close the logout confirmation modal
+    setShowLogoutConfirmation(false); 
   };
 
   return (

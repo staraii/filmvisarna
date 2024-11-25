@@ -23,7 +23,7 @@ export default function MovieCard({id, title, age, categories, posterURL, releas
       <Card>
         <Row>
           <Col xs={12} className="movie-card">
-            <Card.Img src={posterURL} className="shadow-lg w-100 movie-card-img" />
+            <Card.Img src={`/images/${posterURL}?url`} className="shadow-lg w-100 movie-card-img" />
             <Card.Body className="movie-card-body d-flex flex-column align-items-center w-100">
               <div className="movie-card-content-wrapper py-1">
                 <Card.Title className="movie-card-title">

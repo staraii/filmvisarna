@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../../utils/authContext";
 import { fetchUserBookings } from "../../utils/queryService";
-import Pagination from 'react-bootstrap/Pagination'; // Import Bootstrap pagination
+import Pagination from 'react-bootstrap/Pagination'; 
 import "./myProfile.css";
 import { cancelBooking } from "../../services/authService";
 import Modal from "react-bootstrap/Modal";
@@ -107,9 +107,9 @@ const MinProfil = () => {
  const confirmCancelBooking = async () => {
   if (!bookingToCancel || !userEmail) return;
   try {
-    await cancelBooking(bookingToCancel.id, userEmail, bookingToCancel.number);
-    refetch(); // Fetch updated bookings
-    setCurrentBookingPage(1); // Reset to first page
+    await cancelBooking(userEmail, bookingToCancel.number);
+    refetch(); 
+    setCurrentBookingPage(1); 
   } catch (error) {
     console.error("Error while canceling:", error);
   } finally {
