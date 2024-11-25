@@ -6,11 +6,18 @@ const getScreenings = async () => {
   const [result] = await db.execute(query);
   return result;
 };
-const createScreening = async (values: Object) => {
-  const query = `
-    INSERT INTO screenings (movieId, theatreId, dateTime)
-    VALUES (?, ?, ?)`;
-  const [result] = await db.execute(query, [values]);
+const createScreening = async (values: {
+  movieId: number;
+  theatreId: number;
+  dateTime: string;
+}) => {
+  console.log(values);
+  const query = `INSERT INTO screenings (movieId, theatreId, dateTime) VALUES (?, ?, ?)`;
+  const [result] = await db.execute(query, [
+    values.movieId,
+    values.theatreId,
+    values.dateTime,
+  ]);
   return result;
 };
 
