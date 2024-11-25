@@ -103,11 +103,11 @@ function MovieCalendar() {
                   <Accordion.Header>
                     {dayKey.replace(/-/g, " ")}
                   </Accordion.Header>
-                  <Accordion.Body>
+                  <Accordion.Body className="Accordion-Body">
                     {movies.map((movie, index) => (
                       <div className="Movies" key={index}>
                         <Container>
-                          <Card>
+                          <Card className="Card">
                             <Card.Body>
                               <Row className="Row">
                                 <Col>
