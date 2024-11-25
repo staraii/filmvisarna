@@ -16,7 +16,7 @@ import MySQLStore from "express-mysql-session";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Getting path to images directory
-const IMAGES_FOLDER = path.join(__dirname, "./assets/images/");
+const IMAGES_FOLDER = path.join(__dirname, "../assets/images/");
 // Serving static files from /images
 const imageServer = express();
 imageServer.use(express.static(IMAGES_FOLDER));
