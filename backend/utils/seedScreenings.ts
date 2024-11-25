@@ -99,8 +99,12 @@ const Screenings = [
 ];
 
 export default async function seedScreening() {
-  for (let i = 0; i < Screenings.length; i++) {
-    await screeningsService.createScreening(Screenings[i]);
-    //console.log("Success inserting screening ", Screenings[i]);
+  try {
+    for (let i = 0; i < Screenings.length; i++) {
+      await screeningsService.createScreening(Screenings[i]);
+    }
+  } catch (error) {
+    console.error("Error running seed script", error);
   }
+  console.log("Seeding ran successful: 2 weeks added");
 }

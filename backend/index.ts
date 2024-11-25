@@ -76,6 +76,8 @@ app.listen(SERVER_PORT, () => {
   console.log(`Server is running on port ${SERVER_PORT}`);
 });
 
+//kör funktionen initialt en gång för att få data, sedan var andra vecka. Kan bli problem om servern startas om
+seedScreening();
 //seed intervall 2 veckor
 const interval = 14 * 24 * 60 * 60 * 1000;
 setInterval(seedScreening, interval);
