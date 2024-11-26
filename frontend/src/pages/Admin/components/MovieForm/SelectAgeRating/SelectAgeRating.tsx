@@ -1,19 +1,15 @@
-import { useState } from "react";
 import Form from "react-bootstrap/Form";
-//import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
 interface SelectAgeRatingProps {
   ageRating: string;
-  //handleAgeChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onChangeHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  isInvalid: boolean;
+  handleTouched: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
 }
 
-export default function SelectAgeRating({ageRating, onChangeHandler}: SelectAgeRatingProps) {
-  const [touched, setTouched] = useState(false);
-
+export default function SelectAgeRating({ageRating, onChangeHandler, isInvalid, handleTouched}: SelectAgeRatingProps) {
   return (
-    // <Row>
     <Col xs={12} sm={12} md={12} lg={12} xl={12} xxl={12} className="my-3">
       <p className="movieform-label">Åldersgräns</p>
       <Form.Select
@@ -22,8 +18,8 @@ export default function SelectAgeRating({ageRating, onChangeHandler}: SelectAgeR
         name="ageRating"
         onChange={onChangeHandler}
         className="border border-secondary text-secondary"
-        isInvalid={ageRating === "" && touched}
-        onBlur={() => setTouched(true)}
+        isInvalid={isInvalid}
+        onBlur={handleTouched}
       >
         <option value="">Välj åldersgräns</option>
         <option value="1">Barntillåten</option>
@@ -32,6 +28,5 @@ export default function SelectAgeRating({ageRating, onChangeHandler}: SelectAgeR
         <option value="15">Från 15 år</option>
       </Form.Select>
     </Col>
-    // </Row>
   );
 }

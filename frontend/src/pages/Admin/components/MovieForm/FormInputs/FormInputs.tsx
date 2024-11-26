@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -6,70 +5,18 @@ import TextInput from "../TextInput/TextInput";
 import SelectAgeRating from "../SelectAgeRating/SelectAgeRating";
 import ToggleCategories from "../ToggleCategories/ToggleCategories";
 import Form from "react-bootstrap/Form";
-import { TextInputParamsList } from "../../../AdminTypes";
-
-type MovieRegExes = { [key: string]: RegExp };
-
-
-const regExes: MovieRegExes = {
-  id: /^[1-9][0-9]*$/,
-  duration: /^[1-9][0-9]*$/,
-  title: /^[a-zA-ZåäöÅÄÖ0-9.,&\-" ]+$/,
-  cast: /^[a-zA-ZåäöÅÄÖ0-9.,\- ]+$/,
-  directedBy: /^[a-zA-ZåäöÅÄÖ0-9.,\- ]+$/,
-  subtitles: /^[a-zA-ZåäöÅÄÖ]{2,3}$/,
-  spokenLanguage: /^[a-zA-ZåäöÅÄÖ]{2,3}$/,
-  description: /^[a-zA-ZåäöÅÄÖ0-9.,&\-" ]+$/,
-  releaseYear: /^19[0-9][0-9]$/,
-  ageRating: /^(?:1|7|11|15)$/,
-  posterURL: /^[a-zA-z0-9]+.(?:jpg|png|webp)$/,
-  slideURL: /^[a-zA-z0-9]+.(?:jpg|png|webp)$/,
-  trailerURL: new RegExp(
-    /(?:https?:)?(?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtu\.be\/|youtube(?:-nocookie)?\.com\S*?[^\w\s-])([\w-]{11})(?=[^\w-]|$)(?![?=&+%\w.-]*(?:['"][^<>]*>|<\/a>))[?=&+%\w.-]*/,
-    "gim"
-  ),
-  rating: /^[1-5]$/,
-  reviewBy: /^[a-zA-ZåäöÅÄÖ0-9.,&_\-" ]+$/,
-  review: /^[a-zA-ZåäöÅÄÖ0-9.,&_\-" ]+$/,
-};
-
-
-
-interface Movie {
-  id: number | null;
-  title: string;
-  ageRating: string;
-  createdAt: string | null;
-  cast: string;
-  directedBy: string;
-  duration: string;
-  slideFile: null | File;
-  slidePreview: string;
-  slideURL: string;
-  posterFile: null | File;
-  posterPreview: string;
-  posterURL: string;
-  postersFiles: null | File[];
-  postersPreviews: string;
-  postersURLS: string;
-  trailerURL: string;
-  subtitles: string;
-  spokenLanguage: string;
-  description: string;
-  releaseYear: string;
-  [key: string]: string | string[] | null | File | File[] | number;
-}
+import { TextInputParamsList, Movie } from "../../../AdminTypes";
 
 
 interface FormInputsProps {
   movie: Movie;
   categories: string[];
-  onChangeHandler: (name: string, value: string) => void;
+  handleOnChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   toggleCategories: (value: string) => void;
+  handleTouched: (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  touched: { [key: string]: boolean };
+  isInvalid: { [key: string]: boolean };
 }
-type Touched = { [key: string]: boolean };
-type IsValid = { [key: string]: boolean };
-
 
 
 const textInputProps: TextInputParamsList = {
@@ -145,25 +92,7 @@ const textInputProps: TextInputParamsList = {
 
 
 
-
-
-
-
-export default function FormInputs({ movie, categories, onChangeHandler, toggleCategories }: FormInputsProps) {
-  const [touched, setTouched] = useState<Touched>({});
-  const [isValid, setIsValid] = useState<IsValid>({});
-  const handleTouched = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name } = e.currentTarget;
-    setTouched((prevTouch) => ({ ...prevTouch, [name]: true }));
-  }
-  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.currentTarget;
-    handleIsValid(name, value);
-    onChangeHandler(name, value);
-  }
-  const handleIsValid = (name: string, value: string) => {
-      setIsValid((prevValid) => ({...prevValid, [name]: regExes[name].test(value) ? true : false}))
-  }
+export default function FormInputs({ movie, categories, handleOnChange, toggleCategories, handleTouched, touched, isInvalid }: FormInputsProps) {
 
   return (
     <Container>
@@ -187,7 +116,7 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
                   value={movie.title}
                   handleOnChange={handleOnChange}
                   handleTouched={handleTouched}
-                  isInvalid={!isValid.title && touched.title}
+                  isInvalid={isInvalid.title && touched.title}
                   params={textInputProps.title}
                 />
               </Col>
@@ -198,6 +127,8 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
               <SelectAgeRating
                 ageRating={movie.ageRating}
                 onChangeHandler={handleOnChange}
+                isInvalid={isInvalid.ageRating && touched.ageRating}
+                handleTouched={handleTouched}
               />
             </Row>
 
@@ -229,7 +160,7 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
                       value={movie.duration}
                       handleOnChange={handleOnChange}
                       handleTouched={handleTouched}
-                      isInvalid={!isValid.duration && touched.duration}
+                      isInvalid={isInvalid.duration && touched.duration}
                       params={textInputProps.duration}
                     />
                   </Col>
@@ -239,7 +170,7 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
                       value={movie.releaseYear}
                       handleOnChange={handleOnChange}
                       handleTouched={handleTouched}
-                      isInvalid={!isValid.releaseYear && touched.releaseYear}
+                      isInvalid={isInvalid.releaseYear && touched.releaseYear}
                       params={textInputProps.releaseYear}
                     />
                   </Col>
@@ -265,7 +196,7 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
                       handleOnChange={handleOnChange}
                       handleTouched={handleTouched}
                       isInvalid={
-                        !isValid.spokenLanguage && touched.spokenLanguage
+                        isInvalid.spokenLanguage && touched.spokenLanguage
                       }
                       params={textInputProps.spokenLanguage}
                     />
@@ -276,7 +207,7 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
                       value={movie.subtitles}
                       handleOnChange={handleOnChange}
                       handleTouched={handleTouched}
-                      isInvalid={!isValid.subtitles && touched.subtitles}
+                      isInvalid={isInvalid.subtitles && touched.subtitles}
                       params={textInputProps.subtitles}
                     />
                   </Col>
@@ -300,7 +231,7 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
                   value={movie.cast}
                   handleOnChange={handleOnChange}
                   handleTouched={handleTouched}
-                  isInvalid={!isValid.cast && touched.cast}
+                  isInvalid={isInvalid.cast && touched.cast}
                   params={textInputProps.cast}
                 />
               </Col>
@@ -322,7 +253,7 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
                   value={movie.directedBy}
                   handleOnChange={handleOnChange}
                   handleTouched={handleTouched}
-                  isInvalid={!isValid.directedBy && touched.directedBy}
+                  isInvalid={isInvalid.directedBy && touched.directedBy}
                   params={textInputProps.directedBy}
                 />
               </Col>
@@ -344,7 +275,7 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
                   value={movie.description}
                   handleOnChange={handleOnChange}
                   handleTouched={handleTouched}
-                  isInvalid={!isValid.description && touched.description}
+                  isInvalid={isInvalid.description && touched.description}
                   params={textInputProps.description}
                 />
               </Col>
@@ -365,7 +296,7 @@ export default function FormInputs({ movie, categories, onChangeHandler, toggleC
                   value={movie.trailerURL}
                   handleOnChange={handleOnChange}
                   handleTouched={handleTouched}
-                  isInvalid={!isValid.trailerURL && touched.trailerURL}
+                  isInvalid={isInvalid.trailerURL && touched.trailerURL}
                   params={textInputProps.trailerURL}
                 />
               </Col>

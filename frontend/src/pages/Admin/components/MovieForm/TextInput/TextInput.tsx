@@ -5,7 +5,7 @@ import { TextInputParams } from "../../../AdminTypes";
 interface TextInputProps {
   value: string;
   handleOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleTouched: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleTouched: (e: React.FocusEvent<HTMLInputElement>) => void;
   isInvalid: boolean;
   params: TextInputParams;
 }

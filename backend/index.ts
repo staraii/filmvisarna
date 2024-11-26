@@ -13,11 +13,12 @@ import session from "express-session";
 import MySQLStore from "express-mysql-session";
 import seedScreening from "./utils/seedScreenings.js";
 
+
 // Getting directory path
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Getting path to images directory
-const IMAGES_FOLDER = path.join(__dirname, "../assets/images/");
+const IMAGES_FOLDER = path.join(__dirname, "./assets/images/");
 // Serving static files from /images
 const imageServer = express();
 imageServer.use(express.static(IMAGES_FOLDER));
@@ -75,6 +76,7 @@ app.use("/api/events", liveChairRouter);
 app.listen(SERVER_PORT, () => {
   console.log(`Server is running on port ${SERVER_PORT}`);
 });
+
 
 //kör funktionen initialt en gång för att få data, sedan var andra vecka. Kan bli problem om servern startas om
 seedScreening();
