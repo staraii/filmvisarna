@@ -1,12 +1,13 @@
 import { Row, Col, Container, Button } from "react-bootstrap";
 import { useLoaderData, useLocation } from "react-router-dom";
-import { getWeekday } from "../utils/dateTimeUtils";
+import { getWeekday } from "../../utils/dateTimeUtils";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { DualQueryParams, loaderQuery } from "../utils/queryService";
-import { useAuth } from "../utils/authContext";
+import { DualQueryParams, loaderQuery } from "../../utils/queryService";
+import { useAuth } from "../../utils/authContext";
 import "./BookingConfirmation.css";
-import QrModal from "../components/QrModal/QrModal";
+import QrModal from "../../components/QrModal/QrModal";
 import { useEffect, useState } from "react";
+import useLocationTitle from "../../utils/useLocationTitle";
 
 const ticketTypeTranslations: { [key: string]: string } = {
   Adult: "Vuxen",
@@ -47,30 +48,30 @@ const formatBookingDate = (bookingDate: string): string => {
 };
 
 export default function BookingConfirmationPage() {
+  useLocationTitle("Tack för din bokning!");
   const { queryParamsOne, queryParamsTwo } = useLoaderData() as DualQueryParams;
   const { data: screeningData } = useSuspenseQuery(loaderQuery(queryParamsOne));
   const { data: bookingData } = useSuspenseQuery(loaderQuery(queryParamsTwo));
   const { userEmail, isAuthenticated } = useAuth();
   const location = useLocation();
-  const booking = bookingData.success[0];
+  const booking = bookingData[0];
   const screening = screeningData.success[0];
 
   if (
     !screeningData?.success?.[0] ||
-    !bookingData?.success?.[0]?.seats ||
-    !bookingData?.success?.[0]?.bookingNumber
+    !booking?.seats ||
+    !booking?.bookingNumber
   ) {
     throw new Error("Åtkomst nekas: Bokningsdata saknas eller är ogiltig.");
   }
 
-  useEffect(() => {
-    const mail = isAuthenticated ? userEmail : location.state?.email;
+useEffect(() => {
+  const mail = isAuthenticated ? userEmail : location.state?.email;
 
-    if (mail !== booking.email) {
-      throw new Error("Åtkomst nekas.");
-    }
-  }),
-    [];
+  if (mail !== booking.email) {
+    throw new Error("Åtkomst nekas.");
+  }
+}, []);
 
   const [showQrViewer, setShowQrViewer] = useState<null | string>(null);
   const handleShowQR = (bookingNumber: string) => {
@@ -147,7 +148,7 @@ export default function BookingConfirmationPage() {
               variant="outline-secondary"
               onClick={() => handleShowQR(booking.bookingNumber)}
             >
-              Qr Code viewer
+              Visa QR kod
             </Button>
             {showQrViewer && (
               <Col className="qr-code">

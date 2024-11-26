@@ -93,30 +93,29 @@ const handleGetScreeningsByTitle = async (req: Request, res: Response) => {
     return res.status(500).send("Server error");
   }
 };
-const handleGetBookingsByBookingNumber = async (
-  req: Request,
-  res: Response
-) => {
-  const { bookingNumber } = req.params;
-  try {
-    const result = await screeningsService.getBookingsByBookingNumber(
-      bookingNumber
-    );
-    if (!result) {
-      return res.status(500).json({ error: "Error getting booking" });
-    }
-    return res.status(200).json({ success: result });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).send("Server error");
-  }
-};
+// const handleGetBookingsByBookingNumber = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   const { bookingNumber } = req.params;
+//   try {
+//     const result = await screeningsService.getBookingsByBookingNumber(
+//       bookingNumber
+//     );
+//     if (!result) {
+//       return res.status(500).json({ error: "Error getting booking" });
+//     }
+//     return res.status(200).json({ success: result });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).send("Server error");
+//   }
+// };
 
 const getAllScreenings = async (_req: Request, res: Response) => {
   try {
     const result = await screeningsService.getAllScreenings();
     if (result) {
-      console.log(result)
       return res.status(200).json(result)
     }
     res.status(404).json({message: "Not found"})
@@ -132,6 +131,6 @@ export default {
   handleDeleteScreening,
   handleGetScreeningById,
   handleGetScreeningsByTitle,
-  handleGetBookingsByBookingNumber,
+  //handleGetBookingsByBookingNumber,
   getAllScreenings,
 };

@@ -6,6 +6,7 @@ export interface FormData {
   firstName: string;
   lastName: string;
   phoneNumber: string;
+  role: string;
 }
 
 // Validation for Registration Input Fields
@@ -48,7 +49,7 @@ const validateRegistrationInput = (formData: FormData): string | null => {
     return "Telefonnumret måste vara 10 siffror långt.";
   }
 
-  return null; // No errors
+  return null; 
 };
 
 // Validation for Login Input Fields
@@ -61,14 +62,14 @@ const validateLoginInput = (email: string, password: string): string | null => {
     return "Ogiltigt e-postformat.";
   }
 
-  return null; // No errors
+  return null; 
 };
 
 // Login function with validation
 export const login = async (email: string, password: string) => {
   const validationError = validateLoginInput(email, password);
   if (validationError) {
-    throw new Error(validationError); // Throw validation error immediately
+    throw new Error(validationError);
   }
 
   const response = await fetch('/api/login', {
@@ -88,7 +89,7 @@ export const login = async (email: string, password: string) => {
 
   return {
     email: data.email,
-    firstName: data.firstName || '',
+    firstName: data.firstName,
   };
 };
 
@@ -96,7 +97,7 @@ export const login = async (email: string, password: string) => {
 export const register = async (formData: FormData) => {
   const validationError = validateRegistrationInput(formData);
   if (validationError) {
-    throw new Error(validationError); // Throw validation error immediately
+    throw new Error(validationError); 
   }
 
   const { email, password, firstName, lastName, phoneNumber } = formData;
@@ -125,10 +126,10 @@ export const register = async (formData: FormData) => {
   }
 
   const data = await login(email, password);
-  return data; // This should include `{ email, firstName }`
+  return data; 
 };
 
-// Logout function (unchanged)
+// Logout function 
 export const logout = async () => {
   const response = await fetch('/api/login', {
     method: 'DELETE',
@@ -143,11 +144,11 @@ export const logout = async () => {
   return response.json();
 };
 
-// Check if authenticated (unchanged)
+// Check if authenticated 
 export const getMe = async () => {
   const response = await fetch('/api/login', {
     method: 'GET',
-    credentials: 'include'
+    credentials: 'include',  
   });
 
   if (!response.ok) {
@@ -155,15 +156,18 @@ export const getMe = async () => {
   }
 
   const data = await response.json();
+
+ 
   return {
     email: data.user.email,
     firstName: data.user.firstName,
+    role: data.user.role, 
   };
 };
 
 // Cancel booking (unchanged)
-export const cancelBooking = async (bookingId: number, email: string, bookingNumber: string) => {
-  const response = await fetch(`/api/bookings/${bookingId}?bookingNumber=${bookingNumber}&email=${email}`, {
+export const cancelBooking = async (email: string, bookingNumber: string) => {
+  const response = await fetch(`/api/bookings?bookingNumber=${bookingNumber}&email=${email}`, {
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',

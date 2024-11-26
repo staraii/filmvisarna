@@ -9,11 +9,12 @@ import {
   Form,
   useActionData,
 } from "react-router-dom";
-import { loaderQuery, QueryParams } from "../utils/queryService";
+import { loaderQuery, QueryParams } from "../../utils/queryService";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { getWeekday } from "../utils/dateTimeUtils";
-import { useAuth } from ".././utils/authContext";
-import { getParsedYearDateTime } from "../utils/dateTimeUtils";
+import { getWeekday } from "../../utils/dateTimeUtils";
+import { useAuth } from "../../utils/authContext";
+import { getParsedYearDateTime } from "../../utils/dateTimeUtils";
+import useLocationTitle from "../../utils/useLocationTitle";
 
 interface RowSeats {
   seats: number;
@@ -28,6 +29,7 @@ type Seats = {
 interface BookingActionData {
   bookingSuccess: boolean;
   bookingNumber?: string;
+  email?: string;
   error?: string;
 }
 
@@ -55,7 +57,7 @@ export default function BookingPage() {
   const navigate = useNavigate();
 
   const [seatData, setData] = useState<string[]>([]);
-
+  useLocationTitle(screeningData.movieTitle);
   useEffect(() => {
     const date = new Date().toLocaleString();
     const currentTime = getParsedYearDateTime(date);
@@ -134,10 +136,10 @@ export default function BookingPage() {
 
   useEffect(() => {
     if (actionData?.bookingSuccess) {
-      navigate(
-        `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}`,
-        { state: { email } }
-      );
+            navigate(
+              `/boka/${screeningData.screeningId}/order-bekraftelse/${actionData.bookingNumber}/${actionData.email}`,
+              { state: { email } }
+            );
     } else if (actionData && !actionData.bookingSuccess) {
       handleShow();
       setSelectedSeat([]);
@@ -183,7 +185,7 @@ export default function BookingPage() {
     const rowData = seats[row];
     if (!rowData) return;
 
-    let hoveredSeatIds: string[] = [];
+    const hoveredSeatIds: string[] = [];
 
     for (let i = 0; i < tickets; i++) {
       const currentSeatIndex = index + i;
@@ -243,7 +245,7 @@ export default function BookingPage() {
             </Button>
           </Modal.Footer>
         </Modal>
-        ;
+
         <Stack className="w-100 h-100 p-3 d-flex flex-column">
           <h4>{screeningData.theatreName}</h4>
           <Stack className="p-1">
@@ -305,7 +307,7 @@ export default function BookingPage() {
           >
             {Object.entries(seats).map(([row, seatData]) => {
               const { seats: seatCount } = seatData as RowSeats;
-              let rowCumulativeIndex = cumulativeIndex;
+              const rowCumulativeIndex = cumulativeIndex;
 
               return (
                 <div key={row} className="d-flex flex-row-reverse">

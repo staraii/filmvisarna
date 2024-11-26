@@ -1,38 +1,34 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../utils/authContext';
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  const [showWarning, setShowWarning] = useState(false);
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  adminOnly?: boolean; 
+}
 
-  useEffect(() => {
-    // Show warning message when the component mounts if the user is not authenticated
-    if (!isAuthenticated) {
-      setShowWarning(true);
-      // Automatically redirect after a short delay
-      const timer = setTimeout(() => {
-        setShowWarning(false);
-      }, 3000); // 3 seconds
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, adminOnly = false }) => {
+  const { isAuthenticated, role } = useAuth();
 
-      return () => clearTimeout(timer); // Cleanup the timer on unmount
-    }
-  }, [isAuthenticated]);
+  // If user is not authenticated, redirect to login page
+  if (!isAuthenticated) {
+    return <Navigate to="/loggain" />;
+  }
 
-  return isAuthenticated ? (
-    <>{children}</>
-  ) : (
-    <>
-      {showWarning && (
-        <div style={{ color: 'red', margin: '20px', textAlign: 'center' }}>
-          <p>Du måste vara inloggad för att komma åt denna sida.</p>
-        </div>
-      )}
-      <Navigate to="/loggain" />
-    </>
-  );
+  // If it's an admin-only route and the user is not an admin, redirect to another page
+  if (adminOnly && role !== 'admin') {
+    return <Navigate to="/" />; // Optionally, you can create an Unauthorized page
+  }
+
+  // If user is authenticated and either the route is not admin-only, or the user is an admin, render children
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
+
+
+
+
+
 
 

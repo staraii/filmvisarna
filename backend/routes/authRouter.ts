@@ -1,26 +1,24 @@
-// Route file for authentications
 import { Router } from 'express';
 import { login, logout, getLoggedInUser, register } from '../controller/authController.js';
-import { checkAcl } from '../middleware/checkAcl.js'; // Import the checkAcl middleware
 import { checkSession } from '../controller/authController.js';
-
+import acl from '../middleware/acl.js';
 const router = Router();
 
 // Public routes
 // POST: Register
-router.post('/api/register', register); // Accessible to all users (visitors)
+router.post('/api/register', acl, register); 
 
 // POST: Login
-router.post('/api/login', login); // Accessible to all users (visitors, users, admins)
+router.post('/api/login', acl, login); 
 
 // GET: Check if user is logged in
-router.get('/api/login', checkAcl, getLoggedInUser); // Use checkAcl if you want to restrict to logged-in users
+router.get('/api/login', acl, getLoggedInUser); 
 
 // DELETE: Logout
-router.delete('/api/login', logout); // Use checkAcl to restrict logout to logged-in users
+router.delete('/api/login', acl, logout); 
 
 // Route to check if session is active
-router.get('/api/auth/check-session', checkSession);
+router.get('/api/auth/check-session', acl, checkSession);
 
 export default router;
 

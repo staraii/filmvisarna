@@ -3,10 +3,12 @@ import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import reqUtil from "../../utils/reqUtil";
 
 function CancelTickets() {
   const [showModal, setShowModal] = useState(false);
   const [email, setEmail] = useState("");
+  const [bookingNumber, setBookingNumber] = useState("");
   const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleShowModal = () => setShowModal(true);
@@ -19,11 +21,15 @@ function CancelTickets() {
   setEmail(e.target.value);
 };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    const {data} = await reqUtil("DELETE", `/api/bookings?email=${email}&bookingNumber=${bookingNumber}`);
+    if (!data) {
+      throw new Error("Fel vid avbokning")
+    }
     const emailPattern =
-      /^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|outlook\.com)$/;
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9._-]+.[a-zA-Z]{2,4}$/;
     if (!emailPattern.test(email)) {
       handleShowErrorModal();
     } else {
@@ -51,7 +57,7 @@ function CancelTickets() {
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
             <Form.Label>Bokningsnummer</Form.Label>
-            <Form.Control as="textarea" rows={3} className="Custom-Input" />
+            <Form.Control type="text" value={bookingNumber} onChange={(e) => setBookingNumber(e.currentTarget.value)} className="Custom-Input" />
           </Form.Group>
           <div className="Cancel-Tickets-Button">
             <Button variant="primary" type="submit">

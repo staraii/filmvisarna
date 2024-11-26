@@ -6,7 +6,7 @@ import { useAuth } from "../../utils/authContext";
 import { Eye, EyeSlash } from "react-bootstrap-icons"; 
 import './LoginPage.css';
 
-const LoginPage = () => {
+export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -24,26 +24,29 @@ const LoginPage = () => {
     setPassword(e.target.value);
   };
 
- const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setError(null);
 
-    try {
-        // Call the login function and expect to get the email in response
-        const response = await login(email, password);
-        const { email: userEmail, firstName } = response;
-        
-        authLogin(userEmail, firstName);
-        setShowSuccessModal(true); // Show modal after successful login
-    } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
-        setError(errorMessage);
-    }
+  try {
+    // Call the login function and expect to get the email in response
+    const response = await login(email, password);
+    const { email: userEmail, firstName } = response;
+
+    // set role to user by default
+    const role = 'user'; 
+
+    authLogin(userEmail, firstName, role); 
+    setShowSuccessModal(true); 
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "Inloggningen misslyckades";
+    setError(errorMessage);
+  }
 };
 
   const handleModalClose = () => {
-    setShowSuccessModal(false); // Close modal
-    navigate("/profil"); // Redirect to profile after closing modal
+    setShowSuccessModal(false); 
+    navigate("/profil"); 
   };
 
   return (

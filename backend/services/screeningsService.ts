@@ -3,14 +3,21 @@ import { RowDataPacket } from "mysql2";
 
 const getScreenings = async () => {
   const query = "SELECT * FROM fullScreenings;";
-  const [result] = await db.query(query);
+  const [result] = await db.execute(query);
   return result;
 };
-const createScreening = async (values: Object) => {
-  const query = `
-    INSERT INTO screenings (movieId, theatreId, dateTime)
-    VALUES (?, ?, ?)`;
-  const [result] = await db.execute(query, [values]);
+const createScreening = async (values: {
+  movieId: number;
+  theatreId: number;
+  dateTime: string;
+}) => {
+  console.log(values);
+  const query = `INSERT INTO screenings (movieId, theatreId, dateTime) VALUES (?, ?, ?)`;
+  const [result] = await db.execute(query, [
+    values.movieId,
+    values.theatreId,
+    values.dateTime,
+  ]);
   return result;
 };
 
@@ -27,13 +34,13 @@ const deleteScreening = async (id: number) => {
 };
 const getScreeningById = async (id: number) => {
   const query = `SELECT * FROM fullScreenings WHERE screeningId=?`;
-  const [result] = await db.query(query, [id]);
+  const [result] = await db.execute(query, [id]);
   return result;
 };
 const getScreeningByTitle = async (title: string) => {
   const query = `SELECT * FROM fullScreenings WHERE movieTitle LIKE ?`;
   const likeTitle = `%${title}%`;
-  const [result] = await db.query(query, [likeTitle]);
+  const [result] = await db.execute(query, [likeTitle]);
   return result;
 };
 
@@ -43,7 +50,6 @@ const getBookingsByBookingNumber = async (bookingNumber: string) => {
   const [result] = (await db.execute(query, [bookingNumber])) as any;
   return result;
 };
-
 
 type FullScreening = {
   screeningId: number;
@@ -59,7 +65,7 @@ type FullScreening = {
   numberOfOccupiedSeats: number;
   occupiedSeats: string;
   occupiedPercent: number;
-}
+};
 type ScreeningDay = FullScreening[];
 type ScreeningWeek = ScreeningDay[];
 type AllScreenings = ScreeningWeek[];
@@ -74,12 +80,12 @@ const sortScreenings = (screeningsData: FullScreenings) => {
   screeningsData.forEach((screening) => {
     if (screening.week === weekNr) {
       if (screening.day === dayNr) {
-        day.push(screening)
+        day.push(screening);
       } else {
         week.push(day);
         day = [];
         dayNr = screening.day;
-        day.push(screening)
+        day.push(screening);
       }
     } else {
       week.push(day);
@@ -88,11 +94,11 @@ const sortScreenings = (screeningsData: FullScreenings) => {
       week = [];
       dayNr = screening.day;
       weekNr = screening.week;
-      day.push(screening)
+      day.push(screening);
     }
-  })
+  });
   return sortedScreenings;
-}
+};
 
 const getAllScreenings = async () => {
   const now = new Date().toLocaleString("sv-SE");
@@ -101,8 +107,7 @@ const getAllScreenings = async () => {
   const [result] = await db.execute<RowDataPacket[]>(query, [now]);
   const sortedResults = sortScreenings(result as FullScreenings);
   return sortedResults;
-
-}
+};
 export default {
   getScreenings,
   getBookingsByBookingNumber,

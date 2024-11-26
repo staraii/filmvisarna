@@ -7,8 +7,18 @@ import { QueryClient, queryOptions } from "@tanstack/react-query";
 export type QueryParams = {
   query: string;
   queryName: string;
-  id?: string;
+  //id?: string | BookingProps | undefined;
+  id?: string | { [key: string]: string };
 };
+export type QueryParamsTwo = {
+  query: string;
+  queryName: string;
+  id?: string | BookingProps;
+}
+type BookingProps = {
+  bookingNumber: string;
+  email: string;
+}
 export type DualQueryParams = {
   queryParamsOne: QueryParams;
   queryParamsTwo: QueryParams;
@@ -98,7 +108,7 @@ export const doubleLoader =
     queryClient: QueryClient,
     querys: string[],
     queryNames: string[],
-    paramNames?: string[]
+    paramNames?: (string | string[])[]
   ) =>
   async ({ params }: LoaderFunctionArgs) => {
     const queryParamsOne: QueryParams = {
@@ -114,7 +124,12 @@ export const doubleLoader =
       if (paramNames[0] !== "") {
         queryParamsOne.id = params[`${paramNames[0]}`];
       }
-      if (paramNames[1] !== "") {
+      if (paramNames[1] instanceof Array) {
+        if (paramNames[1][0] && paramNames[1][1]) {
+          queryParamsTwo.query = `/api/bookings/fullBookings?bookingNumber=${params["bookingNumber"]}&email=${params["email"]}`
+       
+        }
+      } else if (typeof paramNames[1] === "string" && paramNames[1] !== "") {
         queryParamsTwo.id = params[`${paramNames[1]}`];
       }
     }
@@ -166,7 +181,7 @@ export const bookingAction = async ({ request }: ActionFunctionArgs) => {
       BookingData
     );
     if (status === 201 && data) {
-      return { bookingSuccess: true, bookingNumber: data[0].bookingNumber };
+      return { bookingSuccess: true, bookingNumber: data[0].bookingNumber,email };
     } else {
       throw new Response("Booking failed", { status });
     }
@@ -186,7 +201,7 @@ export const fetchUserBookings = async (email: string) => {
       `/api/bookings/fullBookings?email=${encodeURIComponent(email)}`,
       {
         method: "GET",
-        credentials: "include", // This ensures cookies are sent along with the request
+        credentials: "include", 
         headers: {
           "Content-Type": "application/json",
         },
@@ -204,10 +219,10 @@ export const fetchUserBookings = async (email: string) => {
 
     const data = await response.json();
     
-    return data; // Return the bookings data
+    return data; 
   } catch (error) {
     console.error("Fetch error:", error);
-    throw error; // Re-throw to be caught by useQuery
+    throw error; 
   }
 };
 
